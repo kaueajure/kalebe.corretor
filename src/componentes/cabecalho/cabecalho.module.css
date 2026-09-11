@@ -52,6 +52,48 @@
   color: var(--ouro) !important;
 }
 
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.favoritos {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  color: rgba(245, 240, 232, 0.75);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.favoritos:hover,
+.favoritosAtivo {
+  color: var(--ouro);
+  border-color: rgba(201, 168, 76, 0.35);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.contador {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--ouro);
+  color: var(--escuro);
+  font-size: 0.62rem;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+}
+
 .cta {
   background: var(--ouro);
   color: var(--escuro);
@@ -112,6 +154,10 @@
 
   .menuBotao {
     display: grid;
+  }
+
+  .acoes {
+    gap: 0.25rem;
   }
 
   .menuMobile {

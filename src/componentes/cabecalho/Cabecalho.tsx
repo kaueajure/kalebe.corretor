@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { empresa } from "@/dados/empresa";
+import { useFavoritos } from "@/hooks/useFavoritos";
 import { linkWhatsApp } from "@/lib/formatadores";
 import estilos from "./cabecalho.module.css";
 
@@ -12,13 +13,14 @@ const links = [
   { href: "/lancamentos", rotulo: "Lançamentos" },
   { href: "/sobre", rotulo: "Sobre" },
   { href: "/contato", rotulo: "Contato" },
-  { href: "/favoritos", rotulo: "Favoritos" },
 ];
 
 export function Cabecalho() {
   const pathname = usePathname();
+  const { ids, pronto } = useFavoritos();
   const [menuAberto, setMenuAberto] = useState(false);
   const [rolou, setRolou] = useState(false);
+  const totalFavoritos = pronto ? ids.length : 0;
 
   useEffect(() => {
     const aoRolar = () => setRolou(window.scrollY > 12);
@@ -62,29 +64,67 @@ export function Cabecalho() {
           </ul>
         </nav>
 
-        <a
-          href={linkWhatsApp(empresa.whatsapp, "Olá! Gostaria de atendimento.")}
-          className={estilos.cta}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          WhatsApp
-        </a>
+        <div className={estilos.acoes}>
+          <Link
+            href="/favoritos"
+            className={`${estilos.favoritos} ${
+              pathname.startsWith("/favoritos") ? estilos.favoritosAtivo : ""
+            }`}
+            aria-label={
+              totalFavoritos > 0
+                ? `Favoritos, ${totalFavoritos} salvos`
+                : "Favoritos"
+            }
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill={totalFavoritos > 0 ? "currentColor" : "none"}
+              stroke="currentColor"
+              strokeWidth="1.8"
+              aria-hidden="true"
+            >
+              <path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.65-7 10-7 10z" />
+            </svg>
+            {totalFavoritos > 0 ? (
+              <span className={estilos.contador}>{totalFavoritos}</span>
+            ) : null}
+          </Link>
 
-        <button
-          type="button"
-          className={estilos.menuBotao}
-          aria-expanded={menuAberto}
-          aria-controls="menu-mobile"
-          onClick={() => setMenuAberto((v) => !v)}
-        >
-          <span className="sr-only">
-            {menuAberto ? "Fechar menu" : "Abrir menu"}
-          </span>
-          <span className={`${estilos.linha} ${menuAberto ? estilos.x1 : ""}`} />
-          <span className={`${estilos.linha} ${menuAberto ? estilos.x2 : ""}`} />
-          <span className={`${estilos.linha} ${menuAberto ? estilos.x3 : ""}`} />
-        </button>
+          <a
+            href={linkWhatsApp(
+              empresa.whatsapp,
+              "Olá! Gostaria de atendimento."
+            )}
+            className={estilos.cta}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            WhatsApp
+          </a>
+
+          <button
+            type="button"
+            className={estilos.menuBotao}
+            aria-expanded={menuAberto}
+            aria-controls="menu-mobile"
+            onClick={() => setMenuAberto((v) => !v)}
+          >
+            <span className="sr-only">
+              {menuAberto ? "Fechar menu" : "Abrir menu"}
+            </span>
+            <span
+              className={`${estilos.linha} ${menuAberto ? estilos.x1 : ""}`}
+            />
+            <span
+              className={`${estilos.linha} ${menuAberto ? estilos.x2 : ""}`}
+            />
+            <span
+              className={`${estilos.linha} ${menuAberto ? estilos.x3 : ""}`}
+            />
+          </button>
+        </div>
       </div>
 
       <div
