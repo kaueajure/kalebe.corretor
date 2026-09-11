@@ -1,0 +1,126 @@
+.card {
+  position: relative;
+  background: var(--escuro-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  overflow: hidden;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(201, 168, 76, 0.4);
+  transform: translateY(-3px);
+}
+
+.link {
+  display: block;
+  color: inherit;
+}
+
+.midia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: #121212;
+  overflow: hidden;
+}
+
+.foto {
+  object-fit: cover;
+  transition: transform 0.45s ease;
+}
+
+.card:hover .foto {
+  transform: scale(1.03);
+}
+
+.semFoto {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--cinza-fraco);
+  font-size: 0.85rem;
+}
+
+.finalidade {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.85rem;
+  background: var(--ouro);
+  color: var(--escuro);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 2px;
+}
+
+.mcmv {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  background: rgba(10, 10, 10, 0.72);
+  color: var(--creme);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.55rem;
+  border-radius: 2px;
+  border: 1px solid var(--borda);
+}
+
+.corpo {
+  padding: 1.15rem 1.15rem 1.35rem;
+}
+
+.preco {
+  font-family: var(--fonte-display);
+  font-size: 1.45rem;
+  line-height: 1.1;
+  margin-bottom: 0.15rem;
+}
+
+.precoAnterior {
+  font-size: 0.82rem;
+  color: var(--cinza);
+  text-decoration: line-through;
+  margin-bottom: 0.45rem;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0.45rem 0 0.35rem;
+}
+
+.local {
+  font-size: 0.82rem;
+  color: var(--cinza-fraco);
+  margin-bottom: 1rem;
+}
+
+.specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.specs li {
+  font-size: 0.78rem;
+  color: var(--cinza-suave);
+}
+
+.specs strong {
+  color: var(--creme);
+  font-weight: 500;
+}
+
+.acaoFavorito {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+}

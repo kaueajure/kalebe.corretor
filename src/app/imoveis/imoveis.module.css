@@ -1,0 +1,25 @@
+.pagina {
+  padding: 2.75rem 0 4rem;
+}
+
+.cabecalho {
+  margin-bottom: 2rem;
+}
+
+.totalDesktop {
+  color: var(--cinza-suave);
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+}
+
+.totalDesktop strong {
+  color: var(--creme);
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+}
+
+@media (max-width: 700px) {
+  .totalDesktop {
+    display: none;
+  }
+}

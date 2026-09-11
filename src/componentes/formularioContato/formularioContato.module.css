@@ -1,0 +1,9 @@
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.erro {
+  color: #e8a0a0;
+  font-size: 0.9rem;
+}

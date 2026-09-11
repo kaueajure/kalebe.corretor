@@ -1,0 +1,86 @@
+.pagina {
+  padding: 3rem 0 4.5rem;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.fotoWrap {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 1px solid var(--borda);
+}
+
+.foto {
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(0.15);
+}
+
+.selo {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  background: var(--ouro);
+  color: var(--escuro);
+  padding: 0.85rem 1rem;
+  border-radius: var(--raio);
+  text-align: center;
+}
+
+.selo strong {
+  display: block;
+  font-family: var(--fonte-display);
+  font-size: 1.2rem;
+}
+
+.selo span {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.texto {
+  color: var(--cinza-suave);
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+.lista {
+  margin-bottom: 2rem;
+}
+
+.lista li {
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  color: var(--cinza-suave);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lista li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--ouro);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+  .grade {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .fotoWrap {
+    max-width: 420px;
+  }
+}

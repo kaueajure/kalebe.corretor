@@ -1,0 +1,144 @@
+.cabecalho {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  background: rgba(10, 10, 10, 0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.rolou {
+  border-bottom-color: var(--borda);
+  background: rgba(10, 10, 10, 0.96);
+}
+
+.interno {
+  min-height: var(--cabecalho-altura);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.logo {
+  font-family: var(--fonte-display);
+  font-size: 1.2rem;
+  color: var(--ouro);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.logo span {
+  color: var(--creme);
+  font-weight: 400;
+}
+
+.navDesktop ul {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.navDesktop a {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.7);
+  transition: color 0.25s ease;
+}
+
+.navDesktop a:hover,
+.ativo {
+  color: var(--ouro) !important;
+}
+
+.cta {
+  background: var(--ouro);
+  color: var(--escuro);
+  padding: 0.55rem 1.2rem;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: background 0.25s ease;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cta:hover {
+  background: var(--ouro-claro);
+}
+
+.menuBotao {
+  display: none;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  position: relative;
+}
+
+.linha {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--creme);
+  margin: 5px 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.x1 {
+  transform: translateY(6.5px) rotate(45deg);
+}
+
+.x2 {
+  opacity: 0;
+}
+
+.x3 {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+.menuMobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .navDesktop,
+  .cta {
+    display: none;
+  }
+
+  .menuBotao {
+    display: grid;
+  }
+
+  .menuMobile {
+    display: block;
+    position: fixed;
+    inset: var(--cabecalho-altura) 0 0;
+    background: var(--escuro);
+    padding: 1.5rem;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    border-top: 1px solid var(--borda);
+  }
+
+  .aberto {
+    transform: translateX(0);
+  }
+
+  .menuMobile ul {
+    display: grid;
+    gap: 0.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .menuMobile a {
+    display: block;
+    padding: 1rem 0.25rem;
+    font-size: 1.05rem;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+  }
+}

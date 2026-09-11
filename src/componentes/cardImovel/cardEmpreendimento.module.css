@@ -1,0 +1,78 @@
+.card {
+  background: var(--escuro-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  padding: 1.35rem;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(201, 168, 76, 0.45);
+  transform: translateY(-2px);
+}
+
+.topo {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.tipo,
+.mcmv {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.55rem;
+  border-radius: 2px;
+}
+
+.tipo {
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--ouro);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+}
+
+.mcmv {
+  background: transparent;
+  color: var(--cinza-suave);
+  border: 1px solid rgba(245, 240, 232, 0.12);
+}
+
+.nome {
+  font-family: var(--fonte-display);
+  font-size: 1.3rem;
+  margin-bottom: 0.35rem;
+}
+
+.local {
+  font-size: 0.82rem;
+  color: var(--cinza-fraco);
+  margin-bottom: 1rem;
+}
+
+.rotulo {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ouro);
+}
+
+.preco {
+  font-family: var(--fonte-display);
+  font-size: 1.55rem;
+  margin: 0.2rem 0 1rem;
+}
+
+.detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.detalhes li {
+  font-size: 0.75rem;
+  color: var(--cinza-suave);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  padding: 0.3rem 0.55rem;
+  border-radius: 2px;
+}

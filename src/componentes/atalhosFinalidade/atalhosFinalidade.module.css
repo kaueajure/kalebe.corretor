@@ -1,0 +1,45 @@
+.grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.card {
+  display: block;
+  padding: 1.5rem 1.35rem;
+  border: 1px solid var(--borda);
+  background: var(--escuro-3);
+  border-radius: var(--raio-suave);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(201, 168, 76, 0.45);
+  transform: translateY(-2px);
+}
+
+.card h3 {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.card p {
+  color: var(--cinza-suave);
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.card span {
+  color: var(--ouro);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 800px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,233 @@
+.pagina {
+  padding: 1.5rem 0 4rem;
+}
+
+.migalha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--cinza-fraco);
+  margin-bottom: 1.25rem;
+}
+
+.migalha a:hover {
+  color: var(--ouro);
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr;
+  gap: 2rem;
+  margin-top: 1.75rem;
+  align-items: start;
+}
+
+.metaTopo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.codigo {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--cinza-fraco);
+  letter-spacing: 0.06em;
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+}
+
+.local {
+  color: var(--cinza-suave);
+  margin-bottom: 1.5rem;
+}
+
+.aviso {
+  background: rgba(196, 92, 92, 0.12);
+  border: 1px solid rgba(196, 92, 92, 0.35);
+  color: #e8b4b4;
+  padding: 0.85rem 1rem;
+  border-radius: var(--raio);
+  margin-bottom: 1.25rem;
+}
+
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.resumo li {
+  background: var(--escuro-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  padding: 0.9rem 0.85rem;
+}
+
+.resumo strong {
+  display: block;
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  margin-bottom: 0.2rem;
+}
+
+.resumo span {
+  font-size: 0.75rem;
+  color: var(--cinza-fraco);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bloco {
+  margin-bottom: 2rem;
+}
+
+.bloco h2 {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.bloco p {
+  color: var(--cinza-suave);
+  line-height: 1.8;
+}
+
+.lista {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.lista li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  color: var(--cinza-suave);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.lista li::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: var(--ouro);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.financ {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.financ div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.financ dt {
+  color: var(--cinza-fraco);
+}
+
+.financ dd {
+  color: var(--creme);
+  font-weight: 500;
+}
+
+.obs {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--cinza-fraco) !important;
+}
+
+.lateral {
+  position: sticky;
+  top: calc(var(--cabecalho-altura) + 1rem);
+}
+
+.caixa {
+  background: var(--escuro-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  padding: 1.35rem;
+}
+
+.precoAntigo {
+  color: var(--cinza);
+  text-decoration: line-through;
+  font-size: 0.9rem;
+}
+
+.preco {
+  font-family: var(--fonte-display);
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.custos {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  color: var(--cinza-suave);
+  font-size: 0.88rem;
+}
+
+.acoes {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.creci {
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cinza-fraco);
+  text-align: center;
+}
+
+.similares {
+  margin-top: 3.5rem;
+}
+
+.espacoMobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    position: static;
+  }
+
+  .codigo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .espacoMobile {
+    display: block;
+    height: 76px;
+  }
+
+  .caixa .botao-whatsapp {
+    display: none;
+  }
+}

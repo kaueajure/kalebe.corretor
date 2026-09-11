@@ -1,0 +1,77 @@
+.rodape {
+  background: var(--escuro);
+  border-top: 1px solid var(--borda);
+  padding: 3.5rem 0 1.5rem;
+  margin-top: 2rem;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.logo {
+  font-family: var(--fonte-display);
+  color: var(--ouro);
+  letter-spacing: 0.12em;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.creci {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cinza-fraco);
+  margin-bottom: 1rem;
+}
+
+.texto {
+  color: var(--cinza-suave);
+  font-size: 0.92rem;
+  max-width: 28rem;
+  line-height: 1.7;
+}
+
+.titulo {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ouro);
+  margin-bottom: 1rem;
+}
+
+.lista {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.lista a {
+  color: var(--cinza-suave);
+  transition: color 0.25s ease;
+}
+
+.lista a:hover {
+  color: var(--ouro);
+}
+
+.lista li {
+  color: var(--cinza-suave);
+  font-size: 0.92rem;
+}
+
+.base {
+  border-top: 1px solid rgba(201, 168, 76, 0.08);
+  padding-top: 1.25rem;
+  color: rgba(245, 240, 232, 0.35);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 800px) {
+  .grade {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

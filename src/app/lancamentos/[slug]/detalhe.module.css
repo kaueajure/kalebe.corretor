@@ -1,0 +1,139 @@
+.pagina {
+  padding: 1.5rem 0 4rem;
+}
+
+.migalha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--cinza-fraco);
+  margin-bottom: 1.5rem;
+}
+
+.migalha a:hover {
+  color: var(--ouro);
+}
+
+.capa {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--borda);
+}
+
+.titulo {
+  font-family: var(--fonte-display);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+
+.local {
+  color: var(--cinza-suave);
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.bloco {
+  margin-bottom: 2rem;
+}
+
+.bloco h2 {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.bloco p {
+  color: var(--cinza-suave);
+  line-height: 1.8;
+}
+
+.lista {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.lista li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+}
+
+.lista span {
+  color: var(--cinza-fraco);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips li {
+  border: 1px solid var(--borda);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--cinza-suave);
+  border-radius: 2px;
+}
+
+.obs {
+  color: var(--cinza-fraco);
+  font-size: 0.9rem;
+}
+
+.caixa {
+  background: var(--escuro-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  padding: 1.35rem;
+  position: sticky;
+  top: calc(var(--cabecalho-altura) + 1rem);
+}
+
+.rotulo {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ouro);
+}
+
+.preco {
+  font-family: var(--fonte-display);
+  font-size: 2rem;
+  margin: 0.35rem 0 1.15rem;
+}
+
+.acoes {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.espacoMobile {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .caixa {
+    position: static;
+  }
+}
+
+@media (max-width: 700px) {
+  .espacoMobile {
+    display: block;
+    height: 76px;
+  }
+}
