@@ -118,11 +118,12 @@
     display: block;
     position: fixed;
     inset: var(--cabecalho-altura) 0 0;
-    background: var(--escuro);
+    background: #0a0a0a;
     padding: 1.5rem;
     transform: translateX(100%);
     transition: transform 0.3s ease;
     border-top: 1px solid var(--borda);
+    z-index: 99;
   }
 
   .aberto {

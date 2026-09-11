@@ -23,27 +23,12 @@
   filter: grayscale(0.15);
 }
 
-.selo {
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  background: var(--ouro);
-  color: var(--escuro);
-  padding: 0.85rem 1rem;
-  border-radius: var(--raio);
-  text-align: center;
-}
-
-.selo strong {
-  display: block;
-  font-family: var(--fonte-display);
-  font-size: 1.2rem;
-}
-
-.selo span {
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+.creciLinha {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--ouro);
+  margin-bottom: 1.25rem;
 }
 
 .texto {

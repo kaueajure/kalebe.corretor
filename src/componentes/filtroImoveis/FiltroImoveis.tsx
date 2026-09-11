@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { FiltroImoveisEstado } from "@/tipos/imovel";
 import { filtroInicial, filtroParaQuery } from "@/lib/formatadores";
 import estilos from "./filtroImoveis.module.css";
@@ -34,6 +34,10 @@ export function FiltroImoveis({ cidades, bairros, total }: Props) {
   const inicial = useMemo(() => lerFiltro(searchParams), [searchParams]);
   const [filtro, setFiltro] = useState<FiltroImoveisEstado>(inicial);
   const [aberto, setAberto] = useState(false);
+
+  useEffect(() => {
+    setFiltro(inicial);
+  }, [inicial]);
 
   function atualizar<K extends keyof FiltroImoveisEstado>(
     chave: K,
@@ -191,7 +195,7 @@ export function FiltroImoveis({ cidades, bairros, total }: Props) {
               min={0}
               value={filtro.precoMin}
               onChange={(e) => atualizar("precoMin", e.target.value)}
-              placeholder="0"
+              placeholder="Ex.: 150000"
             />
           </div>
 
@@ -206,7 +210,7 @@ export function FiltroImoveis({ cidades, bairros, total }: Props) {
               min={0}
               value={filtro.precoMax}
               onChange={(e) => atualizar("precoMax", e.target.value)}
-              placeholder="500000"
+              placeholder="Ex.: 400000"
             />
           </div>
 
@@ -273,7 +277,7 @@ export function FiltroImoveis({ cidades, bairros, total }: Props) {
               min={0}
               value={filtro.areaMin}
               onChange={(e) => atualizar("areaMin", e.target.value)}
-              placeholder="40"
+              placeholder="Ex.: 80"
             />
           </div>
         </div>

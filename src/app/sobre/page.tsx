@@ -22,10 +22,6 @@ export default function PaginaSobre() {
             className={estilos.foto}
             priority
           />
-          <div className={estilos.selo}>
-            <strong>CRECI</strong>
-            <span>322829 F</span>
-          </div>
         </div>
 
         <div>
@@ -35,6 +31,7 @@ export default function PaginaSobre() {
             <span className="destaque">Rio Preto e região</span>
           </h1>
           <div className="divisor" />
+          <p className={estilos.creciLinha}>{empresa.creci}</p>
           <p className={estilos.texto}>{empresa.sobre}</p>
 
           <ul className={estilos.lista}>
@@ -43,7 +40,7 @@ export default function PaginaSobre() {
             <li>
               Atendimento em {empresa.cidadesAtendimento.join(", ")} e região
             </li>
-            <li>{empresa.creci}</li>
+            <li>Registro profissional ativo</li>
           </ul>
 
           <a

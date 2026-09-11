@@ -2,7 +2,7 @@
   background: var(--escuro-3);
   border: 1px solid var(--borda);
   border-radius: var(--raio-suave);
-  padding: 1.35rem;
+  padding: 1.55rem 1.45rem;
   transition: border-color 0.25s ease, transform 0.25s ease;
 }
 
@@ -48,6 +48,7 @@
   font-size: 0.82rem;
   color: var(--cinza-fraco);
   margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
 .rotulo {
