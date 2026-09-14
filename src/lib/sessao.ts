@@ -13,7 +13,8 @@ export type SessaoPainel = {
 };
 
 function chaveSecreta() {
-  const secreta = process.env.sessao_secreta;
+  const secreta =
+    process.env.sessao_secreta?.trim() || process.env.SESSAO_SECRETA?.trim();
   if (!secreta) {
     throw new Error("Configure sessao_secreta no .env.");
   }

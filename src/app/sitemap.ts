@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next";
-import { listarSlugsPublicados } from "@/dados/imoveis";
 import { empreendimentos } from "@/dados/lancamentos";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -20,6 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let dinamicasImoveis: MetadataRoute.Sitemap = [];
   try {
+    const { listarSlugsPublicados } = await import("@/dados/imoveis");
     const slugs = await listarSlugsPublicados();
     dinamicasImoveis = slugs.map((slug) => ({
       url: `${base}/imoveis/${slug}`,

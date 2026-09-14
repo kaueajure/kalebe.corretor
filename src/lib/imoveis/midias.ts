@@ -40,6 +40,7 @@ export class ErroDeMidia extends Error {}
 export function obterDiretorioDeUploads(diretorioDoProcesso = process.cwd()) {
   const configurado =
     process.env.diretorio_uploads?.trim() ||
+    process.env.DIRETORIO_UPLOADS?.trim() ||
     process.env.DIRETORIO_DE_UPLOADS?.trim();
   if (configurado) return path.resolve(configurado);
 

@@ -35,11 +35,19 @@ function carregarEnv(caminho) {
 
 carregarEnv(resolve(process.cwd(), ".env"));
 
-const host = process.env.host;
-const user = process.env.usuario;
-const password = process.env.senha;
-const database = process.env.banco;
-const port = Number(process.env.porta || "3306");
+function lerEnv(...chaves) {
+  for (const chave of chaves) {
+    const valor = process.env[chave]?.trim();
+    if (valor) return valor;
+  }
+  return undefined;
+}
+
+const host = lerEnv("host", "HOST");
+const user = lerEnv("usuario", "USUARIO");
+const password = lerEnv("senha", "SENHA");
+const database = lerEnv("banco", "BANCO");
+const port = Number(lerEnv("porta", "PORTA") || "3306");
 
 if (!host || !user || !password || !database) {
   console.error("Faltam variáveis no .env: host, usuario, senha e banco.");
