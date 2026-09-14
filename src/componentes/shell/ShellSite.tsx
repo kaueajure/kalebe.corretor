@@ -15,8 +15,9 @@ export function ShellSite({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <a className="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
       <Cabecalho />
-      <main className="pagina">{children}</main>
+      <main id="conteudo-principal" className="pagina" tabIndex={-1}>{children}</main>
       <Rodape />
     </>
   );

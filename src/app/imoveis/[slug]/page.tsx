@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GaleriaImovel } from "@/componentes/galeriaImovel/GaleriaImovel";
@@ -237,7 +238,7 @@ export default async function PaginaDetalheImovel({ params }: Props) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    WhatsApp
+                    Chamar no WhatsApp
                   </a>
                   <a
                     href={`tel:+${empresa.telefoneLink}`}
@@ -252,7 +253,18 @@ export default async function PaginaDetalheImovel({ params }: Props) {
                   />
                 </div>
 
-                <p className={estilos.creci}>{empresa.creci}</p>
+                <div className={estilos.corretor}>
+                  <Image
+                    src="/imagens/sobre/kalebe.webp"
+                    alt="Kalebe"
+                    width={48}
+                    height={48}
+                  />
+                  <div>
+                    <strong>Kalebe</strong>
+                    <span>Corretor · {empresa.creci}</span>
+                  </div>
+                </div>
               </div>
             </aside>
           </div>

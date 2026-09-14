@@ -1,41 +1,129 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CardEmpreendimento } from "@/componentes/cardImovel/CardEmpreendimento";
 import { empreendimentos } from "@/dados/lancamentos";
+import { empresa } from "@/dados/empresa";
+import { linkWhatsApp } from "@/lib/formatadores";
+import { Icone } from "@/componentes/ui/Icone";
 import estilos from "./lancamentos.module.css";
 
 export const metadata: Metadata = {
   title: "Lançamentos e empreendimentos",
   description:
-    "Lançamentos residenciais em São José do Rio Preto, Mirassol e Bady Bassitt, incluindo Minha Casa Minha Vida.",
+    "Casas e apartamentos na planta em Rio Preto, Mirassol e Bady Bassitt. Opções do Minha Casa Minha Vida com o Kalebe.",
 };
 
-export default function PaginaLancamentos() {
+export default async function PaginaLancamentos({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const cidade = typeof params.cidade === "string" ? params.cidade : "";
+  const tipo = typeof params.tipo === "string" ? params.tipo : "";
+  const lista = empreendimentos.filter(
+    (i) => (!cidade || i.cidade === cidade) && (!tipo || i.tipo === tipo)
+  );
+
   return (
     <div className={estilos.pagina}>
       <div className="conteudo">
         <header className={estilos.cabecalho}>
-          <p className="rotulo-secao">Na planta</p>
-          <h1 className="titulo-secao">Lançamentos</h1>
-          <div className="divisor" />
-          <p className="texto-secao">
-            Empreendimentos com valores a partir de e tipologias informadas pelas
-            construtoras. Para plantas, condições e disponibilidade, fale no
-            WhatsApp.
-          </p>
+          <div>
+            <p className="rotulo-secao">Na planta</p>
+            <h1 className="titulo-secao">Lançamentos na região</h1>
+            <p className="texto-secao">
+              Compare casas e apartamentos, inclusive Minha Casa Minha Vida.
+              Plantas, vagas e condições de compra saem no atendimento.
+            </p>
+          </div>
+          <div className={estilos.ajuda}>
+            <Icone nome="chave" size={26} />
+            <strong>Vai usar o Minha Casa Minha Vida?</strong>
+            <p>Me chame com a cidade e a faixa de valor. Eu te oriento no que dá para financiar.</p>
+            <a
+              href={linkWhatsApp(
+                empresa.whatsapp,
+                "Olá, Kalebe! Quero conhecer as opções do Minha Casa Minha Vida."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-seta"
+            >
+              Tirar dúvidas <Icone nome="seta" size={17} />
+            </a>
+          </div>
         </header>
 
-        {empreendimentos.length === 0 ? (
-          <div className="mensagem-estado">
-            <h2>Nenhum lançamento cadastrado</h2>
-            <p>Novos empreendimentos serão publicados aqui.</p>
+        <form action="/lancamentos" className={estilos.filtros}>
+          <div>
+            <label htmlFor="lancamento-cidade" className="rotulo-campo">
+              Cidade
+            </label>
+            <select
+              id="lancamento-cidade"
+              name="cidade"
+              defaultValue={cidade}
+              className="selecao"
+            >
+              <option value="">Todas as cidades</option>
+              {empresa.cidadesAtendimento.map((c) => (
+                <option key={c}>{c}</option>
+              ))}
+            </select>
           </div>
-        ) : (
+          <div>
+            <label htmlFor="lancamento-tipo" className="rotulo-campo">
+              Tipo
+            </label>
+            <select
+              id="lancamento-tipo"
+              name="tipo"
+              defaultValue={tipo}
+              className="selecao"
+            >
+              <option value="">Casas e apartamentos</option>
+              <option value="casa">Casas</option>
+              <option value="apartamento">Apartamentos</option>
+            </select>
+          </div>
+          <button className="botao botao-primario" type="submit">
+            Filtrar
+          </button>
+          {cidade || tipo ? (
+            <Link href="/lancamentos" className="link-seta">
+              Limpar
+            </Link>
+          ) : null}
+        </form>
+
+        <p className={estilos.total}>
+          {lista.length}{" "}
+          {lista.length === 1
+            ? "empreendimento encontrado"
+            : "empreendimentos encontrados"}
+        </p>
+
+        {lista.length ? (
           <div className={estilos.grade}>
-            {empreendimentos.map((item) => (
+            {lista.map((item) => (
               <CardEmpreendimento key={item.id} empreendimento={item} />
             ))}
           </div>
+        ) : (
+          <div className="mensagem-estado">
+            <h2>Nenhum lançamento com esses filtros</h2>
+            <p>Troque a cidade ou o tipo para ver as opções.</p>
+            <Link href="/lancamentos" className="botao botao-secundario">
+              Ver todos os lançamentos
+            </Link>
+          </div>
         )}
+
+        <p className={estilos.nota}>
+          Valores iniciais por empreendimento. Confirme disponibilidade, plantas
+          e condições no atendimento.
+        </p>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@
   border: 1px solid var(--borda);
   border-radius: var(--raio-suave);
   padding: 2rem 1.75rem;
-  box-shadow: 0 12px 32px rgba(11, 37, 69, 0.06);
+  box-shadow: var(--sombra);
 }
 
 .marca {

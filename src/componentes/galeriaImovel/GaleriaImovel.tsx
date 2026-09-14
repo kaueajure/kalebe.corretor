@@ -13,6 +13,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
   const [indice, setIndice] = useState(0);
   const [aberta, setAberta] = useState(false);
   const total = fotos.length;
+  const mosaico = total >= 3;
 
   const irPara = useCallback(
     (proximo: number) => {
@@ -41,51 +42,81 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
     );
   }
 
+  function abrir(i: number) {
+    setIndice(i);
+    setAberta(true);
+  }
+
   return (
     <div className={estilos.galeria}>
-      <div className={estilos.principal}>
-        <button
-          type="button"
-          className={estilos.abrir}
-          onClick={() => setAberta(true)}
-          aria-label="Ampliar foto"
-        >
-          <Image
-            src={fotos[indice]}
-            alt={`${titulo} — foto ${indice + 1} de ${total}`}
-            fill
-            sizes="(max-width: 900px) 100vw, 70vw"
-            className={estilos.foto}
-            priority
-          />
-        </button>
+      <div className={mosaico ? estilos.mosaico : undefined}>
+        <div className={estilos.principal}>
+          <button
+            type="button"
+            className={estilos.abrir}
+            onClick={() => abrir(indice)}
+            aria-label="Ampliar foto"
+          >
+            <Image
+              src={fotos[indice]}
+              alt={`${titulo} — foto ${indice + 1} de ${total}`}
+              fill
+              sizes="(max-width: 900px) 100vw, 70vw"
+              className={estilos.foto}
+              priority
+            />
+          </button>
+          {total > 1 && !mosaico ? (
+            <>
+              <button
+                type="button"
+                className={`${estilos.nav} ${estilos.prev}`}
+                onClick={() => irPara(indice - 1)}
+                aria-label="Foto anterior"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className={`${estilos.nav} ${estilos.next}`}
+                onClick={() => irPara(indice + 1)}
+                aria-label="Próxima foto"
+              >
+                ›
+              </button>
+            </>
+          ) : null}
+          <span className={estilos.contador}>
+            {indice + 1} / {total}
+          </span>
+          {mosaico ? (
+            <span className={estilos.verFotos}>Ver fotos</span>
+          ) : null}
+        </div>
 
-        {total > 1 ? (
+        {mosaico ? (
           <>
             <button
               type="button"
-              className={`${estilos.nav} ${estilos.prev}`}
-              onClick={() => irPara(indice - 1)}
-              aria-label="Foto anterior"
+              className={estilos.lado}
+              onClick={() => abrir(1)}
+              aria-label="Ver foto 2"
             >
-              ‹
+              <Image src={fotos[1]} alt="" fill sizes="30vw" className={estilos.foto} />
             </button>
             <button
               type="button"
-              className={`${estilos.nav} ${estilos.next}`}
-              onClick={() => irPara(indice + 1)}
-              aria-label="Próxima foto"
+              className={estilos.lado}
+              onClick={() => abrir(2)}
+              aria-label="Ver foto 3"
             >
-              ›
+              <Image src={fotos[2]} alt="" fill sizes="30vw" className={estilos.foto} />
             </button>
-            <span className={estilos.contador}>
-              {indice + 1} / {total}
-            </span>
           </>
         ) : null}
       </div>
 
-      {total > 1 ? (
+      {total > 1 && !mosaico ? (
         <div className={estilos.miniaturas} role="list">
           {fotos.map((foto, i) => (
             <button
@@ -97,13 +128,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               aria-label={`Ver foto ${i + 1}`}
               aria-current={i === indice}
             >
-              <Image
-                src={foto}
-                alt=""
-                fill
-                sizes="120px"
-                className={estilos.foto}
-              />
+              <Image src={foto} alt="" fill sizes="120px" className={estilos.foto} />
             </button>
           ))}
         </div>

@@ -1,77 +1,80 @@
 .rodape {
-  background: var(--fundo-2);
-  border-top: 1px solid var(--borda);
-  padding: 3.5rem 0 1.5rem;
-  margin-top: 2rem;
+  background: var(--primaria);
+  padding: 3.5rem 0 1.4rem;
+  color: #fff;
 }
 
 .grade {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 2.5rem;
-  padding-bottom: 2.5rem;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 3rem;
+  padding-bottom: 2.25rem;
 }
 
 .logo {
   font-family: var(--fonte-display);
-  color: var(--primaria);
-  letter-spacing: 0.04em;
-  font-size: 1.15rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.7rem;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
 }
 
 .creci {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--cinza-fraco);
+  font-size: 0.78rem;
+  color: #c6c6c6;
   margin-bottom: 1rem;
 }
 
 .texto {
-  color: var(--cinza-suave);
-  font-size: 0.92rem;
-  max-width: 28rem;
+  color: #c6c6c6;
+  font-size: 0.95rem;
+  max-width: 22rem;
   line-height: 1.7;
 }
 
 .titulo {
-  font-size: 0.72rem;
-  letter-spacing: 0.14em;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ouro);
   margin-bottom: 1rem;
+  color: #fff;
 }
 
 .lista {
   display: grid;
-  gap: 0.65rem;
-}
-
-.lista a {
-  color: var(--cinza-suave);
-  transition: color 0.25s ease;
-}
-
-.lista a:hover {
-  color: var(--ouro);
+  gap: 0.7rem;
 }
 
 .lista li {
-  color: var(--cinza-suave);
-  font-size: 0.92rem;
+  color: #c6c6c6;
+  font-size: 0.95rem;
+}
+
+.lista a:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 .base {
-  border-top: 1px solid var(--borda);
-  padding-top: 1.25rem;
-  color: var(--texto-fraco);
-  font-size: 0.78rem;
+  border-top: 1px solid rgb(255 255 255 / 14%);
+  padding-top: 1.2rem;
+  color: #c6c6c6;
+  font-size: 0.82rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 760px) {
   .grade {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 1.25rem;
+  }
+
+  .grade > div:first-child {
+    grid-column: 1 / -1;
   }
 }

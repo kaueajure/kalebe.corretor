@@ -46,25 +46,22 @@ export default function PaginaFavoritos() {
     <div className={estilos.pagina}>
       <div className="conteudo">
         <header className={estilos.cabecalho}>
-          <p className="rotulo-secao">Salvos</p>
           <h1 className="titulo-secao">Favoritos</h1>
-          <div className="divisor" />
           <p className="texto-secao">
-            Os imóveis salvos ficam neste aparelho. Você pode removê-los a
-            qualquer momento.
+            Os imóveis que você salvou neste aparelho. Abra de novo quando quiser comparar ou chamar o Kalebe.
           </p>
         </header>
 
         {!pronto || carregando ? (
           <div className="mensagem-estado">
-            <p>Carregando favoritos...</p>
+            <p>Carregando favoritos…</p>
           </div>
         ) : salvos.length === 0 ? (
           <div className="mensagem-estado">
-            <h2>Nenhum imóvel salvo</h2>
+            <h2>Nenhum imóvel salvo ainda</h2>
             <p>
-              Ao navegar pelos imóveis, use o coração para guardar as opções que
-              quiser comparar depois.
+              No anúncio, toque no coração para guardar as opções que quiser
+              comparar depois.
             </p>
             <Link href="/imoveis" className="botao botao-primario">
               Ver imóveis

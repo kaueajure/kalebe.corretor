@@ -35,7 +35,7 @@ export function FormularioContato() {
           botão abaixo.
         </p>
         <a
-          href={linkWhatsApp(empresa.whatsapp)}
+          href={linkWhatsApp(empresa.whatsapp, `Olá, meu nome é ${nome}. Telefone: ${telefone}. ${mensagem}`)}
           className="botao botao-whatsapp"
           target="_blank"
           rel="noopener noreferrer"
@@ -47,13 +47,15 @@ export function FormularioContato() {
   }
 
   return (
-    <form className={estilos.form} onSubmit={enviar} noValidate>
+    <form className={estilos.form} onSubmit={enviar}>
       <div>
         <label htmlFor="contato-nome" className="rotulo-campo">
           Nome
         </label>
         <input
           id="contato-nome"
+          name="nome"
+          placeholder="Como você se chama?"
           className="campo"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
@@ -67,6 +69,9 @@ export function FormularioContato() {
         </label>
         <input
           id="contato-telefone"
+          name="telefone"
+          type="tel"
+          placeholder="(17) 99999-9999"
           className="campo"
           value={telefone}
           onChange={(e) => setTelefone(e.target.value)}
@@ -80,11 +85,12 @@ export function FormularioContato() {
         </label>
         <textarea
           id="contato-mensagem"
+          name="mensagem"
           className="area-texto"
           rows={5}
           value={mensagem}
           onChange={(e) => setMensagem(e.target.value)}
-          placeholder="Conte o que você procura: cidade, faixa de preço, quartos..."
+          placeholder="Ex.: procuro uma casa de 2 quartos em Rio Preto, até R$ 300 mil."
           required
         />
       </div>
@@ -94,7 +100,7 @@ export function FormularioContato() {
         </p>
       ) : null}
       <button type="submit" className="botao botao-primario">
-        Enviar pelo WhatsApp
+        Continuar no WhatsApp
       </button>
     </form>
   );

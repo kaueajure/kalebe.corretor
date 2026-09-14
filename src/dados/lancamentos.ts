@@ -15,7 +15,7 @@ export const empreendimentos: Empreendimento[] = [
     detalhesExtras: ["Entrada facilitada"],
     mcmv: true,
     descricao:
-      "Empreendimento residencial na região oeste de São José do Rio Preto, com unidades a partir de 41,5 m² e duas dormitórios. Opção alinhada ao programa Minha Casa Minha Vida.",
+      "Empreendimento residencial na região oeste de São José do Rio Preto, com unidades a partir de 41,5 m² e dois dormitórios. Uma opção do Minha Casa Minha Vida.",
     caracteristicas: ["2 dormitórios", "41,5 m²", "MCMV"],
     fotos: [],
   },
@@ -32,7 +32,7 @@ export const empreendimentos: Empreendimento[] = [
     quartos: 2,
     mcmv: true,
     descricao:
-      "Apartamentos na região oeste de Rio Preto, com tipologias a partir de 45 m². Ideal para quem busca lançamento com condições de financiamento.",
+      "Apartamentos na região oeste de Rio Preto, com unidades a partir de 45 m². Consulte as plantas e as condições de financiamento.",
     caracteristicas: ["2 dormitórios", "45 m²", "Lançamento"],
     fotos: [],
   },
@@ -66,7 +66,7 @@ export const empreendimentos: Empreendimento[] = [
     quartos: 2,
     mcmv: true,
     descricao:
-      "Casas na região norte de Rio Preto, com tipologias a partir de 55 m².",
+      "Casas na região norte de Rio Preto, com unidades a partir de 55 m².",
     caracteristicas: ["Casa", "2 dormitórios", "55 m²"],
     fotos: [],
   },
@@ -101,7 +101,7 @@ export const empreendimentos: Empreendimento[] = [
     detalhesExtras: ["Entrada até 180x"],
     mcmv: true,
     descricao:
-      "Residencial na região norte de Rio Preto, com entrada parcelada e tipologias compactas de dois dormitórios.",
+      "Residencial na região norte de Rio Preto, com entrada parcelada e unidades de dois quartos.",
     caracteristicas: ["2 dormitórios", "44 m²", "Entrada parcelada"],
     fotos: [],
   },
@@ -137,7 +137,7 @@ export const empreendimentos: Empreendimento[] = [
     entrega: "jan/2028",
     mcmv: true,
     descricao:
-      "Casas próximas à região do Shopping Norte, com tipologias a partir de 46,53 m².",
+      "Casas próximas à região do Shopping Norte, com unidades a partir de 46,53 m².",
     caracteristicas: ["Casa", "2 dormitórios", "46,53 m²"],
     fotos: [],
   },
@@ -155,7 +155,7 @@ export const empreendimentos: Empreendimento[] = [
     entrega: "mar/2028",
     mcmv: true,
     descricao:
-      "Casas em Mirassol, com tipologias a partir de 41,9 m² e entrega prevista para março de 2028.",
+      "Casas em Mirassol, com unidades a partir de 41,9 m² e entrega prevista para março de 2028.",
     caracteristicas: ["Casa", "2 dormitórios", "41,9 m²"],
     fotos: [],
   },
@@ -191,7 +191,7 @@ export const empreendimentos: Empreendimento[] = [
     entrega: "out/2027",
     mcmv: true,
     descricao:
-      "Casas em Bady Bassitt, com tipologias a partir de 43,77 m² e entrega prevista para outubro de 2027.",
+      "Casas em Bady Bassitt, com unidades a partir de 43,77 m² e entrega prevista para outubro de 2027.",
     caracteristicas: ["Casa", "2 dormitórios", "43,77 m²"],
     fotos: [],
   },
@@ -210,7 +210,7 @@ export const empreendimentos: Empreendimento[] = [
     detalhesExtras: ["Faixa 3"],
     mcmv: true,
     descricao:
-      "Casas em Bady Bassitt compatíveis com Faixa 3 do Minha Casa Minha Vida, com tipologias a partir de 58,15 m².",
+      "Casas em Bady Bassitt compatíveis com Faixa 3 do Minha Casa Minha Vida, com unidades a partir de 58,15 m².",
     caracteristicas: ["Casa", "Faixa 3", "58,15 m²"],
     fotos: [],
   },

@@ -1,104 +1,98 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
-import type { FiltroImoveisEstado } from "@/tipos/imovel";
-import { filtroParaQuery } from "@/lib/formatadores";
+import Link from "next/link";
+import { useState } from "react";
+import { Icone } from "@/componentes/ui/Icone";
+import { empresa } from "@/dados/empresa";
 import estilos from "./buscaPrincipal.module.css";
 
-export function BuscaPrincipal() {
-  const router = useRouter();
-  const [finalidade, setFinalidade] =
-    useState<FiltroImoveisEstado["finalidade"]>("");
-  const [tipo, setTipo] = useState<FiltroImoveisEstado["tipo"]>("");
-  const [cidade, setCidade] = useState("");
-  const [quartos, setQuartos] = useState("");
-
-  function enviar(e: FormEvent) {
-    e.preventDefault();
-    const query = filtroParaQuery({ finalidade, tipo, cidade, quartos });
-    router.push(`/imoveis${query}`);
+function rotuloPreco(valor: number, aluguel: boolean) {
+  if (aluguel) {
+    return `Até ${new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      maximumFractionDigits: 0,
+    }).format(valor)}`;
   }
 
+  if (valor >= 1_000_000) {
+    return "Até R$ 1 milhão";
+  }
+
+  return `Até R$ ${valor / 1000} mil`;
+}
+
+export function BuscaPrincipal() {
+  const [finalidade, setFinalidade] = useState("venda");
+  const precos =
+    finalidade === "venda"
+      ? [200000, 300000, 400000, 600000, 1000000]
+      : [1000, 1500, 2000, 3000, 5000];
+
   return (
-    <form className={estilos.busca} onSubmit={enviar} aria-label="Buscar imóveis">
-      <div className={estilos.campo}>
-        <label htmlFor="busca-finalidade" className="rotulo-campo">
-          Finalidade
-        </label>
-        <select
-          id="busca-finalidade"
-          className="selecao"
-          value={finalidade}
-          onChange={(e) =>
-            setFinalidade(e.target.value as FiltroImoveisEstado["finalidade"])
-          }
+    <div className={estilos.busca}>
+      <div className={estilos.intencoes} role="group" aria-label="O que você procura?">
+        <button
+          type="button"
+          aria-pressed={finalidade === "venda"}
+          onClick={() => setFinalidade("venda")}
         >
-          <option value="">Comprar ou alugar</option>
-          <option value="venda">Comprar</option>
-          <option value="aluguel">Alugar</option>
-        </select>
-      </div>
-
-      <div className={estilos.campo}>
-        <label htmlFor="busca-tipo" className="rotulo-campo">
-          Tipo
-        </label>
-        <select
-          id="busca-tipo"
-          className="selecao"
-          value={tipo}
-          onChange={(e) =>
-            setTipo(e.target.value as FiltroImoveisEstado["tipo"])
-          }
+          Comprar
+        </button>
+        <button
+          type="button"
+          aria-pressed={finalidade === "aluguel"}
+          onClick={() => setFinalidade("aluguel")}
         >
-          <option value="">Todos os tipos</option>
-          <option value="casa">Casa</option>
-          <option value="apartamento">Apartamento</option>
-          <option value="sobrado">Sobrado</option>
-          <option value="terreno">Terreno</option>
-          <option value="comercial">Comercial</option>
-        </select>
+          Alugar
+        </button>
+        <Link href="/lancamentos">
+          Lançamentos <Icone nome="seta" size={14} />
+        </Link>
       </div>
-
-      <div className={estilos.campo}>
-        <label htmlFor="busca-cidade" className="rotulo-campo">
-          Cidade
-        </label>
-        <select
-          id="busca-cidade"
-          className="selecao"
-          value={cidade}
-          onChange={(e) => setCidade(e.target.value)}
-        >
-          <option value="">Todas as cidades</option>
-          <option value="São José do Rio Preto">São José do Rio Preto</option>
-          <option value="Mirassol">Mirassol</option>
-          <option value="Bady Bassitt">Bady Bassitt</option>
-        </select>
-      </div>
-
-      <div className={estilos.campo}>
-        <label htmlFor="busca-quartos" className="rotulo-campo">
-          Quartos
-        </label>
-        <select
-          id="busca-quartos"
-          className="selecao"
-          value={quartos}
-          onChange={(e) => setQuartos(e.target.value)}
-        >
-          <option value="">Qualquer</option>
-          <option value="1">1+</option>
-          <option value="2">2+</option>
-          <option value="3">3+</option>
-          <option value="4">4+</option>
-        </select>
-      </div>
-
-      <button type="submit" className={`botao botao-primario ${estilos.enviar}`}>
-        Buscar imóveis
-      </button>
-    </form>
+      <form action="/imoveis" className={estilos.form} aria-label="Buscar imóveis">
+        <input type="hidden" name="finalidade" value={finalidade} />
+        <div className={estilos.campo}>
+          <label htmlFor="busca-cidade">Onde você quer morar?</label>
+          <select id="busca-cidade" name="cidade" className="selecao" defaultValue="">
+            <option value="">Todas as cidades</option>
+            {empresa.cidadesAtendimento.map((cidade) => (
+              <option key={cidade}>{cidade}</option>
+            ))}
+          </select>
+        </div>
+        <div className={estilos.campo}>
+          <label htmlFor="busca-tipo">Tipo de imóvel</label>
+          <select id="busca-tipo" name="tipo" className="selecao" defaultValue="">
+            <option value="">Todos os tipos</option>
+            <option value="casa">Casa</option>
+            <option value="apartamento">Apartamento</option>
+            <option value="sobrado">Sobrado</option>
+            <option value="terreno">Terreno</option>
+            <option value="comercial">Comercial</option>
+          </select>
+        </div>
+        <div className={estilos.campo}>
+          <label htmlFor="busca-preco">Até quanto?</label>
+          <select
+            id="busca-preco"
+            name="precoMax"
+            className="selecao"
+            defaultValue=""
+            key={finalidade}
+          >
+            <option value="">Qualquer valor</option>
+            {precos.map((preco) => (
+              <option key={preco} value={preco}>
+                {rotuloPreco(preco, finalidade === "aluguel")}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className={`botao botao-primario ${estilos.enviar}`}>
+          <Icone nome="busca" size={18} /> Buscar
+        </button>
+      </form>
+    </div>
   );
 }

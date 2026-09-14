@@ -10,28 +10,30 @@ export function Rodape() {
     <footer className={estilos.rodape}>
       <div className={`conteudo-largo ${estilos.grade}`}>
         <div>
-          <p className={estilos.logo}>KALEBE CORRETOR</p>
+          <p className={estilos.logo}>Kalebe</p>
           <p className={estilos.creci}>{empresa.creci}</p>
           <p className={estilos.texto}>
-            Atendimento em {empresa.regiao}. Imóveis prontos e lançamentos com
-            orientação de financiamento.
+            Imóveis em São José do Rio Preto, Mirassol e Bady Bassitt.
+            Atendimento direto com o corretor.
           </p>
         </div>
 
         <div>
-          <h2 className={estilos.titulo}>Navegação</h2>
+          <h2 className={estilos.titulo}>Buscar</h2>
           <ul className={estilos.lista}>
             <li>
-              <Link href="/imoveis">Imóveis</Link>
+              <Link href="/imoveis">Imóveis à venda</Link>
             </li>
             <li>
               <Link href="/lancamentos">Lançamentos</Link>
             </li>
             <li>
-              <Link href="/sobre">Sobre</Link>
+              <Link href="/imoveis?tipo=casa&finalidade=venda">Casas</Link>
             </li>
             <li>
-              <Link href="/contato">Contato</Link>
+              <Link href="/imoveis?tipo=apartamento&finalidade=venda">
+                Apartamentos
+              </Link>
             </li>
             <li>
               <Link href="/favoritos">Favoritos</Link>
@@ -40,8 +42,14 @@ export function Rodape() {
         </div>
 
         <div>
-          <h2 className={estilos.titulo}>Contato</h2>
+          <h2 className={estilos.titulo}>Kalebe</h2>
           <ul className={estilos.lista}>
+            <li>
+              <Link href="/sobre">O corretor</Link>
+            </li>
+            <li>
+              <Link href="/contato">Contato</Link>
+            </li>
             <li>
               <a href={`tel:+${empresa.telefoneLink}`}>{empresa.telefone}</a>
             </li>
@@ -54,9 +62,6 @@ export function Rodape() {
                 WhatsApp
               </a>
             </li>
-            <li>
-              {empresa.cidade} – {empresa.estado}
-            </li>
           </ul>
         </div>
       </div>
@@ -65,6 +70,7 @@ export function Rodape() {
         <p>
           © {ano} {empresa.nome}. Todos os direitos reservados.
         </p>
+        <Link href="/login">Área do corretor</Link>
       </div>
     </footer>
   );

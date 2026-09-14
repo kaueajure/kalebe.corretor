@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import { FormularioContato } from "@/componentes/formularioContato/FormularioContato";
 import { empresa } from "@/dados/empresa";
@@ -15,13 +16,26 @@ export default function PaginaContato() {
       <div className={`conteudo ${estilos.grade}`}>
         <div>
           <p className="rotulo-secao">Atendimento</p>
-          <h1 className="titulo-secao">Contato</h1>
-          <div className="divisor" />
+          <h1 className="titulo-secao">
+            Me chama. A gente vê o que cabe na sua busca.
+          </h1>
           <p className="texto-secao">
-            Envie sua mensagem ou chame diretamente no WhatsApp. Informe cidade,
-            faixa de preço e quantidade de quartos para agilizar o atendimento.
+            Visita, financiamento ou anúncio do seu imóvel: o caminho mais
+            rápido é o WhatsApp.
           </p>
 
+          <div className={estilos.corretor}>
+            <Image
+              src="/imagens/sobre/kalebe.webp"
+              alt="Kalebe"
+              width={56}
+              height={56}
+            />
+            <div>
+              <strong>Kalebe</strong>
+              <span>{empresa.creci}</span>
+            </div>
+          </div>
           <ul className={estilos.canais}>
             <li>
               <span>Telefone</span>
@@ -48,15 +62,13 @@ export default function PaginaContato() {
               <strong>{empresa.creci}</strong>
             </li>
           </ul>
-
-          <p className={estilos.obs}>
-            Endereço comercial e horário de atendimento podem ser confirmados no
-            primeiro contato.
-          </p>
         </div>
 
         <div className={estilos.formWrap}>
-          <h2 className={estilos.formTitulo}>Enviar mensagem</h2>
+          <h2 className={estilos.formTitulo}>Escreva o que você procura</h2>
+          <p className={estilos.formDescricao}>
+            A mensagem abre no WhatsApp. Você confere e envia por lá.
+          </p>
           <FormularioContato />
         </div>
       </div>

@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import type { Imovel } from "@/tipos/imovel";
@@ -10,6 +8,7 @@ import {
   formatarPreco,
 } from "@/lib/formatadores";
 import { FavoritoBotao } from "@/componentes/favoritoBotao/FavoritoBotao";
+import { Icone } from "@/componentes/ui/Icone";
 import estilos from "./cardImovel.module.css";
 
 interface Props {
@@ -39,11 +38,12 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
           <span className={estilos.finalidade}>
             {formatarFinalidade(imovel.finalidade)}
           </span>
+          {imovel.status !== "disponivel" ? <span className={estilos.status}>{imovel.status === "reservado" ? "Reservado" : "Indisponível"}</span> : null}
           {imovel.mcmv ? <span className={estilos.mcmv}>MCMV</span> : null}
         </div>
 
         <div className={estilos.corpo}>
-          <p className={estilos.preco}>{formatarPreco(imovel.preco)}</p>
+          <p className={estilos.preco}>{formatarPreco(imovel.preco)}{imovel.finalidade === "aluguel" && imovel.preco != null ? <small> / mês</small> : null}</p>
           {imovel.precoAnterior ? (
             <p className={estilos.precoAnterior}>
               {formatarPreco(imovel.precoAnterior)}
@@ -57,7 +57,7 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
           <ul className={estilos.specs} aria-label="Características">
             {imovel.quartos != null ? (
               <li>
-                <strong>{imovel.quartos}</strong> quartos
+                <Icone nome="quartos" size={16} /><strong>{imovel.quartos}</strong> quartos
               </li>
             ) : null}
             {imovel.banheiros != null ? (
@@ -67,12 +67,12 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
             ) : null}
             {imovel.vagas != null ? (
               <li>
-                <strong>{imovel.vagas}</strong> vagas
+                <Icone nome="carro" size={16} /><strong>{imovel.vagas}</strong> vagas
               </li>
             ) : null}
             {imovel.area != null ? (
               <li>
-                <strong>{formatarArea(imovel.area)}</strong>
+                <Icone nome="area" size={15} /><strong>{formatarArea(imovel.area)}</strong>
               </li>
             ) : null}
           </ul>
