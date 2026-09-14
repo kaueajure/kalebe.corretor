@@ -1,4 +1,21 @@
-.form { display: grid; gap: 20px; }
-.form input, .form textarea { font-size: 14px; }
-.form button { margin-top: 4px; }
-.erro { color: var(--erro); font-size: 13px; }
+.form {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.form :global(.campo),
+.form :global(.area-texto),
+.form :global(.selecao) {
+  font-size: 0.95rem;
+}
+
+.form :global(.botao) {
+  margin-top: 0.25rem;
+  width: 100%;
+}
+
+.erro {
+  color: var(--erro);
+  font-size: 0.9rem;
+  margin: 0;
+}

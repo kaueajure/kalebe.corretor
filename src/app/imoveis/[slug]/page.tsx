@@ -6,6 +6,7 @@ import { GaleriaImovel } from "@/componentes/galeriaImovel/GaleriaImovel";
 import { CardImovel } from "@/componentes/cardImovel/CardImovel";
 import { FavoritoBotao } from "@/componentes/favoritoBotao/FavoritoBotao";
 import { BarraContatoMobile } from "@/componentes/barraContatoMobile/BarraContatoMobile";
+import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import {
   listarSlugsPublicados,
@@ -99,7 +100,7 @@ export default async function PaginaDetalheImovel({ params }: Props) {
 
       <article className={`${estilos.pagina} ${indisponivel ? estilos.indisponivelPagina : ""}`}>
         <div className="conteudo">
-          <nav className={estilos.migalha} aria-label="Breadcrumb">
+          <nav className="migalha" aria-label="Breadcrumb">
             <Link href="/">Início</Link>
             <span>/</span>
             <Link href="/imoveis">Imóveis</Link>
@@ -271,8 +272,15 @@ export default async function PaginaDetalheImovel({ params }: Props) {
 
           {similares.length > 0 ? (
             <section className={estilos.similares}>
-              <h2 className="titulo-secao">Imóveis semelhantes</h2>
-              <div className="divisor" />
+              <div className={estilos.similaresCabecalho}>
+                <div>
+                  <p className="rotulo-secao">Continue olhando</p>
+                  <h2 className="titulo-secao">Imóveis semelhantes</h2>
+                </div>
+                <Link href="/imoveis" className="link-seta">
+                  Ver todos <Icone nome="seta" size={18} />
+                </Link>
+              </div>
               <div className="grade-imoveis">
                 {similares.map((item) => (
                   <CardImovel key={item.id} imovel={item} />

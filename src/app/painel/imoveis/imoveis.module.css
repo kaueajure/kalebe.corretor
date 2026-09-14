@@ -1,7 +1,6 @@
 .principal {
-  width: min(100% - 2rem, 1180px);
+  width: min(100%, 1180px);
   margin: 0 auto;
-  padding: 2rem 0 3rem;
   display: grid;
   gap: 1.25rem;
 }
@@ -18,34 +17,38 @@
   font-family: var(--fonte-display);
   font-size: clamp(1.6rem, 2.5vw, 2.1rem);
   color: var(--primaria);
+  letter-spacing: -0.03em;
 }
 
 .cabecalho p {
   color: var(--texto-suave);
   margin-top: 0.35rem;
+  max-width: 36rem;
 }
 
 .aviso {
-  padding: 0.85rem 1rem;
+  padding: 0.9rem 1.05rem;
   border-radius: var(--raio);
-  border: 1px solid color-mix(in srgb, var(--sucesso) 35%, var(--borda));
-  background: color-mix(in srgb, var(--sucesso) 10%, var(--fundo-2));
+  border: 1px solid color-mix(in srgb, var(--sucesso) 30%, transparent);
+  background: color-mix(in srgb, var(--sucesso) 12%, #faf9f7);
   color: var(--sucesso);
+  font-weight: 550;
 }
 
 .vazio {
   display: grid;
   gap: 0.75rem;
   justify-items: start;
-  padding: 2rem 1.25rem;
-  border: 1px dashed var(--borda-forte);
+  padding: 2.25rem 1.5rem;
+  border: 1px dashed rgb(17 17 17 / 18%);
   border-radius: var(--raio-suave);
-  background: var(--fundo-2);
+  background: #faf9f7;
 }
 
 .vazio h2 {
   font-family: var(--fonte-display);
   color: var(--primaria);
+  letter-spacing: -0.02em;
 }
 
 .vazio p {
@@ -59,7 +62,7 @@
 
 .lista ul {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.75rem;
 }
 
 .item {
@@ -67,10 +70,19 @@
   grid-template-columns: 112px minmax(0, 1.6fr) 0.7fr 0.9fr 0.9fr auto;
   gap: 1rem;
   align-items: center;
-  padding: 0.9rem;
-  border: 1px solid var(--borda);
+  padding: 0.95rem;
+  border: 1px solid rgb(17 17 17 / 8%);
   border-radius: var(--raio-suave);
-  background: var(--fundo-2);
+  background: #faf9f7;
+  box-shadow: 0 8px 22px rgb(17 17 17 / 4%);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+
+.item:hover {
+  border-color: rgb(17 17 17 / 16%);
+  box-shadow: 0 12px 28px rgb(17 17 17 / 6%);
 }
 
 .capa {
@@ -79,7 +91,7 @@
   height: 84px;
   border-radius: var(--raio);
   overflow: hidden;
-  background: var(--fundo-3);
+  background: #e6e4e0;
   display: grid;
   place-items: center;
   color: var(--texto-fraco);
@@ -101,6 +113,7 @@
   font-size: 1.05rem;
   color: var(--texto);
   margin-top: 0.2rem;
+  letter-spacing: -0.01em;
 }
 
 .identificacao p {
@@ -111,9 +124,9 @@
 
 .dados span {
   display: inline-block;
-  padding: 0.25rem 0.55rem;
+  padding: 0.28rem 0.6rem;
   border-radius: var(--raio);
-  background: var(--primaria-suave);
+  background: #ebe9e5;
   color: var(--primaria);
   font-size: 0.8rem;
   font-weight: 600;
@@ -122,6 +135,7 @@
 .preco {
   color: var(--primaria);
   font-size: 1rem;
+  letter-spacing: -0.01em;
 }
 
 .status {
@@ -133,25 +147,25 @@
 .disponibilidade {
   display: inline-flex;
   width: fit-content;
-  padding: 0.2rem 0.5rem;
+  padding: 0.22rem 0.55rem;
   border-radius: var(--raio);
   font-size: 0.78rem;
   font-weight: 600;
 }
 
 .situacaoPublicado {
-  background: color-mix(in srgb, var(--sucesso) 16%, var(--fundo));
+  background: color-mix(in srgb, var(--sucesso) 14%, #faf9f7);
   color: var(--sucesso);
 }
 
 .situacaoRascunho {
-  background: var(--fundo-3);
+  background: #ebe9e5;
   color: var(--texto-suave);
 }
 
 .disponibilidade {
-  background: var(--fundo);
-  border: 1px solid var(--borda);
+  background: transparent;
+  border: 1px solid rgb(17 17 17 / 12%);
   color: var(--texto-suave);
 }
 

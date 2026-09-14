@@ -2,16 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BarraContatoMobile } from "@/componentes/barraContatoMobile/BarraContatoMobile";
+import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import {
   empreendimentos,
   obterEmpreendimentoPorSlug,
 } from "@/dados/lancamentos";
-import {
-  formatarArea,
-  formatarPreco,
-  linkWhatsApp,
-} from "@/lib/formatadores";
+import { formatarArea, formatarPreco, linkWhatsApp } from "@/lib/formatadores";
 import estilos from "./detalhe.module.css";
 
 interface Props {
@@ -43,7 +40,7 @@ export default async function PaginaDetalheLancamento({ params }: Props) {
     <>
       <article className={estilos.pagina}>
         <div className="conteudo">
-          <nav className={estilos.migalha} aria-label="Breadcrumb">
+          <nav className="migalha" aria-label="Breadcrumb">
             <Link href="/">Início</Link>
             <span>/</span>
             <Link href="/lancamentos">Lançamentos</Link>
@@ -51,16 +48,16 @@ export default async function PaginaDetalheLancamento({ params }: Props) {
             <span>{item.nome}</span>
           </nav>
 
-          <div className={estilos.capa}>
+          <header className={estilos.capa}>
             <p className="rotulo-secao">
               {item.tipo === "casa" ? "Casa" : "Apartamento"}
-              {item.mcmv ? " · MCMV" : ""}
+              {item.mcmv ? " · Minha Casa Minha Vida" : ""}
             </p>
             <h1 className={estilos.titulo}>{item.nome}</h1>
             <p className={estilos.local}>
               {item.bairro} · {item.cidade}/{item.estado}
             </p>
-          </div>
+          </header>
 
           <div className={estilos.grade}>
             <div>
@@ -104,7 +101,9 @@ export default async function PaginaDetalheLancamento({ params }: Props) {
                   <h2>Características</h2>
                   <ul className={estilos.chips}>
                     {item.caracteristicas.map((c) => (
-                      <li key={c}>{c}</li>
+                      <li key={c} className="pill">
+                        {c}
+                      </li>
                     ))}
                   </ul>
                 </section>
@@ -142,6 +141,21 @@ export default async function PaginaDetalheLancamento({ params }: Props) {
           </div>
         </div>
       </article>
+
+      <section className="faixa-cta">
+        <div className="conteudo faixa-cta-interior">
+          <div>
+            <h2>Quer conhecer outros lançamentos?</h2>
+            <p>
+              Veja casas e apartamentos na planta em Rio Preto e região.
+            </p>
+          </div>
+          <Link href="/lancamentos" className="botao botao-secundario">
+            Ver lançamentos <Icone nome="seta" size={18} />
+          </Link>
+        </div>
+      </section>
+
       <BarraContatoMobile mensagem={mensagem} />
       <div className={estilos.espacoMobile} />
     </>

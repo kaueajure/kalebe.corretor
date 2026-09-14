@@ -1,43 +1,26 @@
 .pagina {
-  padding: 1.25rem 0 4rem;
-}
-
-.migalha {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  font-size: 0.88rem;
-  color: var(--texto-fraco);
-  margin-bottom: 1.35rem;
-}
-
-.migalha a:hover {
-  color: var(--primaria);
+  padding: 1.5rem 0 0;
 }
 
 .capa {
-  margin-bottom: 2rem;
-  padding: 1.75rem 1.6rem;
-  border-radius: var(--raio-suave);
-  background:
-    linear-gradient(160deg, #2a2a2a 0%, #111111 75%);
-  color: #fff;
-}
-
-.capa :global(.rotulo-secao) {
-  color: #c6c6c6;
+  margin-bottom: 2.25rem;
+  max-width: 44rem;
+  padding-bottom: 0.5rem;
 }
 
 .titulo {
   font-family: var(--fonte-display);
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
-  line-height: 1.12;
-  letter-spacing: -0.04em;
-  margin-bottom: 0.45rem;
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+  margin-bottom: 0.55rem;
+  color: var(--primaria);
 }
 
 .local {
-  color: rgb(255 255 255 / 82%);
+  color: var(--texto-suave);
+  font-size: 1.05rem;
 }
 
 .grade {
@@ -45,21 +28,24 @@
   grid-template-columns: minmax(0, 1.45fr) 340px;
   gap: 2rem;
   align-items: start;
+  padding-bottom: 4rem;
 }
 
 .bloco {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.85rem;
 }
 
 .bloco h2 {
   font-family: var(--fonte-display);
-  font-size: 1.25rem;
-  margin-bottom: 0.7rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.03em;
 }
 
 .bloco p {
   color: var(--texto-suave);
   line-height: 1.75;
+  font-size: 1.02rem;
 }
 
 .lista {
@@ -71,7 +57,7 @@
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.7rem 0;
+  padding: 0.75rem 0;
   border-bottom: 1px solid var(--borda);
 }
 
@@ -86,11 +72,10 @@
 }
 
 .chips li {
-  border: 1px solid var(--borda);
-  padding: 0.4rem 0.7rem;
+  text-transform: none;
+  letter-spacing: 0;
   font-size: 0.88rem;
-  color: var(--texto-suave);
-  border-radius: 999px;
+  font-weight: 600;
 }
 
 .obs {
@@ -102,7 +87,7 @@
   background: #fff;
   border: 1px solid var(--borda);
   border-radius: var(--raio-suave);
-  padding: 1.35rem;
+  padding: 1.45rem;
   position: sticky;
   top: calc(var(--cabecalho-altura) + 1rem);
   box-shadow: var(--sombra);
@@ -147,5 +132,9 @@
   .espacoMobile {
     display: block;
     height: 84px;
+  }
+
+  .grade {
+    padding-bottom: 3rem;
   }
 }

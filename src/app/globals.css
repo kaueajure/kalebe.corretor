@@ -276,6 +276,135 @@ ol {
   background: var(--fundo-3);
 }
 
+/* Casca das páginas internas — alinhada à home */
+.pagina-interna {
+  padding: 2.75rem 0 0;
+}
+
+.intro-pagina {
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.intro-pagina .titulo-secao,
+.titulo-pagina {
+  font-family: var(--fonte-display);
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  letter-spacing: -0.045em;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--primaria);
+  margin-bottom: 0.85rem;
+  text-wrap: balance;
+}
+
+.intro-pagina .texto-secao {
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.corpo-pagina {
+  padding-bottom: 4.5rem;
+}
+
+.grade-empreendimentos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.15rem;
+}
+
+.faixa-cta {
+  padding: 2.25rem 0;
+  background: var(--primaria);
+  color: #fff;
+}
+
+.faixa-cta-interior {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.faixa-cta h2 {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 0.35rem;
+}
+
+.faixa-cta p {
+  color: rgb(255 255 255 / 78%);
+  max-width: 36rem;
+  line-height: 1.6;
+}
+
+.faixa-cta .botao-secundario {
+  flex-shrink: 0;
+  border-color: rgb(255 255 255 / 35%);
+  color: #fff;
+  background: transparent;
+}
+
+.faixa-cta .botao-secundario:hover {
+  background: rgb(255 255 255 / 10%);
+}
+
+.faixa-cta .link-seta {
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.bloco-suave {
+  background: var(--fundo-3);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  padding: 1.35rem 1.4rem;
+}
+
+.migalha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: var(--texto-fraco);
+  margin-bottom: 1.25rem;
+}
+
+.migalha a:hover {
+  color: var(--primaria);
+}
+
+@media (max-width: 1000px) {
+  .grade-empreendimentos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .pagina-interna {
+    padding-top: 1.75rem;
+  }
+
+  .corpo-pagina {
+    padding-bottom: 3rem;
+  }
+
+  .grade-empreendimentos {
+    grid-template-columns: 1fr;
+  }
+
+  .faixa-cta-interior {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .intro-pagina .titulo-secao,
+  .titulo-pagina {
+    font-size: clamp(1.85rem, 8vw, 2.45rem);
+  }
+}
+
 .pill {
   display: inline-flex;
   align-items: center;

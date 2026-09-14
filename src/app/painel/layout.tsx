@@ -30,10 +30,15 @@ export default async function LayoutPainel({
   return (
     <div className={estilos.estrutura}>
       <aside className={estilos.lateral}>
-        <Link href="/painel" className={estilos.marca}>
-          Kalebe
-          <span>Painel</span>
-        </Link>
+        <div className={estilos.topoLateral}>
+          <Link href="/painel" className={estilos.marca}>
+            Kalebe
+            <span>Painel</span>
+          </Link>
+          <Link href="/" className={estilos.verSite}>
+            Ver site
+          </Link>
+        </div>
 
         <NavegacaoPainel />
 

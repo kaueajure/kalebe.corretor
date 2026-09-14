@@ -1,12 +1,9 @@
-.pagina {
-  padding: 3rem 0 4.5rem;
-}
-
 .grade {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 4rem;
   align-items: center;
+  padding-bottom: 4.5rem;
 }
 
 .fotoWrap {
@@ -21,26 +18,30 @@
   object-fit: cover;
 }
 
-.grade h1 {
-  font-size: clamp(2rem, 3.6vw, 3.1rem);
-  margin-bottom: 1.2rem;
-}
-
 .texto {
   color: var(--texto-suave);
   line-height: 1.75;
   font-size: 1.05rem;
   margin-bottom: 1rem;
+  max-width: 38rem;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.5rem;
 }
 
 .processo {
-  margin-top: 4.5rem;
+  padding: 4.5rem 0;
 }
 
 .etapas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1.15rem;
   margin-top: 1.75rem;
 }
 
@@ -73,35 +74,6 @@
   line-height: 1.65;
 }
 
-.regiao {
-  display: flex;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding: 1.5rem 1.6rem;
-  background: var(--primaria);
-  color: #fff;
-  border-radius: var(--raio-suave);
-  margin-top: 3rem;
-  align-items: center;
-}
-
-.regiao h2 {
-  font-family: var(--fonte-display);
-  font-size: 1.35rem;
-  letter-spacing: -0.03em;
-}
-
-.regiao p {
-  font-size: 0.95rem;
-  color: rgb(255 255 255 / 78%);
-  margin-top: 0.4rem;
-}
-
-.regiao :global(.link-seta) {
-  color: #fff;
-  flex-shrink: 0;
-}
-
 @media (max-width: 900px) {
   .grade {
     gap: 2rem;
@@ -109,13 +81,17 @@
 }
 
 @media (max-width: 760px) {
-  .pagina {
-    padding-top: 1.5rem;
-  }
-
   .grade,
   .etapas {
     grid-template-columns: 1fr;
+  }
+
+  .grade {
+    padding-bottom: 3rem;
+  }
+
+  .processo {
+    padding: 3rem 0;
   }
 
   .fotoWrap {
@@ -125,10 +101,5 @@
 
   .grade > div:last-child {
     grid-row: 1;
-  }
-
-  .regiao {
-    flex-direction: column;
-    align-items: start;
   }
 }

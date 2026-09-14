@@ -11,9 +11,9 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.25rem;
-  border: 1px dashed var(--borda-forte);
+  border: 1px dashed rgb(17 17 17 / 22%);
   border-radius: var(--raio-suave);
-  background: var(--fundo-2);
+  background: #f3f1ee;
 }
 
 .entradaAtiva {
