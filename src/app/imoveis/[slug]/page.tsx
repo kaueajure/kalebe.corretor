@@ -7,7 +7,7 @@ import { FavoritoBotao } from "@/componentes/favoritoBotao/FavoritoBotao";
 import { BarraContatoMobile } from "@/componentes/barraContatoMobile/BarraContatoMobile";
 import { empresa } from "@/dados/empresa";
 import {
-  imoveis,
+  listarSlugsPublicados,
   obterImovelPorSlug,
   obterImoveisSimilares,
 } from "@/dados/imoveis";
@@ -22,17 +22,24 @@ import {
 } from "@/lib/formatadores";
 import estilos from "./detalhe.module.css";
 
+export const dynamic = "force-dynamic";
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return imoveis.map((imovel) => ({ slug: imovel.slug }));
+  try {
+    const slugs = await listarSlugsPublicados();
+    return slugs.map((slug) => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const imovel = obterImovelPorSlug(slug);
+  const imovel = await obterImovelPorSlug(slug);
   if (!imovel) return { title: "Imóvel não encontrado" };
 
   const descricao = `${imovel.titulo} em ${imovel.bairro}, ${imovel.cidade}. ${formatarPreco(imovel.preco)}.`;
@@ -50,10 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PaginaDetalheImovel({ params }: Props) {
   const { slug } = await params;
-  const imovel = obterImovelPorSlug(slug);
+  const imovel = await obterImovelPorSlug(slug);
   if (!imovel) notFound();
 
-  const similares = obterImoveisSimilares(imovel);
+  const similares = await obterImoveisSimilares(imovel);
   const mensagem = mensagemInteresseImovel(imovel);
   const indisponivel = imovel.status !== "disponivel";
 

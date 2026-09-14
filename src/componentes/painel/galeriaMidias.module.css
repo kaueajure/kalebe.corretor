@@ -1,0 +1,198 @@
+.galeria {
+  display: grid;
+  gap: 1rem;
+}
+
+.entrada {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px dashed var(--borda-forte);
+  border-radius: var(--raio-suave);
+  background: var(--fundo-2);
+}
+
+.entradaAtiva {
+  border-color: var(--primaria-clara);
+  background: var(--primaria-suave);
+}
+
+.entrada strong {
+  display: block;
+  color: var(--texto);
+}
+
+.entrada p {
+  margin: 0.25rem 0;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+.entrada small {
+  color: var(--texto-fraco);
+  font-size: 0.8rem;
+}
+
+.inputArquivo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.resumo {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.lista {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 96px 1fr auto;
+  gap: 0.85rem;
+  align-items: start;
+  padding: 0.85rem;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--fundo-2);
+}
+
+.itemArrastando {
+  opacity: 0.6;
+}
+
+.ordem {
+  color: var(--texto-fraco);
+  cursor: grab;
+  padding-top: 0.35rem;
+  user-select: none;
+}
+
+.miniatura {
+  position: relative;
+  width: 96px;
+  height: 72px;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--fundo-3);
+}
+
+.miniatura img,
+.miniatura video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.seloCapa {
+  position: absolute;
+  left: 0.35rem;
+  bottom: 0.35rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--raio);
+  background: var(--primaria);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.edicao {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.edicao > strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: 0.65rem;
+}
+
+.campos label,
+.legenda {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.campos span,
+.legenda span {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.tipoVideo {
+  align-self: end;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  padding-bottom: 0.7rem;
+}
+
+.capa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: var(--texto);
+}
+
+.acoes {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.acoes button {
+  min-height: 36px;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--fundo);
+  color: var(--texto);
+  font-size: 0.82rem;
+}
+
+.acoes button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.remover {
+  color: var(--erro) !important;
+  border-color: color-mix(in srgb, var(--erro) 35%, var(--borda)) !important;
+}
+
+@media (max-width: 760px) {
+  .item {
+    grid-template-columns: auto 72px 1fr;
+  }
+
+  .acoes {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .campos {
+    grid-template-columns: 1fr;
+  }
+}

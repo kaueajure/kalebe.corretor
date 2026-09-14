@@ -1,0 +1,12 @@
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.acoes .botao {
+  min-height: 40px;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.82rem;
+}

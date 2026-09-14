@@ -6,12 +6,15 @@ import { CardEmpreendimento } from "@/componentes/cardImovel/CardEmpreendimento"
 import { AtalhosFinalidade } from "@/componentes/atalhosFinalidade/AtalhosFinalidade";
 import { ListaRegioes } from "@/componentes/atalhosFinalidade/ListaRegioes";
 import { empresa } from "@/dados/empresa";
-import { imoveis } from "@/dados/imoveis";
+import { listarImoveisPublicados } from "@/dados/imoveis";
 import { empreendimentos } from "@/dados/lancamentos";
 import { linkWhatsApp } from "@/lib/formatadores";
 import estilos from "./inicio.module.css";
 
-export default function PaginaInicial() {
+export const dynamic = "force-dynamic";
+
+export default async function PaginaInicial() {
+  const imoveis = await listarImoveisPublicados();
   const destaques = imoveis.filter((i) => i.destaque).slice(0, 3);
   const recentes = [...imoveis]
     .sort((a, b) => b.criadoEm.localeCompare(a.criadoEm))
@@ -68,11 +71,21 @@ export default function PaginaInicial() {
               Ver todos
             </Link>
           </div>
-          <div className="grade-imoveis">
-            {destaques.map((imovel, i) => (
-              <CardImovel key={imovel.id} imovel={imovel} prioridade={i === 0} />
-            ))}
-          </div>
+          {destaques.length === 0 ? (
+            <div className="mensagem-estado">
+              <p>Em breve novos imóveis em destaque.</p>
+            </div>
+          ) : (
+            <div className="grade-imoveis">
+              {destaques.map((imovel, i) => (
+                <CardImovel
+                  key={imovel.id}
+                  imovel={imovel}
+                  prioridade={i === 0}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -109,11 +122,17 @@ export default function PaginaInicial() {
               <div className="divisor" />
             </div>
           </div>
-          <div className="grade-imoveis">
-            {recentes.map((imovel) => (
-              <CardImovel key={imovel.id} imovel={imovel} />
-            ))}
-          </div>
+          {recentes.length === 0 ? (
+            <div className="mensagem-estado">
+              <p>Nenhum imóvel publicado no momento.</p>
+            </div>
+          ) : (
+            <div className="grade-imoveis">
+              {recentes.map((imovel) => (
+                <CardImovel key={imovel.id} imovel={imovel} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

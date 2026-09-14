@@ -3,13 +3,15 @@ import { Suspense } from "react";
 import { CardImovel } from "@/componentes/cardImovel/CardImovel";
 import { FiltroImoveis } from "@/componentes/filtroImoveis/FiltroImoveis";
 import {
-  imoveis,
   listarBairros,
   listarCidades,
+  listarImoveisPublicados,
 } from "@/dados/imoveis";
 import { filtrarImoveis, filtroInicial } from "@/lib/formatadores";
 import type { FiltroImoveisEstado } from "@/tipos/imovel";
 import estilos from "./imoveis.module.css";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Imóveis à venda e para alugar",
@@ -21,9 +23,7 @@ interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-function valorParam(
-  valor: string | string[] | undefined
-): string {
+function valorParam(valor: string | string[] | undefined): string {
   if (Array.isArray(valor)) return valor[0] || "";
   return valor || "";
 }
@@ -45,9 +45,12 @@ export default async function PaginaImoveis({ searchParams }: Props) {
     busca: valorParam(params.busca),
   };
 
+  const imoveis = await listarImoveisPublicados();
   const resultados = filtrarImoveis(imoveis, filtro);
-  const cidades = listarCidades();
-  const bairros = listarBairros(filtro.cidade || undefined);
+  const [cidades, bairros] = await Promise.all([
+    listarCidades(),
+    listarBairros(filtro.cidade || undefined),
+  ]);
 
   return (
     <div className={estilos.pagina}>

@@ -43,7 +43,7 @@
 
 .lista li {
   padding: 0.7rem 0;
-  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  border-bottom: 1px solid var(--borda);
   color: var(--cinza-suave);
   display: flex;
   align-items: center;

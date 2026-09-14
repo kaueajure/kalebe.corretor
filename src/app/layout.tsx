@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
-import { Cabecalho } from "@/componentes/cabecalho/Cabecalho";
-import { Rodape } from "@/componentes/rodape/Rodape";
+import { Source_Serif_4, Plus_Jakarta_Sans } from "next/font/google";
+import { ShellSite } from "@/componentes/shell/ShellSite";
 import { FavoritosProvedor } from "@/hooks/useFavoritos";
 import { empresa } from "@/dados/empresa";
 import "./globals.css";
 
-const playfair = Playfair_Display({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-playfair",
+  weight: ["500", "600", "700"],
+  variable: "--font-display",
   display: "swap",
 });
 
-const dmSans = DM_Sans({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  variable: "--font-dm",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-corpo",
   display: "swap",
 });
 
@@ -47,11 +46,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${playfair.variable} ${dmSans.variable}`}>
+      <body className={`${sourceSerif.variable} ${jakarta.variable}`}>
         <FavoritosProvedor>
-          <Cabecalho />
-          <main className="pagina">{children}</main>
-          <Rodape />
+          <ShellSite>{children}</ShellSite>
         </FavoritosProvedor>
       </body>
     </html>

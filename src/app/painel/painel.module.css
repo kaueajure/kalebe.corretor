@@ -1,0 +1,137 @@
+.estrutura {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+.lateral {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 1.15rem;
+  background: var(--fundo-2);
+  border-right: 1px solid var(--borda);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.marca {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  color: var(--primaria);
+  letter-spacing: 0.02em;
+  padding: 0 0.35rem;
+}
+
+.marca span {
+  display: block;
+  font-family: var(--fonte-corpo);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  margin-top: 0.15rem;
+}
+
+.conta {
+  margin-top: auto;
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borda);
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--raio);
+  background: var(--primaria-suave);
+  color: var(--primaria);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.identidade {
+  min-width: 0;
+  display: grid;
+}
+
+.identidade strong {
+  font-size: 0.88rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identidade small {
+  color: var(--texto-suave);
+  font-size: 0.72rem;
+}
+
+.sair {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: transparent;
+  color: var(--texto);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.sair:hover {
+  background: var(--primaria-suave);
+  border-color: var(--borda-forte);
+}
+
+.conteudo {
+  min-width: 0;
+  padding: 1.75rem 1.5rem 2.5rem;
+}
+
+.inicio h1 {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  color: var(--primaria);
+  margin-bottom: 0.5rem;
+}
+
+.inicio p {
+  color: var(--texto-suave);
+  margin-bottom: 1.5rem;
+  max-width: 36rem;
+}
+
+@media (max-width: 860px) {
+  .estrutura {
+    grid-template-columns: 1fr;
+  }
+
+  .lateral {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--borda);
+    gap: 1rem;
+  }
+
+  .conta {
+    margin-top: 0;
+  }
+}

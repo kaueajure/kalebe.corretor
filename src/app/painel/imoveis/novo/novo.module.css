@@ -1,0 +1,24 @@
+.cabecalho h1 {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  color: var(--primaria);
+  margin-top: 0.65rem;
+}
+
+.cabecalho p {
+  color: var(--texto-suave);
+  margin-top: 0.35rem;
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primaria-clara);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.voltar:hover {
+  color: var(--primaria);
+}

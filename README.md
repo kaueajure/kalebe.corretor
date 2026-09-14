@@ -17,8 +17,15 @@ Site imobiliário completo inspirado na identidade visual do material de referê
 
 - Next.js (App Router)
 - TypeScript
-- CSS Modules + design tokens
-- next/font (Playfair Display, DM Sans)
+- CSS Modules + design tokens (Marinho Institucional)
+- next/font (Source Serif 4, Plus Jakarta Sans)
+- MySQL + `mysql2` (`usuarios`)
+
+## Banco de dados
+
+1. Configure o `.env` com `host`, `usuario`, `senha`, `banco`, `porta` e `sessao_secreta`
+2. Rode `npm run banco:migrar` (aplica os `.sql` de `/banco` via mysql2)
+3. Conexão: `import { banco } from "@/lib/banco"`
 
 ## Desenvolvimento
 

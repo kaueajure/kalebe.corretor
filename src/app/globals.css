@@ -1,22 +1,35 @@
 :root {
-  --ouro: #c9a84c;
-  --ouro-claro: #e8c97a;
-  --ouro-escuro: #9a7a2e;
-  --escuro: #0a0a0a;
-  --escuro-2: #111111;
-  --escuro-3: #1a1a1a;
-  --creme: #f5f0e8;
-  --cinza: #888888;
-  --cinza-suave: rgba(245, 240, 232, 0.65);
-  --cinza-fraco: rgba(245, 240, 232, 0.45);
-  --borda: rgba(201, 168, 76, 0.15);
-  --borda-forte: rgba(201, 168, 76, 0.4);
+  /* Marinho Institucional (proposta A) */
+  --fundo: #f5f7fa;
+  --fundo-2: #ffffff;
+  --fundo-3: #e8eef5;
+  --texto: #0b2545;
+  --texto-suave: #5a6a7a;
+  --texto-fraco: #8a97a8;
+  --primaria: #0b2545;
+  --primaria-clara: #1b4f72;
+  --primaria-suave: #e8eef5;
+  --borda: #d8e0ea;
+  --borda-forte: #9bb0c4;
+
+  /* Aliases usados no restante do CSS */
+  --escuro: var(--fundo);
+  --escuro-2: var(--fundo-2);
+  --escuro-3: var(--fundo-3);
+  --creme: var(--texto);
+  --ouro: var(--primaria);
+  --ouro-claro: var(--primaria-clara);
+  --ouro-escuro: #081c33;
+  --cinza: var(--texto-fraco);
+  --cinza-suave: var(--texto-suave);
+  --cinza-fraco: var(--texto-fraco);
+
   --whatsapp: #25d366;
   --whatsapp-escuro: #1ebe5a;
   --erro: #c45c5c;
   --sucesso: #5c9a72;
-  --fonte-display: var(--font-playfair), Georgia, serif;
-  --fonte-corpo: var(--font-dm), "Segoe UI", sans-serif;
+  --fonte-display: var(--font-display), Georgia, serif;
+  --fonte-corpo: var(--font-corpo), "Segoe UI", sans-serif;
   --raio: 4px;
   --raio-suave: 8px;
   --largura: 1180px;
@@ -37,8 +50,8 @@ html {
 }
 
 body {
-  background: var(--escuro);
-  color: var(--creme);
+  background: var(--fundo);
+  color: var(--texto);
   font-family: var(--fonte-corpo);
   font-weight: 400;
   line-height: 1.6;
@@ -77,7 +90,7 @@ ol {
 }
 
 :focus-visible {
-  outline: 2px solid var(--ouro);
+  outline: 2px solid var(--primaria-clara);
   outline-offset: 3px;
 }
 
@@ -110,9 +123,10 @@ ol {
 
 .rotulo-secao {
   font-size: 0.7rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ouro);
+  color: var(--primaria-clara);
+  font-weight: 600;
   margin-bottom: 0.75rem;
 }
 
@@ -122,14 +136,15 @@ ol {
   line-height: 1.15;
   font-weight: 700;
   margin-bottom: 0.75rem;
+  color: var(--primaria);
 }
 
 .titulo-secao .destaque {
-  color: var(--ouro);
+  color: var(--primaria-clara);
 }
 
 .texto-secao {
-  color: var(--cinza-suave);
+  color: var(--texto-suave);
   max-width: 36rem;
   line-height: 1.75;
 }
@@ -137,7 +152,7 @@ ol {
 .divisor {
   width: 48px;
   height: 2px;
-  background: var(--ouro);
+  background: var(--primaria);
   margin: 1.25rem 0 1.5rem;
 }
 
@@ -146,12 +161,11 @@ ol {
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
-  padding: 0.9rem 1.6rem;
-  border-radius: 2px;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 500;
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--raio);
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  font-weight: 600;
   transition: background var(--transicao), border-color var(--transicao),
     color var(--transicao), transform var(--transicao);
   min-height: 44px;
@@ -162,23 +176,23 @@ ol {
 }
 
 .botao-primario {
-  background: var(--ouro);
-  color: var(--escuro);
+  background: var(--primaria);
+  color: #fff;
 }
 
 .botao-primario:hover {
-  background: var(--ouro-claro);
+  background: var(--primaria-clara);
 }
 
 .botao-secundario {
   border: 1px solid var(--borda-forte);
-  color: var(--ouro);
+  color: var(--primaria);
   background: transparent;
 }
 
 .botao-secundario:hover {
-  background: rgba(201, 168, 76, 0.08);
-  border-color: var(--ouro);
+  background: var(--primaria-suave);
+  border-color: var(--primaria-clara);
 }
 
 .botao-whatsapp {
@@ -191,42 +205,43 @@ ol {
 }
 
 .botao-fantasma {
-  border: 1px solid rgba(245, 240, 232, 0.15);
-  color: var(--creme);
+  border: 1px solid var(--borda);
+  color: var(--texto);
 }
 
 .botao-fantasma:hover {
-  border-color: rgba(245, 240, 232, 0.35);
+  border-color: var(--borda-forte);
+  background: var(--fundo-2);
 }
 
 .campo,
 .selecao,
 .area-texto {
   width: 100%;
-  background: var(--escuro-2);
+  background: var(--fundo-2);
   border: 1px solid var(--borda);
   border-radius: var(--raio);
   padding: 0.85rem 1rem;
-  color: var(--creme);
+  color: var(--texto);
   transition: border-color var(--transicao);
   min-height: 46px;
 }
 
 .campo::placeholder,
 .area-texto::placeholder {
-  color: rgba(245, 240, 232, 0.38);
+  color: var(--texto-fraco);
 }
 
 .campo:focus,
 .selecao:focus,
 .area-texto:focus {
-  border-color: var(--ouro);
+  border-color: var(--primaria-clara);
   outline: none;
 }
 
 .selecao {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C9A84C' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%231B4F72' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
@@ -235,10 +250,11 @@ ol {
 .rotulo-campo {
   display: block;
   font-size: 0.75rem;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--cinza-fraco);
+  color: var(--texto-suave);
   margin-bottom: 0.4rem;
+  font-weight: 600;
 }
 
 .grade-imoveis {
@@ -252,7 +268,7 @@ ol {
 }
 
 .secao-escura {
-  background: var(--escuro-2);
+  background: var(--fundo-2);
 }
 
 .pill {
@@ -260,20 +276,21 @@ ol {
   align-items: center;
   gap: 0.35rem;
   font-size: 0.68rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.35rem 0.75rem;
-  border-radius: 2px;
-  background: rgba(201, 168, 76, 0.12);
-  color: var(--ouro);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: var(--raio);
+  background: var(--primaria-suave);
+  color: var(--primaria-clara);
+  border: 1px solid var(--borda);
+  font-weight: 600;
 }
 
 .mensagem-estado {
   text-align: center;
   padding: 3.5rem 1.5rem;
   border: 1px solid var(--borda);
-  background: var(--escuro-3);
+  background: var(--fundo-2);
   border-radius: var(--raio-suave);
 }
 
@@ -282,19 +299,20 @@ ol {
   font-family: var(--fonte-display);
   font-size: 1.5rem;
   margin-bottom: 0.6rem;
+  color: var(--primaria);
 }
 
 .mensagem-estado p {
-  color: var(--cinza-suave);
+  color: var(--texto-suave);
   margin-bottom: 1.5rem;
 }
 
 .esqueleto {
   background: linear-gradient(
     90deg,
-    var(--escuro-3) 25%,
-    #222 50%,
-    var(--escuro-3) 75%
+    var(--fundo-3) 25%,
+    #dce6f0 50%,
+    var(--fundo-3) 75%
   );
   background-size: 200% 100%;
   animation: brilho 1.4s ease infinite;

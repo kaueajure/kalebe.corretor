@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 100;
-  background: rgba(10, 10, 10, 0.88);
+  background: rgba(245, 247, 250, 0.9);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: border-color 0.25s ease, background 0.25s ease;
@@ -10,7 +10,7 @@
 
 .rolou {
   border-bottom-color: var(--borda);
-  background: rgba(10, 10, 10, 0.96);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .interno {
@@ -24,14 +24,14 @@
 .logo {
   font-family: var(--fonte-display);
   font-size: 1.2rem;
-  color: var(--ouro);
-  letter-spacing: 0.12em;
+  color: var(--primaria);
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
 .logo span {
-  color: var(--creme);
-  font-weight: 400;
+  color: var(--texto-suave);
+  font-weight: 500;
 }
 
 .navDesktop ul {
@@ -40,16 +40,16 @@
 }
 
 .navDesktop a {
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(245, 240, 232, 0.7);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  color: var(--texto-suave);
   transition: color 0.25s ease;
 }
 
 .navDesktop a:hover,
 .ativo {
-  color: var(--ouro) !important;
+  color: var(--primaria) !important;
 }
 
 .acoes {
@@ -64,17 +64,17 @@
   height: 40px;
   display: inline-grid;
   place-items: center;
-  color: rgba(245, 240, 232, 0.75);
+  color: var(--texto-suave);
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--raio);
   transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
 }
 
 .favoritos:hover,
 .favoritosAtivo {
-  color: var(--ouro);
-  border-color: rgba(201, 168, 76, 0.35);
-  background: rgba(201, 168, 76, 0.08);
+  color: var(--primaria);
+  border-color: var(--borda);
+  background: var(--primaria-suave);
 }
 
 .contador {
@@ -85,8 +85,8 @@
   height: 16px;
   padding: 0 4px;
   border-radius: 999px;
-  background: var(--ouro);
-  color: var(--escuro);
+  background: var(--primaria);
+  color: #fff;
   font-size: 0.62rem;
   font-weight: 600;
   display: grid;
@@ -95,14 +95,12 @@
 }
 
 .cta {
-  background: var(--ouro);
-  color: var(--escuro);
+  background: var(--primaria);
+  color: #fff;
   padding: 0.55rem 1.2rem;
-  border-radius: 2px;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 500;
+  border-radius: var(--raio);
+  font-size: 0.82rem;
+  font-weight: 600;
   transition: background 0.25s ease;
   min-height: 40px;
   display: inline-flex;
@@ -110,7 +108,7 @@
 }
 
 .cta:hover {
-  background: var(--ouro-claro);
+  background: var(--primaria-clara);
 }
 
 .menuBotao {
@@ -125,7 +123,7 @@
   display: block;
   width: 22px;
   height: 1.5px;
-  background: var(--creme);
+  background: var(--texto);
   margin: 5px 0;
   transition: transform 0.25s ease, opacity 0.25s ease;
 }
@@ -164,7 +162,7 @@
     display: block;
     position: fixed;
     inset: var(--cabecalho-altura) 0 0;
-    background: #0a0a0a;
+    background: var(--fundo-2);
     padding: 1.5rem;
     transform: translateX(100%);
     transition: transform 0.3s ease;
@@ -186,6 +184,6 @@
     display: block;
     padding: 1rem 0.25rem;
     font-size: 1.05rem;
-    border-bottom: 1px solid rgba(201, 168, 76, 0.08);
+    border-bottom: 1px solid var(--borda);
   }
 }

@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS usuarios (
+  id VARCHAR(64) NOT NULL,
+  email VARCHAR(191) NOT NULL,
+  senha VARCHAR(191) NOT NULL,
+  nome VARCHAR(191) NOT NULL,
+  desenvolvedor TINYINT(1) NOT NULL DEFAULT 0,
+  administrador TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (id),
+  UNIQUE KEY usuarios_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

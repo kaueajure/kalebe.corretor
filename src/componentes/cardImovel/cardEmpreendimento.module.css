@@ -1,14 +1,16 @@
 .card {
-  background: var(--escuro-3);
+  background: var(--fundo-2);
   border: 1px solid var(--borda);
   border-radius: var(--raio-suave);
   padding: 1.55rem 1.45rem;
-  transition: border-color 0.25s ease, transform 0.25s ease;
+  transition: border-color 0.25s ease, transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .card:hover {
-  border-color: rgba(201, 168, 76, 0.45);
+  border-color: var(--borda-forte);
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(11, 37, 69, 0.08);
 }
 
 .topo {
@@ -20,48 +22,52 @@
 .tipo,
 .mcmv {
   font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.28rem 0.55rem;
-  border-radius: 2px;
+  border-radius: var(--raio);
+  font-weight: 600;
 }
 
 .tipo {
-  background: rgba(201, 168, 76, 0.12);
-  color: var(--ouro);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  background: var(--primaria-suave);
+  color: var(--primaria-clara);
+  border: 1px solid var(--borda);
 }
 
 .mcmv {
   background: transparent;
-  color: var(--cinza-suave);
-  border: 1px solid rgba(245, 240, 232, 0.12);
+  color: var(--texto-suave);
+  border: 1px solid var(--borda);
 }
 
 .nome {
   font-family: var(--fonte-display);
   font-size: 1.3rem;
   margin-bottom: 0.35rem;
+  color: var(--primaria);
 }
 
 .local {
   font-size: 0.82rem;
-  color: var(--cinza-fraco);
+  color: var(--texto-suave);
   margin-bottom: 1rem;
   line-height: 1.5;
 }
 
 .rotulo {
   font-size: 0.68rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--ouro);
+  color: var(--primaria-clara);
+  font-weight: 600;
 }
 
 .preco {
   font-family: var(--fonte-display);
   font-size: 1.55rem;
   margin: 0.2rem 0 1rem;
+  color: var(--primaria);
 }
 
 .detalhes {
@@ -72,8 +78,8 @@
 
 .detalhes li {
   font-size: 0.75rem;
-  color: var(--cinza-suave);
-  border: 1px solid rgba(201, 168, 76, 0.15);
+  color: var(--texto-suave);
+  border: 1px solid var(--borda);
   padding: 0.3rem 0.55rem;
-  border-radius: 2px;
+  border-radius: var(--raio);
 }

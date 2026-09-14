@@ -1,0 +1,93 @@
+.botaoPerigo {
+  color: var(--erro);
+  border-color: color-mix(in srgb, var(--erro) 40%, var(--borda));
+}
+
+.botaoPerigo:hover {
+  background: color-mix(in srgb, var(--erro) 8%, var(--fundo-2));
+  border-color: var(--erro);
+}
+
+.dialogo {
+  width: min(100% - 2rem, 28rem);
+  margin: auto;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  background: var(--fundo-2);
+  color: var(--texto);
+  padding: 0;
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--primaria) 18%, transparent);
+}
+
+.dialogo::backdrop {
+  background: color-mix(in srgb, var(--primaria) 45%, transparent);
+}
+
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem 0.85rem;
+}
+
+.cabecalho h2 {
+  font-family: var(--fonte-display);
+  font-size: 1.25rem;
+  color: var(--primaria);
+}
+
+.cabecalho p {
+  color: var(--texto-suave);
+  margin-top: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.fechar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--raio);
+  border: 1px solid var(--borda);
+  color: var(--texto-suave);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.corpo {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--fundo);
+}
+
+.corpo span {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.erro {
+  margin: 0.85rem 1.25rem 0;
+  color: var(--erro);
+  font-size: 0.9rem;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding: 1.15rem 1.25rem;
+}
+
+.botaoConfirmar {
+  background: var(--erro);
+}
+
+.botaoConfirmar:hover {
+  background: color-mix(in srgb, var(--erro) 85%, #000);
+}

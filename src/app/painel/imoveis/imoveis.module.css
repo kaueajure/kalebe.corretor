@@ -1,0 +1,197 @@
+.principal {
+  width: min(100% - 2rem, 1180px);
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.cabecalho h1 {
+  font-family: var(--fonte-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  color: var(--primaria);
+}
+
+.cabecalho p {
+  color: var(--texto-suave);
+  margin-top: 0.35rem;
+}
+
+.aviso {
+  padding: 0.85rem 1rem;
+  border-radius: var(--raio);
+  border: 1px solid color-mix(in srgb, var(--sucesso) 35%, var(--borda));
+  background: color-mix(in srgb, var(--sucesso) 10%, var(--fundo-2));
+  color: var(--sucesso);
+}
+
+.vazio {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: start;
+  padding: 2rem 1.25rem;
+  border: 1px dashed var(--borda-forte);
+  border-radius: var(--raio-suave);
+  background: var(--fundo-2);
+}
+
+.vazio h2 {
+  font-family: var(--fonte-display);
+  color: var(--primaria);
+}
+
+.vazio p {
+  color: var(--texto-suave);
+}
+
+.lista > header {
+  margin-bottom: 0.75rem;
+  color: var(--texto-suave);
+}
+
+.lista ul {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1.6fr) 0.7fr 0.9fr 0.9fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem;
+  border: 1px solid var(--borda);
+  border-radius: var(--raio-suave);
+  background: var(--fundo-2);
+}
+
+.capa {
+  position: relative;
+  width: 112px;
+  height: 84px;
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: var(--fundo-3);
+  display: grid;
+  place-items: center;
+  color: var(--texto-fraco);
+}
+
+.capa img {
+  object-fit: cover;
+}
+
+.identificacao span {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+  font-weight: 600;
+}
+
+.identificacao h2 {
+  font-size: 1.05rem;
+  color: var(--texto);
+  margin-top: 0.2rem;
+}
+
+.identificacao p {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.dados span {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--raio);
+  background: var(--primaria-suave);
+  color: var(--primaria);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.preco {
+  color: var(--primaria);
+  font-size: 1rem;
+}
+
+.status {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.situacao,
+.disponibilidade {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--raio);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.situacaoPublicado {
+  background: color-mix(in srgb, var(--sucesso) 16%, var(--fundo));
+  color: var(--sucesso);
+}
+
+.situacaoRascunho {
+  background: var(--fundo-3);
+  color: var(--texto-suave);
+}
+
+.disponibilidade {
+  background: var(--fundo);
+  border: 1px solid var(--borda);
+  color: var(--texto-suave);
+}
+
+@media (max-width: 980px) {
+  .item {
+    grid-template-columns: 96px 1fr auto;
+    grid-template-areas:
+      "capa id acoes"
+      "capa dados acoes"
+      "capa preco status";
+  }
+
+  .capa {
+    grid-area: capa;
+  }
+
+  .identificacao {
+    grid-area: id;
+  }
+
+  .dados {
+    grid-area: dados;
+  }
+
+  .preco {
+    grid-area: preco;
+  }
+
+  .status {
+    grid-area: status;
+  }
+}
+
+@media (max-width: 640px) {
+  .item {
+    grid-template-columns: 72px 1fr;
+    grid-template-areas:
+      "capa id"
+      "dados dados"
+      "preco status"
+      "acoes acoes";
+  }
+}

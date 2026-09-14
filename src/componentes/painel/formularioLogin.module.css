@@ -1,0 +1,15 @@
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.erro {
+  color: var(--erro);
+  font-size: 0.9rem;
+}
+
+.form .botao:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}

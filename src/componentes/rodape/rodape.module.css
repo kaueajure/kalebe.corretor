@@ -1,5 +1,5 @@
 .rodape {
-  background: var(--escuro);
+  background: var(--fundo-2);
   border-top: 1px solid var(--borda);
   padding: 3.5rem 0 1.5rem;
   margin-top: 2rem;
@@ -14,8 +14,8 @@
 
 .logo {
   font-family: var(--fonte-display);
-  color: var(--ouro);
-  letter-spacing: 0.12em;
+  color: var(--primaria);
+  letter-spacing: 0.04em;
   font-size: 1.15rem;
   margin-bottom: 0.5rem;
 }
@@ -63,9 +63,9 @@
 }
 
 .base {
-  border-top: 1px solid rgba(201, 168, 76, 0.08);
+  border-top: 1px solid var(--borda);
   padding-top: 1.25rem;
-  color: rgba(245, 240, 232, 0.35);
+  color: var(--texto-fraco);
   font-size: 0.78rem;
 }
 
