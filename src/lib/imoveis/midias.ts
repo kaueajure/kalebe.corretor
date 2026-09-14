@@ -42,7 +42,14 @@ export function obterDiretorioDeUploads(diretorioDoProcesso = process.cwd()) {
     process.env.diretorio_uploads?.trim() ||
     process.env.DIRETORIO_UPLOADS?.trim() ||
     process.env.DIRETORIO_DE_UPLOADS?.trim();
-  if (configurado) return path.resolve(configurado);
+
+  // Relativo ao diretório do app (ex.: public_html).
+  // No Hostinger, "../uploads" fica na mesma altura que public_html.
+  if (configurado) {
+    return path.isAbsolute(configurado)
+      ? path.normalize(configurado)
+      : path.resolve(diretorioDoProcesso, configurado);
+  }
 
   return path.resolve(diretorioDoProcesso, "..", "uploads");
 }
