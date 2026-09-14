@@ -31,6 +31,7 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
               sizes="(max-width: 700px) 100vw, (max-width: 980px) 50vw, 33vw"
               className={estilos.foto}
               priority={prioridade}
+              unoptimized
             />
           ) : (
             <div className={estilos.semFoto}>Foto indisponível</div>

@@ -64,6 +64,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               sizes="(max-width: 900px) 100vw, 70vw"
               className={estilos.foto}
               priority
+              unoptimized
             />
           </button>
           {total > 1 && !mosaico ? (
@@ -102,7 +103,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               onClick={() => abrir(1)}
               aria-label="Ver foto 2"
             >
-              <Image src={fotos[1]} alt="" fill sizes="30vw" className={estilos.foto} />
+              <Image src={fotos[1]} alt="" fill sizes="30vw" className={estilos.foto} unoptimized />
             </button>
             <button
               type="button"
@@ -110,7 +111,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               onClick={() => abrir(2)}
               aria-label="Ver foto 3"
             >
-              <Image src={fotos[2]} alt="" fill sizes="30vw" className={estilos.foto} />
+              <Image src={fotos[2]} alt="" fill sizes="30vw" className={estilos.foto} unoptimized />
             </button>
           </>
         ) : null}
@@ -128,7 +129,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               aria-label={`Ver foto ${i + 1}`}
               aria-current={i === indice}
             >
-              <Image src={foto} alt="" fill sizes="120px" className={estilos.foto} />
+              <Image src={foto} alt="" fill sizes="120px" className={estilos.foto} unoptimized />
             </button>
           ))}
         </div>
@@ -156,6 +157,7 @@ export function GaleriaImovel({ fotos, titulo }: Props) {
               fill
               sizes="100vw"
               className={estilos.foto}
+              unoptimized
             />
           </div>
           {total > 1 ? (
