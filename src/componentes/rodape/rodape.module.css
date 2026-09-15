@@ -68,6 +68,16 @@
   gap: 1rem;
 }
 
+.desenvolvedor {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.desenvolvedor:hover {
+  text-decoration-thickness: 2px;
+}
+
 @media (max-width: 760px) {
   .grade {
     grid-template-columns: 1fr 1fr;

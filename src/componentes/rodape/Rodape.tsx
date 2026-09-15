@@ -67,7 +67,17 @@ export function Rodape() {
         <p>
           © {ano} {empresa.nome}. Todos os direitos reservados.
         </p>
-        <Link href="/login">Área do corretor</Link>
+        <p>
+          Desenvolvido por{" "}
+          <a
+            className={estilos.desenvolvedor}
+            href="https://kaueajure.website"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Kauê Ajure
+          </a>
+        </p>
       </div>
     </footer>
   );
