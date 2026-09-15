@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const etapas = [
   {
     nome: "mensagem" as const,
-    titulo: "Você me conta o que procura",
+    titulo: "Você me conta o que procura ",
     texto:
       "Cidade, tipo de imóvel e quanto pretende investir. Se ainda não souber, a gente afunila juntos.",
   },
