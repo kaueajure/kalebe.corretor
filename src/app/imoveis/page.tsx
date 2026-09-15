@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Ordenacao } from "@/componentes/filtroImoveis/Ordenacao";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -14,9 +15,10 @@ import estilos from "./imoveis.module.css";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Imóveis à venda e para alugar",
+  title: "Imóveis à venda",
   description:
     "Lista de imóveis em São José do Rio Preto, Mirassol e Bady Bassitt. Filtre por tipo, preço, quartos e bairro.",
+  alternates: { canonical: "/imoveis" },
 };
 
 interface Props {
@@ -29,13 +31,18 @@ function valorParam(valor: string | string[] | undefined): string {
 }
 
 export default async function PaginaImoveis({ searchParams }: Props) {
-  const [params, imoveis] = await Promise.all([
-    searchParams,
-    listarImoveisPublicados(),
-  ]);
+  const params = await searchParams;
+  if (Object.hasOwn(params, "finalidade")) {
+    const limpos = new URLSearchParams();
+    for (const [chave, valor] of Object.entries(params)) {
+      if (chave === "finalidade" || valor === undefined) continue;
+      for (const item of Array.isArray(valor) ? valor : [valor]) limpos.append(chave, item);
+    }
+    redirect(`/imoveis${limpos.size ? `?${limpos}` : ""}`);
+  }
+  const imoveis = await listarImoveisPublicados();
   const filtro: FiltroImoveisEstado = {
     ...filtroInicial,
-    finalidade: valorParam(params.finalidade) as FiltroImoveisEstado["finalidade"],
     tipo: valorParam(params.tipo) as FiltroImoveisEstado["tipo"],
     cidade: valorParam(params.cidade),
     bairro: valorParam(params.bairro),
@@ -49,8 +56,8 @@ export default async function PaginaImoveis({ searchParams }: Props) {
   };
 
   const resultados = filtrarImoveis(imoveis, filtro);
-  const cidades = [...new Set(imoveis.map((i) => i.cidade))].sort();
-  const bairros = [...new Set(imoveis.map((i) => i.bairro))].sort();
+  const cidades = [...new Set(imoveis.map((i) => i.cidade).filter((item): item is string => Boolean(item)))].sort();
+  const bairros = [...new Set(imoveis.map((i) => i.bairro).filter((item): item is string => Boolean(item)))].sort();
   const ordem = valorParam(params.ordem);
   resultados.sort((a, b) => {
     if (ordem === "menor-preco") return (a.preco ?? Infinity) - (b.preco ?? Infinity);
@@ -62,12 +69,7 @@ export default async function PaginaImoveis({ searchParams }: Props) {
     );
   });
 
-  const titulo =
-    filtro.finalidade === "aluguel"
-      ? "Imóveis para alugar"
-      : filtro.finalidade === "venda"
-        ? "Imóveis à venda"
-        : "Imóveis";
+  const titulo = "Imóveis à venda";
   const local = filtro.cidade ? ` em ${filtro.cidade}` : " na região";
 
   return (
@@ -87,17 +89,13 @@ export default async function PaginaImoveis({ searchParams }: Props) {
           </header>
 
           <div className={estilos.atalhos} aria-label="Buscas rápidas">
-            <Link href="/imoveis?tipo=casa&finalidade=venda">
+            <Link href="/imoveis?tipo=casa">
               <Icone nome="casa" size={18} />
               Casas
             </Link>
-            <Link href="/imoveis?tipo=apartamento&finalidade=venda">
+            <Link href="/imoveis?tipo=apartamento">
               <Icone nome="predio" size={18} />
               Apartamentos
-            </Link>
-            <Link href="/lancamentos">
-              <Icone nome="chave" size={18} />
-              Lançamentos
             </Link>
             <Link href="/imoveis?cidade=S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Preto">
               <Icone nome="local" size={18} />

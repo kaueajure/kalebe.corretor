@@ -11,7 +11,6 @@ export const empresa = {
   regiao: "São José do Rio Preto e região",
   especialidades: [
     "Imóveis prontos",
-    "Minha Casa Minha Vida",
     "Financiamento habitacional",
   ],
   cidadesAtendimento: [
@@ -20,7 +19,7 @@ export const empresa = {
     "Bady Bassitt",
   ],
   sobre:
-    "Sou o Kalebe, corretor em São José do Rio Preto, Mirassol e Bady Bassitt. Trabalho com imóveis prontos e lançamentos — inclusive Minha Casa Minha Vida. Ajudo a escolher, visitar e negociar, e oriento o financiamento."
+    "Sou o Kalebe, corretor em São José do Rio Preto, Mirassol e Bady Bassitt. Trabalho com imóveis à venda e ajudo você a escolher, visitar, negociar e entender o financiamento."
 } as const;
 
 export const regioes = [

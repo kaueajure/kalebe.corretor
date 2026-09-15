@@ -2,11 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { BuscaPrincipal } from "@/componentes/buscaPrincipal/BuscaPrincipal";
 import { CardImovel } from "@/componentes/cardImovel/CardImovel";
-import { CardEmpreendimento } from "@/componentes/cardImovel/CardEmpreendimento";
 import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import { listarImoveisPublicados } from "@/dados/imoveis";
-import { empreendimentos } from "@/dados/lancamentos";
 import { linkWhatsApp } from "@/lib/formatadores";
 import estilos from "./inicio.module.css";
 
@@ -18,20 +16,26 @@ export default async function PaginaInicial() {
   const selecao = [...disponiveis]
     .sort((a, b) => Number(Boolean(b.destaque)) - Number(Boolean(a.destaque)))
     .slice(0, 6);
+  const fotoDaCapa = selecao
+    .flatMap((imovel) => imovel.midias.map((midia) => ({ ...midia, titulo: imovel.titulo })))
+    .find((midia) => midia.tipo === "imagem");
   const cidades = empresa.cidadesAtendimento;
 
   return (
     <>
       <section className={estilos.hero}>
         <div className={estilos.heroFotoWrap}>
-          <Image
-            src="/imagens/imoveis/jardim-arroio/05.webp"
-            alt="Casa à venda no Jardim Arroio, em São José do Rio Preto"
-            fill
-            priority
-            sizes="100vw"
-            className={estilos.heroFoto}
-          />
+          {fotoDaCapa ? (
+            <Image
+              src={fotoDaCapa.url}
+              alt={fotoDaCapa.descricao || fotoDaCapa.titulo}
+              fill
+              priority
+              unoptimized
+              sizes="100vw"
+              className={estilos.heroFoto}
+            />
+          ) : null}
         </div>
         <div className={estilos.heroSombra} />
         <div className={`conteudo-largo ${estilos.heroConteudo}`}>
@@ -43,25 +47,21 @@ export default async function PaginaInicial() {
             Encontre um imóvel em Rio Preto e região.
           </h1>
           <p className={estilos.subtitulo}>
-            Casas, apartamentos e lançamentos do Minha Casa Minha Vida.
-            Você busca aqui e conversa direto comigo.
+            Casas, apartamentos, sobrados e terrenos à venda. Você busca aqui
+            e conversa direto comigo.
           </p>
           <BuscaPrincipal />
         </div>
       </section>
 
       <div className={`conteudo ${estilos.atalhos}`} aria-label="Buscas rápidas">
-        <Link href="/imoveis?tipo=casa&finalidade=venda">
+        <Link href="/imoveis?tipo=casa">
           <Icone nome="casa" size={18} />
           Casas à venda
         </Link>
-        <Link href="/imoveis?tipo=apartamento&finalidade=venda">
+        <Link href="/imoveis?tipo=apartamento">
           <Icone nome="predio" size={18} />
           Apartamentos
-        </Link>
-        <Link href="/lancamentos">
-          <Icone nome="chave" size={18} />
-          Minha Casa Minha Vida
         </Link>
         <Link href="/imoveis?cidade=S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Preto">
           <Icone nome="local" size={18} />
@@ -105,29 +105,6 @@ export default async function PaginaInicial() {
         </div>
       </section>
 
-      <section className={estilos.lancamentos}>
-        <div className="conteudo">
-          <div className={estilos.cabecalhoSecao}>
-            <div>
-              <p className="rotulo-secao">Lançamentos</p>
-              <h2 className="titulo-secao">Primeiro imóvel, com calma.</h2>
-              <p className="texto-secao">
-                Casas e apartamentos na planta, muitos pelo Minha Casa Minha
-                Vida. Compare cidade, metragem e valor de entrada.
-              </p>
-            </div>
-            <Link href="/lancamentos" className="link-seta">
-              Ver lançamentos <Icone nome="seta" />
-            </Link>
-          </div>
-          <div className={estilos.gradeEmp}>
-            {empreendimentos.slice(0, 6).map((item) => (
-              <CardEmpreendimento key={item.id} empreendimento={item} />
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="secao">
         <div className="conteudo">
           <h2 className="titulo-secao">Onde você quer morar?</h2>
@@ -149,7 +126,7 @@ export default async function PaginaInicial() {
                     <p>
                       {total
                         ? `${total} ${total === 1 ? "imóvel à venda" : "imóveis à venda"}`
-                        : "Ver imóveis e lançamentos"}
+                        : "Consultar opções"}
                     </p>
                   </div>
                   <Icone nome="seta" size={18} />

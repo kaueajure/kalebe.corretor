@@ -8,6 +8,7 @@ import type { DadosValidadosDoImovel } from "@/lib/imoveis/validacao";
 type LinhaDoImovel = RowDataPacket & {
   id: number;
   codigo: string;
+  identificador: string;
   titulo: string;
   localizacao: string | null;
   nome_condominio: string | null;
@@ -22,6 +23,7 @@ type LinhaDoImovel = RowDataPacket & {
 export type ImovelDoPainel = {
   id: number;
   codigo: string;
+  identificador: string;
   titulo: string;
   localizacao: string | null;
   tipo: string;
@@ -32,38 +34,84 @@ export type ImovelDoPainel = {
   capa: string | null;
 };
 
-export async function listarImoveisDoPainel() {
+export type FiltrosDaListaDoPainel = {
+  busca?: string;
+  situacao?: "PUBLICADO" | "RASCUNHO";
+  disponibilidade?: "DISPONIVEL" | "RESERVADO" | "EM_NEGOCIACAO" | "VENDIDO" | "INDISPONIVEL";
+  pagina?: number;
+  porPagina?: number;
+};
+
+export async function consultarImoveisDoPainel(filtros: FiltrosDaListaDoPainel = {}) {
+  const pagina = Math.max(1, Math.floor(filtros.pagina ?? 1));
+  const porPagina = Math.min(50, Math.max(10, Math.floor(filtros.porPagina ?? 20)));
+  const condicoes: string[] = [];
+  const valores: Array<string | number> = [];
+
+  if (filtros.busca) {
+    condicoes.push("(imovel.codigo LIKE ? OR imovel.titulo LIKE ? OR imovel.cidade LIKE ? OR imovel.bairro LIKE ?)");
+    const termo = `%${filtros.busca.slice(0, 100)}%`;
+    valores.push(termo, termo, termo, termo);
+  }
+  if (filtros.situacao) {
+    condicoes.push("imovel.situacao = ?");
+    valores.push(filtros.situacao);
+  }
+  if (filtros.disponibilidade) {
+    condicoes.push("imovel.disponibilidade = ?");
+    valores.push(filtros.disponibilidade);
+  }
+
+  const onde = condicoes.length ? `WHERE ${condicoes.join(" AND ")}` : "";
+  const [contagem] = await banco.query<(RowDataPacket & { total: number })[]>(
+    `SELECT COUNT(*) AS total FROM imoveis AS imovel ${onde}`,
+    valores,
+  );
+  const total = Number(contagem[0]?.total ?? 0);
+  const totalPaginas = Math.max(1, Math.ceil(total / porPagina));
+  const paginaAtual = Math.min(pagina, totalPaginas);
+  const deslocamento = (paginaAtual - 1) * porPagina;
   const [linhas] = await banco.query<LinhaDoImovel[]>(
     `SELECT imovel.id, imovel.codigo, imovel.titulo,
-            TRIM(BOTH ', ' FROM CONCAT_WS(', ',
-              NULLIF(imovel.nome_condominio, ''),
-              NULLIF(imovel.bairro, ''),
-              NULLIF(imovel.cidade, '')
-            )) AS localizacao,
-            imovel.nome_condominio, imovel.tipo,
-            imovel.situacao, imovel.disponibilidade,
-            imovel.valor_venda, imovel.criado_em,
-            (SELECT midia.arquivo
-               FROM midias AS midia
+            TRIM(BOTH ', ' FROM CONCAT_WS(', ', NULLIF(imovel.nome_condominio, ''),
+              NULLIF(imovel.bairro, ''), NULLIF(imovel.cidade, ''))) AS localizacao,
+            imovel.nome_condominio, imovel.tipo, imovel.situacao,
+            imovel.disponibilidade, imovel.valor_venda, imovel.criado_em,
+            imovel.identificador,
+            (SELECT midia.arquivo FROM midias AS midia
               WHERE midia.imovel_id = imovel.id AND midia.principal = TRUE
-              ORDER BY midia.ordem, midia.id
-              LIMIT 1) AS capa
-       FROM imoveis AS imovel
-      ORDER BY imovel.criado_em DESC, imovel.id DESC`,
+              ORDER BY midia.ordem, midia.id LIMIT 1) AS capa
+       FROM imoveis AS imovel ${onde}
+      ORDER BY imovel.atualizado_em DESC, imovel.id DESC LIMIT ? OFFSET ?`,
+    [...valores, porPagina, deslocamento],
   );
 
-  return linhas.map<ImovelDoPainel>((linha) => ({
-    id: Number(linha.id),
-    codigo: linha.codigo,
-    titulo: linha.titulo,
-    localizacao: linha.localizacao || null,
-    tipo: linha.tipo,
-    situacao: linha.situacao,
-    disponibilidade: linha.disponibilidade,
-    preco: linha.valor_venda !== null ? Number(linha.valor_venda) : null,
-    criadoEm: linha.criado_em,
-    capa: linha.capa,
-  }));
+  return {
+    imoveis: linhas.map<ImovelDoPainel>((linha) => ({
+      id: Number(linha.id), codigo: linha.codigo, titulo: linha.titulo,
+      identificador: linha.identificador,
+      localizacao: linha.localizacao || null, tipo: linha.tipo,
+      situacao: linha.situacao, disponibilidade: linha.disponibilidade,
+      preco: linha.valor_venda !== null ? Number(linha.valor_venda) : null,
+      criadoEm: linha.criado_em, capa: linha.capa,
+    })),
+    total,
+    pagina: paginaAtual,
+    totalPaginas,
+  };
+}
+
+export async function obterResumoDoPainel() {
+  const [linhas] = await banco.query<
+    (RowDataPacket & { total: number; publicados: number; rascunhos: number })[]
+  >(`SELECT COUNT(*) AS total,
+      SUM(situacao = 'PUBLICADO') AS publicados,
+      SUM(situacao = 'RASCUNHO') AS rascunhos FROM imoveis`);
+  return {
+    total: Number(linhas[0]?.total ?? 0),
+    publicados: Number(linhas[0]?.publicados ?? 0),
+    rascunhos: Number(linhas[0]?.rascunhos ?? 0),
+  };
 }
 
 export async function identificadorEstaDisponivel(
@@ -98,23 +146,22 @@ export async function cadastrarImovel(
 
   const [resultado] = await conexao.execute<ResultSetHeader>(
     `INSERT INTO imoveis (
-       codigo, titulo, identificador, descricao, nome_condominio, lancamento_id,
+       codigo, titulo, identificador, descricao, nome_condominio,
        tipo, subtipo, situacao, disponibilidade,
        valor_venda, valor_condominio, valor_iptu, periodicidade_iptu,
        valor_outras_despesas, aceita_financiamento, aceita_permuta,
-       area_total, area_util, area_construida, unidade_area_total,
+       area_total, area_util, area_construida,
        frente_terreno, fundos_terreno, topografia,
        quartos, suites, banheiros, vagas, andar, unidade, total_andares, elevador, pe_direito,
        bairro, cidade, estado, logradouro, numero, complemento, ponto_referencia, cep,
        exibir_endereco_exato, destaque, publicado_em
-     ) VALUES (${Array.from({ length: 44 }, () => "?").join(", ")})`,
+     ) VALUES (${Array.from({ length: 42 }, () => "?").join(", ")})`,
     [
       codigo,
       dados.titulo,
       dados.identificador,
       dados.descricao,
       dados.nomeCondominio,
-      dados.lancamentoId,
       dados.tipo,
       dados.subtipo,
       dados.situacao,
@@ -129,7 +176,6 @@ export async function cadastrarImovel(
       dados.areaTerreno,
       dados.areaUtil,
       dados.areaConstruida,
-      dados.areaTerreno !== null ? dados.unidadeAreaTerreno : null,
       dados.frenteTerreno,
       dados.fundosTerreno,
       dados.topografia,
@@ -180,7 +226,7 @@ export async function cadastrarImovel(
     );
   }
 
-  return { idDoImovel, codigo };
+  return { idDoImovel, codigo, identificador: dados.identificador };
 }
 
 type LinhaCompletaDoImovel = RowDataPacket & {
@@ -191,7 +237,6 @@ type LinhaCompletaDoImovel = RowDataPacket & {
   descricao: string | null;
   tipo: string;
   subtipo: string | null;
-  lancamento_id: number | null;
   situacao: string;
   disponibilidade: string;
   valor_venda: string | null;
@@ -204,7 +249,6 @@ type LinhaCompletaDoImovel = RowDataPacket & {
   area_total: string | null;
   area_util: string | null;
   area_construida: string | null;
-  unidade_area_total: string | null;
   frente_terreno: string | null;
   fundos_terreno: string | null;
   topografia: string | null;
@@ -287,8 +331,6 @@ function montarValoresDoFormulario(
     descricao: linha.descricao ?? "",
     tipo: linha.tipo,
     subtipo: linha.subtipo ?? "",
-    lancamentoId:
-      linha.lancamento_id === null ? "" : String(linha.lancamento_id),
     disponibilidade: linha.disponibilidade,
     valorVenda: numeroParaCampo(linha.valor_venda),
     valorCondominio: condominioIsento
@@ -308,7 +350,6 @@ function montarValoresDoFormulario(
     areaTerreno: numeroParaCampo(linha.area_total),
     areaUtil: numeroParaCampo(linha.area_util),
     areaConstruida: numeroParaCampo(linha.area_construida),
-    unidadeAreaTerreno: linha.unidade_area_total ?? "M2",
     frenteTerreno: numeroParaCampo(linha.frente_terreno),
     fundosTerreno: numeroParaCampo(linha.fundos_terreno),
     topografia: linha.topografia ?? "",
@@ -335,10 +376,10 @@ function montarValoresDoFormulario(
 
 export async function obterImovelParaEdicao(id: number) {
   const [linhas] = await banco.query<LinhaCompletaDoImovel[]>(
-    `SELECT id, codigo, identificador, titulo, descricao, tipo, subtipo, lancamento_id, situacao, disponibilidade,
+    `SELECT id, codigo, identificador, titulo, descricao, tipo, subtipo, situacao, disponibilidade,
             valor_venda, valor_condominio, valor_iptu, periodicidade_iptu, valor_outras_despesas,
             aceita_financiamento, aceita_permuta,
-            area_total, area_util, area_construida, unidade_area_total, frente_terreno, fundos_terreno, topografia,
+            area_total, area_util, area_construida, frente_terreno, fundos_terreno, topografia,
             quartos, suites, banheiros, vagas, andar, unidade, total_andares, elevador, pe_direito,
             bairro, cidade, estado, logradouro, numero, complemento, nome_condominio, ponto_referencia, cep,
             exibir_endereco_exato, destaque, publicado_em
@@ -425,11 +466,11 @@ export async function atualizarImovel(
 
   await conexao.execute(
     `UPDATE imoveis SET
-       titulo = ?, descricao = ?, nome_condominio = ?, lancamento_id = ?,
+       titulo = ?, descricao = ?, nome_condominio = ?,
        tipo = ?, subtipo = ?, situacao = ?, disponibilidade = ?,
        valor_venda = ?, valor_condominio = ?, valor_iptu = ?, periodicidade_iptu = ?,
        valor_outras_despesas = ?, aceita_financiamento = ?, aceita_permuta = ?,
-       area_total = ?, area_util = ?, area_construida = ?, unidade_area_total = ?,
+       area_total = ?, area_util = ?, area_construida = ?,
        frente_terreno = ?, fundos_terreno = ?, topografia = ?,
        quartos = ?, suites = ?, banheiros = ?, vagas = ?, andar = ?, unidade = ?, total_andares = ?, elevador = ?, pe_direito = ?,
        bairro = ?, cidade = ?, estado = ?, logradouro = ?, numero = ?, complemento = ?, ponto_referencia = ?, cep = ?,
@@ -440,7 +481,6 @@ export async function atualizarImovel(
       dados.titulo,
       dados.descricao,
       dados.nomeCondominio,
-      dados.lancamentoId,
       dados.tipo,
       dados.subtipo,
       dados.situacao,
@@ -455,7 +495,6 @@ export async function atualizarImovel(
       dados.areaTerreno,
       dados.areaUtil,
       dados.areaConstruida,
-      dados.areaTerreno !== null ? dados.unidadeAreaTerreno : null,
       dados.frenteTerreno,
       dados.fundosTerreno,
       dados.topografia,

@@ -1,40 +1,31 @@
 import type { MetadataRoute } from "next";
-import { empreendimentos } from "@/dados/lancamentos";
+import { listarEntradasDoSitemap } from "@/dados/imoveis";
+
+export const revalidate = 3600;
+
+const BASE = "https://kalebecorretor.com.br";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = "https://kalebecorretor.com.br";
-
   const estaticas: MetadataRoute.Sitemap = [
-    "",
-    "/imoveis",
-    "/lancamentos",
-    "/sobre",
-    "/contato",
-    "/favoritos",
-  ].map((rota) => ({
-    url: `${base}${rota}`,
-    changeFrequency: "weekly",
-    priority: rota === "" ? 1 : 0.8,
-  }));
+    { url: BASE, changeFrequency: "weekly", priority: 1 },
+    { url: `${BASE}/imoveis`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE}/sobre`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/contato`, changeFrequency: "monthly", priority: 0.6 },
+  ];
 
-  let dinamicasImoveis: MetadataRoute.Sitemap = [];
   try {
-    const { listarSlugsPublicados } = await import("@/dados/imoveis");
-    const slugs = await listarSlugsPublicados();
-    dinamicasImoveis = slugs.map((slug) => ({
-      url: `${base}/imoveis/${slug}`,
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    }));
-  } catch {
-    dinamicasImoveis = [];
+    const entradas = await listarEntradasDoSitemap();
+    return [
+      ...estaticas,
+      ...entradas.map((item) => ({
+        url: `${BASE}/imoveis/${item.slug}`,
+        lastModified: item.atualizadoEm,
+        changeFrequency: "weekly" as const,
+        priority: 0.8,
+      })),
+    ];
+  } catch (erro) {
+    console.error("Não foi possível gerar as URLs dos imóveis no sitemap.", erro);
+    return estaticas;
   }
-
-  const dinamicasLancamentos = empreendimentos.map((item) => ({
-    url: `${base}/lancamentos/${item.slug}`,
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }));
-
-  return [...estaticas, ...dinamicasImoveis, ...dinamicasLancamentos];
 }

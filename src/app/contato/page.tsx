@@ -9,6 +9,7 @@ import estilos from "./contato.module.css";
 export const metadata: Metadata = {
   title: "Contato",
   description: `Fale com ${empresa.nome} pelo WhatsApp ou telefone. Atendimento em ${empresa.regiao}.`,
+  alternates: { canonical: "/contato" },
 };
 
 export default function PaginaContato() {

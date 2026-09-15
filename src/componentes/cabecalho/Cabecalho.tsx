@@ -11,7 +11,6 @@ import estilos from "./cabecalho.module.css";
 
 const links = [
   { href: "/imoveis", rotulo: "Imóveis" },
-  { href: "/lancamentos", rotulo: "Lançamentos" },
   { href: "/sobre", rotulo: "O corretor" },
   { href: "/contato", rotulo: "Contato" },
 ];

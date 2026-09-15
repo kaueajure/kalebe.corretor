@@ -18,6 +18,8 @@ import {
   obterImovelParaEdicao,
 } from "@/lib/imoveis/repositorio";
 import { banco } from "@/lib/banco";
+import { revalidatePath } from "next/cache";
+import { CABECALHOS_SEM_CACHE, requisicaoTemOrigemPermitida } from "@/lib/seguranca/requisicao";
 
 export const runtime = "nodejs";
 
@@ -26,7 +28,7 @@ type ContextoDaRota = {
 };
 
 function respostaDeErro(mensagem: string, status: number, campo?: string) {
-  return Response.json({ sucesso: false, mensagem, campo }, { status });
+  return Response.json({ sucesso: false, mensagem, campo }, { status, headers: CABECALHOS_SEM_CACHE });
 }
 
 function lerId(idTexto: string | undefined) {
@@ -35,6 +37,9 @@ function lerId(idTexto: string | undefined) {
 }
 
 export async function PUT(requisicao: Request, contexto: ContextoDaRota) {
+  if (!requisicaoTemOrigemPermitida(requisicao)) {
+    return respostaDeErro("Requisição não autorizada.", 403);
+  }
   const sessao = await obterSessaoPainelAutorizada();
   if (!sessao) {
     return respostaDeErro(
@@ -126,6 +131,10 @@ export async function PUT(requisicao: Request, contexto: ContextoDaRota) {
     });
     await conexao.commit();
     alteracaoConfirmada = true;
+    revalidatePath("/");
+    revalidatePath("/imoveis");
+    revalidatePath(`/imoveis/${imovel.identificador}`);
+    revalidatePath("/sitemap.xml");
 
     const limpezas = await Promise.allSettled(
       midiasRemovidas.map((removida) => excluirArquivoDeMidia(removida.arquivo)),
@@ -137,7 +146,7 @@ export async function PUT(requisicao: Request, contexto: ContextoDaRota) {
       );
     }
 
-    return Response.json({ sucesso: true, situacao: dados.situacao });
+    return Response.json({ sucesso: true, situacao: dados.situacao }, { headers: CABECALHOS_SEM_CACHE });
   } catch (erro) {
     if (transacaoIniciada && !alteracaoConfirmada) {
       try {
@@ -162,7 +171,10 @@ export async function PUT(requisicao: Request, contexto: ContextoDaRota) {
   }
 }
 
-export async function DELETE(_requisicao: Request, contexto: ContextoDaRota) {
+export async function DELETE(requisicao: Request, contexto: ContextoDaRota) {
+  if (!requisicaoTemOrigemPermitida(requisicao)) {
+    return respostaDeErro("Requisição não autorizada.", 403);
+  }
   const sessao = await obterSessaoPainelAutorizada();
   if (!sessao) {
     return respostaDeErro(
@@ -184,6 +196,10 @@ export async function DELETE(_requisicao: Request, contexto: ContextoDaRota) {
       return respostaDeErro("Imóvel não encontrado.", 404);
     }
     await conexao.commit();
+    revalidatePath("/");
+    revalidatePath("/imoveis");
+    revalidatePath(`/imoveis/${resultado.identificador}`);
+    revalidatePath("/sitemap.xml");
     try {
       await excluirPastaDoImovel(resultado.identificador);
     } catch (erro) {
@@ -192,7 +208,7 @@ export async function DELETE(_requisicao: Request, contexto: ContextoDaRota) {
         erro,
       );
     }
-    return Response.json({ sucesso: true });
+    return Response.json({ sucesso: true }, { headers: CABECALHOS_SEM_CACHE });
   } catch (erro) {
     try {
       await conexao.rollback();

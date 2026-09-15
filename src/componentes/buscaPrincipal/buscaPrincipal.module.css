@@ -13,8 +13,7 @@
   margin-bottom: 1.1rem;
 }
 
-.intencoes button,
-.intencoes a {
+.intencoes strong {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -23,16 +22,7 @@
   font-weight: 700;
   border-bottom: 3px solid transparent;
   margin-bottom: -1px;
-  color: var(--texto-suave);
-}
-
-.intencoes [aria-pressed="true"] {
   border-bottom-color: var(--primaria);
-  color: var(--primaria);
-}
-
-.intencoes a:hover,
-.intencoes button:hover {
   color: var(--primaria);
 }
 

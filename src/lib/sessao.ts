@@ -1,8 +1,10 @@
+import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 const NOME_COOKIE = "sessao_painel";
-const DURACAO = "7d";
+const DURACAO = "8h";
+const DURACAO_EM_SEGUNDOS = 60 * 60 * 8;
 
 export type SessaoPainel = {
   id: string;
@@ -17,6 +19,9 @@ function chaveSecreta() {
     process.env.sessao_secreta?.trim() || process.env.SESSAO_SECRETA?.trim();
   if (!secreta) {
     throw new Error("Configure sessao_secreta no .env.");
+  }
+  if (secreta.length < 32) {
+    throw new Error("sessao_secreta precisa ter pelo menos 32 caracteres.");
   }
   return new TextEncoder().encode(secreta);
 }
@@ -37,10 +42,10 @@ export async function criarSessao(dados: SessaoPainel) {
   const jar = await cookies();
   jar.set(NOME_COOKIE, token, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production" && process.env.COOKIE_SEGURO !== "NAO",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: DURACAO_EM_SEGUNDOS,
   });
 }
 

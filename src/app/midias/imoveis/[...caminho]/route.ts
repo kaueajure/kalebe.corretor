@@ -28,6 +28,8 @@ function cabecalhos(caminho: string, tamanho: number) {
     "Cache-Control": "public, max-age=31536000, immutable",
     "Content-Length": String(tamanho),
     "Content-Type": tipo,
+    "Content-Disposition": "inline",
+    "Cross-Origin-Resource-Policy": "same-site",
     "X-Content-Type-Options": "nosniff",
   });
 }

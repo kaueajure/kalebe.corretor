@@ -1,3 +1,4 @@
+import "server-only";
 import type { RowDataPacket } from "mysql2";
 import { banco } from "@/lib/banco";
 

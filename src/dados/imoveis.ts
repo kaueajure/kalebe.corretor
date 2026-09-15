@@ -6,4 +6,5 @@ export {
   listarBairros,
   listarImoveisPorIds,
   listarSlugsPublicados,
+  listarEntradasDoSitemap,
 } from "@/lib/imoveis/publico";

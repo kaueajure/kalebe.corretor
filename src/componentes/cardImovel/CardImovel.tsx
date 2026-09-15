@@ -3,9 +3,9 @@ import Link from "next/link";
 import type { Imovel } from "@/tipos/imovel";
 import {
   formatarArea,
-  formatarFinalidade,
   formatarLocalizacao,
   formatarPreco,
+  formatarStatus,
 } from "@/lib/formatadores";
 import { FavoritoBotao } from "@/componentes/favoritoBotao/FavoritoBotao";
 import { Icone } from "@/componentes/ui/Icone";
@@ -17,7 +17,12 @@ interface Props {
 }
 
 export function CardImovel({ imovel, prioridade = false }: Props) {
-  const foto = imovel.fotos[0];
+  const foto = imovel.midias.find((midia) => midia.tipo === "imagem");
+  const localizacao = formatarLocalizacao(
+    imovel.bairro,
+    imovel.cidade,
+    imovel.estado,
+  );
 
   return (
     <article className={estilos.card}>
@@ -25,8 +30,8 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
         <div className={estilos.midia}>
           {foto ? (
             <Image
-              src={foto}
-              alt={`${imovel.titulo} — foto principal`}
+              src={foto.url}
+              alt={foto.descricao || `${imovel.titulo} — foto principal`}
               fill
               sizes="(max-width: 700px) 100vw, (max-width: 980px) 50vw, 33vw"
               className={estilos.foto}
@@ -36,26 +41,23 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
           ) : (
             <div className={estilos.semFoto}>Foto indisponível</div>
           )}
-          <span className={estilos.finalidade}>
-            {formatarFinalidade(imovel.finalidade)}
-          </span>
-          {imovel.status !== "disponivel" ? <span className={estilos.status}>{imovel.status === "reservado" ? "Reservado" : "Indisponível"}</span> : null}
-          {imovel.mcmv ? <span className={estilos.mcmv}>MCMV</span> : null}
+          <span className={estilos.negocio}>Venda</span>
+          {imovel.status !== "disponivel" ? (
+            <span className={estilos.status}>{formatarStatus(imovel.status)}</span>
+          ) : null}
         </div>
 
         <div className={estilos.corpo}>
-          <p className={estilos.preco}>{formatarPreco(imovel.preco)}{imovel.finalidade === "aluguel" && imovel.preco != null ? <small> / mês</small> : null}</p>
+          {imovel.preco != null ? <p className={estilos.preco}>{formatarPreco(imovel.preco)}</p> : null}
           {imovel.precoAnterior ? (
             <p className={estilos.precoAnterior}>
               {formatarPreco(imovel.precoAnterior)}
             </p>
           ) : null}
           <h3 className={estilos.titulo}>{imovel.titulo}</h3>
-          <p className={estilos.local}>
-            {formatarLocalizacao(imovel.bairro, imovel.cidade, imovel.estado)}
-          </p>
+          {localizacao ? <p className={estilos.local}>{localizacao}</p> : null}
 
-          <ul className={estilos.specs} aria-label="Características">
+          {[imovel.quartos, imovel.banheiros, imovel.vagas, imovel.area].some((valor) => valor != null) ? <ul className={estilos.specs} aria-label="Características">
             {imovel.quartos != null ? (
               <li>
                 <Icone nome="quartos" size={16} /><strong>{imovel.quartos}</strong> quartos
@@ -76,7 +78,7 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
                 <Icone nome="area" size={15} /><strong>{formatarArea(imovel.area)}</strong>
               </li>
             ) : null}
-          </ul>
+          </ul> : null}
         </div>
       </Link>
 

@@ -58,15 +58,6 @@ const respostaOpcional = z.enum(["", "SIM", "NAO"]).transform((valor) =>
   valor === "" ? null : valor === "SIM",
 );
 
-const idOpcional = z.preprocess(
-  (valor) => (typeof valor === "string" && valor.trim() ? Number(valor) : null),
-  z
-    .number({ error: "Selecione um lançamento válido." })
-    .int()
-    .positive()
-    .nullable(),
-);
-
 export const esquemaDoCadastroDeImovel = z
   .object({
     titulo: z
@@ -77,7 +68,6 @@ export const esquemaDoCadastroDeImovel = z
     descricao: textoOpcional(20_000, "A descrição pode ter no máximo 20.000 caracteres."),
     tipo: z.enum(tiposDoImovel, { error: "Selecione um tipo de imóvel válido." }),
     subtipo: textoOpcional(80, "O subtipo pode ter no máximo 80 caracteres."),
-    lancamentoId: idOpcional,
     situacao: z.enum(situacoesDoImovel, {
       error: "Selecione uma ação de publicação válida.",
     }),
@@ -107,7 +97,6 @@ export const esquemaDoCadastroDeImovel = z
     areaTerreno: numeroOpcional("A área do terreno", 99_999_999.99),
     areaUtil: numeroOpcional("A área útil", 99_999_999.99),
     areaConstruida: numeroOpcional("A área construída", 99_999_999.99),
-    unidadeAreaTerreno: z.enum(["M2", "HECTARE"]),
     frenteTerreno: numeroOpcional("A frente do terreno", 99_999_999.99),
     fundosTerreno: numeroOpcional("O fundo do terreno", 99_999_999.99),
     topografia: z

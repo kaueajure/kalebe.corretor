@@ -9,6 +9,7 @@ import estilos from "./sobre.module.css";
 export const metadata: Metadata = {
   title: "O corretor",
   description: `Conheça ${empresa.nome}, ${empresa.creci}, corretor em ${empresa.regiao}.`,
+  alternates: { canonical: "/sobre" },
 };
 
 const etapas = [
@@ -102,7 +103,7 @@ export default function PaginaSobre() {
           <div>
             <h2>São José do Rio Preto, Mirassol e Bady Bassitt</h2>
             <p>
-              Imóveis prontos e lançamentos, inclusive Minha Casa Minha Vida.
+              Imóveis à venda com atendimento direto do início à negociação.
             </p>
           </div>
           <Link href="/imoveis" className="botao botao-secundario">

@@ -14,10 +14,6 @@ export function formatarArea(valor: number | null | undefined): string {
   return `${valor.toLocaleString("pt-BR", { maximumFractionDigits: 2 })} m²`;
 }
 
-export function formatarFinalidade(finalidade: Imovel["finalidade"]): string {
-  return finalidade === "venda" ? "Venda" : "Aluguel";
-}
-
 export function formatarTipo(tipo: Imovel["tipo"]): string {
   const mapa: Record<Imovel["tipo"], string> = {
     casa: "Casa",
@@ -30,11 +26,23 @@ export function formatarTipo(tipo: Imovel["tipo"]): string {
 }
 
 export function formatarLocalizacao(
-  bairro: string,
-  cidade: string,
-  estado = "SP"
+  bairro?: string | null,
+  cidade?: string | null,
+  estado?: string | null
 ): string {
-  return `${bairro} · ${cidade}/${estado}`;
+  const cidadeEstado = [cidade, estado].filter(Boolean).join("/");
+  return [bairro, cidadeEstado].filter(Boolean).join(" · ");
+}
+
+export function formatarStatus(status: Imovel["status"]): string {
+  const rotulos: Record<Imovel["status"], string> = {
+    disponivel: "Disponível",
+    reservado: "Reservado",
+    em_negociacao: "Em negociação",
+    vendido: "Vendido",
+    indisponivel: "Indisponível",
+  };
+  return rotulos[status];
 }
 
 export function linkWhatsApp(numero: string, mensagem?: string): string {
@@ -44,12 +52,11 @@ export function linkWhatsApp(numero: string, mensagem?: string): string {
 }
 
 export function mensagemInteresseImovel(imovel: Imovel): string {
-  const preco = formatarPreco(imovel.preco);
-  return `Olá! Tenho interesse no imóvel ${imovel.titulo} (${imovel.codigo}) — ${preco}.`;
+  const preco = imovel.preco != null ? ` — ${formatarPreco(imovel.preco)}` : "";
+  return `Olá! Tenho interesse no imóvel ${imovel.titulo} (${imovel.codigo})${preco}.`;
 }
 
 export const filtroInicial: FiltroImoveisEstado = {
-  finalidade: "",
   tipo: "",
   cidade: "",
   bairro: "",
@@ -67,9 +74,6 @@ export function filtrarImoveis(
   filtro: FiltroImoveisEstado
 ): Imovel[] {
   return lista.filter((imovel) => {
-    if (filtro.finalidade && imovel.finalidade !== filtro.finalidade) {
-      return false;
-    }
     if (filtro.tipo && imovel.tipo !== filtro.tipo) return false;
     if (filtro.cidade && imovel.cidade !== filtro.cidade) return false;
     if (filtro.bairro && imovel.bairro !== filtro.bairro) return false;
@@ -102,8 +106,8 @@ export function filtrarImoveis(
       const termo = filtro.busca.toLowerCase();
       const texto = [
         imovel.titulo,
-        imovel.bairro,
-        imovel.cidade,
+        imovel.bairro ?? "",
+        imovel.cidade ?? "",
         imovel.codigo,
         imovel.descricao,
       ]

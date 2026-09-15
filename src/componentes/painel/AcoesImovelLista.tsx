@@ -8,9 +8,11 @@ import estilos from "./acoesImovelLista.module.css";
 type Propriedades = {
   id: number;
   titulo: string;
+  identificador: string;
+  publicado: boolean;
 };
 
-export function AcoesImovelLista({ id, titulo }: Propriedades) {
+export function AcoesImovelLista({ id, titulo, identificador, publicado }: Propriedades) {
   const router = useRouter();
 
   async function aoExcluir() {
@@ -33,6 +35,17 @@ export function AcoesImovelLista({ id, titulo }: Propriedades) {
 
   return (
     <div className={estilos.acoes}>
+      {publicado ? (
+        <Link
+          className="botao botao-secundario"
+          href={`/imoveis/${identificador}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Abrir anúncio de ${titulo}`}
+        >
+          Ver anúncio
+        </Link>
+      ) : null}
       <Link
         className="botao botao-secundario"
         href={`/painel/imoveis/${id}/editar`}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { MidiaDoImovelParaEdicao } from "@/lib/imoveis/repositorio";
 import {
   enviarFormularioDeImovel,
@@ -28,7 +28,6 @@ const ESTADO_INICIAL: Record<string, string | boolean | string[]> = {
   tipo: "CASA",
   disponibilidade: "DISPONIVEL",
   periodicidadeIptu: "ANUAL",
-  unidadeAreaTerreno: "M2",
   recursosAdicionais: [],
 };
 
@@ -202,6 +201,7 @@ export function FormularioImovel({
   const estadoInicial = { ...ESTADO_INICIAL, ...valoresIniciais };
   const [enviando, setEnviando] = useState<"RASCUNHO" | "PUBLICAR" | null>(null);
   const [estado, setEstado] = useState<EstadoDoEnvio>(null);
+  const [alterado, setAlterado] = useState(false);
   const [dados, setDados] = useState(estadoInicial);
   const [midias, setMidias] = useState<MidiaSelecionada[]>(() =>
     midiasIniciaisParaSelecao(midiasIniciais),
@@ -230,14 +230,27 @@ export function FormularioImovel({
     localizacao,
     Boolean(texto(dados.descricao).trim()),
     Boolean(dados.areaUtil || dados.areaTerreno || dados.areaConstruida),
-    Boolean(dados.caracteristicas || dados.recursosAdicionais),
+    Boolean(
+      texto(dados.caracteristicas).trim() ||
+        lista(dados.recursosAdicionais).length,
+    ),
     capa,
   ];
   const completude = Math.round(
     (itensDeQualidade.filter(Boolean).length / itensDeQualidade.length) * 100,
   );
 
+  useEffect(() => {
+    function avisarSaida(evento: BeforeUnloadEvent) {
+      if (!alterado) return;
+      evento.preventDefault();
+    }
+    window.addEventListener("beforeunload", avisarSaida);
+    return () => window.removeEventListener("beforeunload", avisarSaida);
+  }, [alterado]);
+
   function atualizarDados() {
+    setAlterado(true);
     if (formulario.current) setDados(valorDoFormulario(formulario.current));
   }
 
@@ -257,12 +270,7 @@ export function FormularioImovel({
       return;
     }
 
-    const acao =
-      modo === "editar" &&
-      situacaoAtual === "PUBLICADO" &&
-      acaoEnviada === "RASCUNHO"
-        ? "PUBLICAR"
-        : acaoEnviada;
+    const acao = acaoEnviada;
 
     const erroLocal = validarFormularioAntesDoEnvio({
       modo,
@@ -295,6 +303,7 @@ export function FormularioImovel({
 
       if (!resultado.sucesso) {
         if (resultado.status === 401) {
+          setAlterado(false);
           router.push("/login");
           return;
         }
@@ -306,6 +315,7 @@ export function FormularioImovel({
         modo === "editar"
           ? `atualizado=${resultado.acao === "PUBLICAR" ? "publicado" : "rascunho"}`
           : `criado=${resultado.acao === "PUBLICAR" ? "publicado" : "rascunho"}`;
+      setAlterado(false);
       router.push(`/painel/imoveis?${parametro}`);
       router.refresh();
     } catch (erro) {
@@ -426,18 +436,6 @@ export function FormularioImovel({
                 </option>
               ))}
             </select>
-          </label>
-          <label className={`${estilos.campo} ${estilos.campoLargo}`}>
-            <span>Lançamento</span>
-            <select
-              className="selecao"
-              name="lancamentoId"
-              defaultValue=""
-              disabled
-            >
-              <option value="">Em breve</option>
-            </select>
-            <small>Vínculo com lançamentos estará disponível em breve.</small>
           </label>
           <label className={`${estilos.campo} ${estilos.campoLargo}`}>
             <span>Descrição</span>
@@ -718,24 +716,10 @@ export function FormularioImovel({
             <CampoNumero
               nome="areaTerreno"
               rotulo="Área do terreno"
+              unidade="m²"
               valorInicial={texto(estadoInicial.areaTerreno)}
             />
           ) : null}
-          {tipo === "CASA" || tipo === "TERRENO" || tipo === "SOBRADO" ? (
-            <label className={estilos.campo}>
-              <span>Unidade da área do terreno</span>
-              <select
-                className="selecao"
-                name="unidadeAreaTerreno"
-                defaultValue={texto(estadoInicial.unidadeAreaTerreno) || "M2"}
-              >
-                <option value="M2">Metros quadrados (m²)</option>
-                <option value="HECTARE">Hectares (ha)</option>
-              </select>
-            </label>
-          ) : (
-            <input name="unidadeAreaTerreno" type="hidden" value="M2" />
-          )}
           {tipo === "TERRENO" ? (
             <CampoNumero
               nome="frenteTerreno"
@@ -869,7 +853,10 @@ export function FormularioImovel({
         <div className={estilos.grade}>
           <GaleriaMidias
             midias={midias}
-            aoAlterar={setMidias}
+            aoAlterar={(novasMidias) => {
+              setAlterado(true);
+              setMidias(novasMidias);
+            }}
             aoErro={(mensagem) =>
               setEstado(mensagem ? { tipo: "erro", mensagem } : null)
             }
@@ -932,7 +919,15 @@ export function FormularioImovel({
       </fieldset>
 
       <footer className={estilos.acoes}>
-        <Link className="botao botao-fantasma" href="/painel/imoveis">
+        <Link
+          className="botao botao-fantasma"
+          href="/painel/imoveis"
+          onClick={(evento) => {
+            if (alterado && !window.confirm("Descartar as alterações não salvas?")) {
+              evento.preventDefault();
+            }
+          }}
+        >
           Cancelar
         </Link>
         <button
@@ -944,7 +939,9 @@ export function FormularioImovel({
           {enviando === "RASCUNHO"
             ? "Salvando…"
             : modo === "editar"
-              ? "Salvar alterações"
+              ? situacaoAtual === "PUBLICADO"
+                ? "Despublicar e salvar rascunho"
+                : "Salvar alterações"
               : "Salvar rascunho"}
         </button>
         <button

@@ -44,8 +44,7 @@
   font-size: 0.9rem;
 }
 
-.finalidade,
-.mcmv,
+.negocio,
 .status {
   position: absolute;
   left: 0.85rem;
@@ -59,14 +58,8 @@
   border-radius: 999px;
 }
 
-.finalidade {
+.negocio {
   top: 0.85rem;
-}
-
-.mcmv {
-  bottom: 0.75rem;
-  background: var(--primaria);
-  color: #fff;
 }
 
 .status {

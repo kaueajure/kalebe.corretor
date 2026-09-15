@@ -1,20 +1,8 @@
-"use client";
-
-import Link from "next/link";
-import { useState } from "react";
 import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import estilos from "./buscaPrincipal.module.css";
 
-function rotuloPreco(valor: number, aluguel: boolean) {
-  if (aluguel) {
-    return `Até ${new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      maximumFractionDigits: 0,
-    }).format(valor)}`;
-  }
-
+function rotuloPreco(valor: number) {
   if (valor >= 1_000_000) {
     return "Até R$ 1 milhão";
   }
@@ -23,35 +11,14 @@ function rotuloPreco(valor: number, aluguel: boolean) {
 }
 
 export function BuscaPrincipal() {
-  const [finalidade, setFinalidade] = useState("venda");
-  const precos =
-    finalidade === "venda"
-      ? [200000, 300000, 400000, 600000, 1000000]
-      : [1000, 1500, 2000, 3000, 5000];
+  const precos = [200000, 300000, 400000, 600000, 1000000];
 
   return (
     <div className={estilos.busca}>
-      <div className={estilos.intencoes} role="group" aria-label="O que você procura?">
-        <button
-          type="button"
-          aria-pressed={finalidade === "venda"}
-          onClick={() => setFinalidade("venda")}
-        >
-          Comprar
-        </button>
-        <button
-          type="button"
-          aria-pressed={finalidade === "aluguel"}
-          onClick={() => setFinalidade("aluguel")}
-        >
-          Alugar
-        </button>
-        <Link href="/lancamentos">
-          Lançamentos <Icone nome="seta" size={14} />
-        </Link>
+      <div className={estilos.intencoes}>
+        <strong>Imóveis à venda</strong>
       </div>
       <form action="/imoveis" className={estilos.form} aria-label="Buscar imóveis">
-        <input type="hidden" name="finalidade" value={finalidade} />
         <div className={estilos.campo}>
           <label htmlFor="busca-cidade">Onde você quer morar?</label>
           <select id="busca-cidade" name="cidade" className="selecao" defaultValue="">
@@ -79,12 +46,11 @@ export function BuscaPrincipal() {
             name="precoMax"
             className="selecao"
             defaultValue=""
-            key={finalidade}
           >
             <option value="">Qualquer valor</option>
             {precos.map((preco) => (
               <option key={preco} value={preco}>
-                {rotuloPreco(preco, finalidade === "aluguel")}
+                {rotuloPreco(preco)}
               </option>
             ))}
           </select>

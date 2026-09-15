@@ -1,20 +1,11 @@
 import Link from "next/link";
-import { listarImoveisDoPainel } from "@/lib/imoveis/repositorio";
+import { exigirSessaoPainel } from "@/lib/imoveis/auth-painel";
+import { obterResumoDoPainel } from "@/lib/imoveis/repositorio";
 import estilos from "./painel.module.css";
 
 export default async function PaginaPainel() {
-  let total = 0;
-  let publicados = 0;
-  let rascunhos = 0;
-
-  try {
-    const imoveis = await listarImoveisDoPainel();
-    total = imoveis.length;
-    publicados = imoveis.filter((i) => i.situacao === "PUBLICADO").length;
-    rascunhos = imoveis.filter((i) => i.situacao === "RASCUNHO").length;
-  } catch {
-    // Mantém zeros se o banco estiver indisponível.
-  }
+  await exigirSessaoPainel();
+  const { total, publicados, rascunhos } = await obterResumoDoPainel();
 
   return (
     <div className={estilos.inicio}>

@@ -25,13 +25,10 @@ export function Rodape() {
               <Link href="/imoveis">Imóveis à venda</Link>
             </li>
             <li>
-              <Link href="/lancamentos">Lançamentos</Link>
+              <Link href="/imoveis?tipo=casa">Casas</Link>
             </li>
             <li>
-              <Link href="/imoveis?tipo=casa&finalidade=venda">Casas</Link>
-            </li>
-            <li>
-              <Link href="/imoveis?tipo=apartamento&finalidade=venda">
+              <Link href="/imoveis?tipo=apartamento">
                 Apartamentos
               </Link>
             </li>

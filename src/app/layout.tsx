@@ -25,13 +25,15 @@ export const metadata: Metadata = {
     default: `${empresa.nome} | Imóveis em ${empresa.cidade}`,
     template: `%s | ${empresa.nome}`,
   },
-  description: `Casas, apartamentos e lançamentos em ${empresa.regiao}. Atendimento direto com o Kalebe, ${empresa.creci}.`,
+  description: `Casas, apartamentos, sobrados e terrenos à venda em ${empresa.regiao}. Atendimento direto com o Kalebe, ${empresa.creci}.`,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "pt_BR",
     siteName: empresa.nome,
     title: `${empresa.nome} | Imóveis em ${empresa.cidade}`,
-    description: `Imóveis à venda e lançamentos do Minha Casa Minha Vida em ${empresa.regiao}.`,
+    description: `Imóveis à venda em ${empresa.regiao}.`,
+    url: "/",
   },
   robots: {
     index: true,

@@ -307,12 +307,6 @@ ol {
   padding-bottom: 4.5rem;
 }
 
-.grade-empreendimentos {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.15rem;
-}
-
 .faixa-cta {
   padding: 2.25rem 0;
   background: var(--primaria);
@@ -375,12 +369,6 @@ ol {
   color: var(--primaria);
 }
 
-@media (max-width: 1000px) {
-  .grade-empreendimentos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 760px) {
   .pagina-interna {
     padding-top: 1.75rem;
@@ -388,10 +376,6 @@ ol {
 
   .corpo-pagina {
     padding-bottom: 3rem;
-  }
-
-  .grade-empreendimentos {
-    grid-template-columns: 1fr;
   }
 
   .faixa-cta-interior {

@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/login", "/painel"],
+      disallow: ["/login", "/painel", "/api/", "/favoritos"],
     },
     sitemap: "https://kalebecorretor.com.br/sitemap.xml",
   };

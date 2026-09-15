@@ -18,14 +18,19 @@ import {
   identificadorEstaDisponivel,
 } from "@/lib/imoveis/repositorio";
 import { banco } from "@/lib/banco";
+import { revalidatePath } from "next/cache";
+import { CABECALHOS_SEM_CACHE, requisicaoTemOrigemPermitida } from "@/lib/seguranca/requisicao";
 
 export const runtime = "nodejs";
 
 function respostaDeErro(mensagem: string, status: number, campo?: string) {
-  return Response.json({ sucesso: false, mensagem, campo }, { status });
+  return Response.json({ sucesso: false, mensagem, campo }, { status, headers: CABECALHOS_SEM_CACHE });
 }
 
 export async function POST(requisicao: Request) {
+  if (!requisicaoTemOrigemPermitida(requisicao)) {
+    return respostaDeErro("Requisição não autorizada.", 403);
+  }
   const sessao = await obterSessaoPainelAutorizada();
   if (!sessao) {
     return respostaDeErro(
@@ -104,9 +109,13 @@ export async function POST(requisicao: Request) {
       pastaConfirmada = true;
     }
     await conexao.commit();
+    revalidatePath("/");
+    revalidatePath("/imoveis");
+    revalidatePath(`/imoveis/${resultado.identificador}`);
+    revalidatePath("/sitemap.xml");
     return Response.json(
       { sucesso: true, imovel: resultado, situacao },
-      { status: 201 },
+      { status: 201, headers: CABECALHOS_SEM_CACHE },
     );
   } catch (erro) {
     try {

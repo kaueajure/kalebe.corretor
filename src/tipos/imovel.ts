@@ -1,5 +1,3 @@
-export type Finalidade = "venda" | "aluguel";
-
 export type TipoImovel =
   | "casa"
   | "apartamento"
@@ -7,25 +5,43 @@ export type TipoImovel =
   | "comercial"
   | "sobrado";
 
-export type StatusImovel = "disponivel" | "reservado" | "indisponivel";
+export type StatusImovel =
+  | "disponivel"
+  | "reservado"
+  | "em_negociacao"
+  | "vendido"
+  | "indisponivel";
+
+export interface MidiaPublica {
+  tipo: "imagem" | "video" | "planta";
+  url: string;
+  descricao: string | null;
+}
 
 export interface Imovel {
   id: string;
   codigo: string;
   slug: string;
   titulo: string;
-  finalidade: Finalidade;
   tipo: TipoImovel;
   status: StatusImovel;
   destaque?: boolean;
   recente?: boolean;
-  cidade: string;
-  bairro: string;
-  estado: string;
+  cidade: string | null;
+  bairro: string | null;
+  estado: string | null;
+  nomeCondominio: string | null;
+  logradouro: string | null;
+  numero: string | null;
+  complemento: string | null;
+  pontoReferencia: string | null;
+  exibirEnderecoExato: boolean;
   preco: number | null;
   precoAnterior?: number | null;
   condominio?: number | null;
   iptu?: number | null;
+  periodicidadeIptu?: "mensal" | "anual" | null;
+  outrasDespesas?: number | null;
   area: number | null;
   areaTerreno?: number | null;
   quartos: number | null;
@@ -34,36 +50,14 @@ export interface Imovel {
   vagas: number | null;
   descricao: string;
   caracteristicas: string[];
-  fotos: string[];
-  financiamento?: {
-    titulo: string;
-    itens: { rotulo: string; valor: string }[];
-  };
-  mcmv?: boolean;
+  midias: MidiaPublica[];
+  aceitaFinanciamento?: boolean | null;
+  aceitaPermuta?: boolean | null;
   criadoEm: string;
-}
-
-export interface Empreendimento {
-  id: string;
-  slug: string;
-  nome: string;
-  tipo: "casa" | "apartamento";
-  cidade: string;
-  bairro: string;
-  estado: string;
-  precoApartir: number;
-  area: number | null;
-  quartos: number | null;
-  entrega?: string;
-  detalhesExtras?: string[];
-  descricao: string;
-  caracteristicas: string[];
-  fotos: string[];
-  mcmv?: boolean;
+  atualizadoEm: string;
 }
 
 export interface FiltroImoveisEstado {
-  finalidade: Finalidade | "";
   tipo: TipoImovel | "";
   cidade: string;
   bairro: string;
