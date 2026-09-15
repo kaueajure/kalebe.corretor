@@ -22,16 +22,6 @@
   flex-shrink: 0;
 }
 
-.simbolo {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  color: #fff;
-  background: var(--primaria);
-  border-radius: 12px 12px 4px 12px;
-}
-
 .nome {
   font-family: var(--fonte-display);
   font-size: 1.55rem;

@@ -2,7 +2,10 @@ import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
-import { obterCaminhoAbsolutoDaMidia } from "@/lib/imoveis/midias";
+import {
+  obterCaminhoAbsolutoDaMidia,
+  recuperarMidiaDeDeployAnterior,
+} from "@/lib/imoveis/midias";
 
 export const runtime = "nodejs";
 
@@ -53,6 +56,18 @@ async function localizar(contexto: ContextoDaRota) {
       }
     } catch {
       // Tenta a cópia versionada quando o volume externo não possui o arquivo.
+    }
+  }
+
+  const recuperado = await recuperarMidiaDeDeployAnterior(caminho);
+  if (recuperado) {
+    try {
+      const informacoes = await stat(recuperado);
+      if (informacoes.isFile()) {
+        return { caminhoAbsoluto: recuperado, tamanho: informacoes.size };
+      }
+    } catch {
+      // O arquivo pode ter sido removido entre a recuperação e a leitura.
     }
   }
   return null;

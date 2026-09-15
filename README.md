@@ -21,6 +21,18 @@ npm run banco:migrar
 npm run dev
 ```
 
+### Armazenamento de fotos na Hostinger
+
+A Hostinger publica cada versão do aplicativo dentro de `hbuilds/versions/<id>` e troca o link `hbuilds/current` a cada deploy. Por isso, as fotos não podem ser gravadas dentro da versão do aplicativo.
+
+Configure `DIRETORIO_UPLOADS` no hPanel com o caminho absoluto da pasta `uploads` do domínio, fora de `hbuilds` e de `public_html`:
+
+```env
+DIRETORIO_UPLOADS=/home/USUARIO/domains/DOMINIO/uploads
+```
+
+O sistema também reconhece automaticamente quando está sendo executado dentro de `hbuilds` e usa `<raiz-do-dominio>/uploads`. Ao solicitar uma foto ausente, ele procura a mídia nas versões antigas ainda preservadas pela Hostinger e a copia para a pasta persistente. Essa recuperação depende de o deploy antigo ainda existir; arquivos já excluídos pela hospedagem precisam ser enviados novamente pelo painel.
+
 ## Validação para produção
 
 ```bash

@@ -38,9 +38,6 @@ export function Cabecalho() {
     <header className={estilos.cabecalho}>
       <div className={`conteudo-largo ${estilos.interno}`}>
         <Link href="/" className={estilos.logo} aria-label="Kalebe Corretor — início">
-          <span className={estilos.simbolo} aria-hidden="true">
-            <Icone nome="casa" size={22} />
-          </span>
           <span className={estilos.nome}>
             Kalebe
             <span>Corretor de imóveis</span>

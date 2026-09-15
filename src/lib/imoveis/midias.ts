@@ -1,5 +1,15 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, rename, rm, stat, unlink, writeFile } from "node:fs/promises";
+import { constants as constantesDoFs } from "node:fs";
+import {
+  copyFile,
+  mkdir,
+  readdir,
+  rename,
+  rm,
+  stat,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -37,21 +47,109 @@ export type PastaTemporariaDeMidias = {
 
 export class ErroDeMidia extends Error {}
 
+function obterRaizDoDominioHostinger(diretorioDoProcesso: string) {
+  const diretorioNormalizado = path.resolve(diretorioDoProcesso);
+  const marcador = `${path.sep}hbuilds${path.sep}`;
+  const indice = diretorioNormalizado.indexOf(marcador);
+  return indice > 0 ? diretorioNormalizado.slice(0, indice) : null;
+}
+
+function normalizarCaminhoRelativoDoUpload(caminho: string) {
+  return caminho
+    .replace(/^(?:\.\.[/\\])+/, "")
+    .replace(/^(?:\.[/\\])+/, "");
+}
+
 export function obterDiretorioDeUploads(diretorioDoProcesso = process.cwd()) {
   const configurado =
     process.env.diretorio_uploads?.trim() ||
     process.env.DIRETORIO_UPLOADS?.trim() ||
     process.env.DIRETORIO_DE_UPLOADS?.trim();
+  const raizDoDominioHostinger =
+    obterRaizDoDominioHostinger(diretorioDoProcesso);
 
-  // Relativo ao diretório do app (ex.: public_html).
-  // No Hostinger, "../uploads" fica na mesma altura que public_html.
   if (configurado) {
-    return path.isAbsolute(configurado)
-      ? path.normalize(configurado)
-      : path.resolve(diretorioDoProcesso, configurado);
+    if (path.isAbsolute(configurado)) return path.normalize(configurado);
+
+    // Cada deploy da Hostinger é executado dentro de hbuilds/versions/<id>.
+    // Caminhos relativos precisam partir do domínio para sobreviver ao redeploy.
+    if (raizDoDominioHostinger) {
+      const relativo = normalizarCaminhoRelativoDoUpload(configurado);
+      return path.resolve(raizDoDominioHostinger, relativo || "uploads");
+    }
+
+    return path.resolve(diretorioDoProcesso, configurado);
+  }
+
+  if (raizDoDominioHostinger) {
+    return path.join(raizDoDominioHostinger, "uploads");
   }
 
   return path.resolve(diretorioDoProcesso, "..", "uploads");
+}
+
+async function obterVersoesDaHostinger(diretorioDoProcesso: string) {
+  const raizDoDominio = obterRaizDoDominioHostinger(diretorioDoProcesso);
+  if (!raizDoDominio) return [];
+
+  const diretorioDeVersoes = path.join(raizDoDominio, "hbuilds", "versions");
+  try {
+    const entradas = await readdir(diretorioDeVersoes, {
+      withFileTypes: true,
+    });
+    const versoes = await Promise.all(
+      entradas
+        .filter((entrada) => entrada.isDirectory())
+        .map(async (entrada) => {
+          const diretorio = path.join(diretorioDeVersoes, entrada.name);
+          const informacoes = await stat(diretorio);
+          return { diretorio, modificadoEm: informacoes.mtimeMs };
+        }),
+    );
+    return versoes
+      .sort((primeira, segunda) => segunda.modificadoEm - primeira.modificadoEm)
+      .map((versao) => versao.diretorio);
+  } catch {
+    return [];
+  }
+}
+
+export async function recuperarMidiaDeDeployAnterior(
+  segmentos: string[],
+  diretorioDoProcesso = process.cwd(),
+) {
+  const destino = obterCaminhoAbsolutoDaMidia(
+    segmentos,
+    obterDiretorioDeUploads(diretorioDoProcesso),
+  );
+  if (!destino) return null;
+
+  const versoes = await obterVersoesDaHostinger(diretorioDoProcesso);
+  for (const versao of versoes) {
+    const diretoriosLegados = [
+      path.join(versao, "uploads"),
+      path.join(versao, "nodejs", "uploads"),
+      path.join(versao, "public_html", "uploads"),
+    ];
+    for (const diretorioLegado of diretoriosLegados) {
+      const origem = obterCaminhoAbsolutoDaMidia(segmentos, diretorioLegado);
+      if (!origem || origem === destino) continue;
+      try {
+        const informacoes = await stat(/* turbopackIgnore: true */ origem);
+        if (!informacoes.isFile()) continue;
+        await mkdir(path.dirname(destino), { recursive: true, mode: 0o750 });
+        try {
+          await copyFile(origem, destino, constantesDoFs.COPYFILE_EXCL);
+        } catch (erro) {
+          if ((erro as NodeJS.ErrnoException).code !== "EEXIST") throw erro;
+        }
+        return destino;
+      } catch {
+        // Continua procurando o mesmo arquivo nas demais versões preservadas.
+      }
+    }
+  }
+  return null;
 }
 
 function cabecalhoHex(buffer: Buffer, inicio: number, fim: number) {
