@@ -113,6 +113,22 @@
   font-size: 0.8rem;
 }
 
+.campo .estadoCep {
+  min-height: 1.1rem;
+}
+
+.campo .consultando {
+  color: var(--texto-suave);
+}
+
+.campo .sucesso {
+  color: var(--sucesso);
+}
+
+.campo .erro {
+  color: var(--erro);
+}
+
 .campoLargo {
   grid-column: 1 / -1;
 }

@@ -14,6 +14,7 @@ import { GaleriaMidias, type MidiaSelecionada } from "./GaleriaMidias";
 import estilos from "./formularioImovel.module.css";
 
 type EstadoDoEnvio = { tipo: "erro"; mensagem: string } | null;
+type EstadoDoCep = { tipo: "consultando" | "sucesso" | "erro"; mensagem: string } | null;
 
 type PropriedadesDoFormulario = {
   modo?: "criar" | "editar";
@@ -198,9 +199,11 @@ export function FormularioImovel({
 }: PropriedadesDoFormulario) {
   const router = useRouter();
   const formulario = useRef<HTMLFormElement>(null);
+  const cepEmConsulta = useRef<string | null>(null);
   const estadoInicial = { ...ESTADO_INICIAL, ...valoresIniciais };
   const [enviando, setEnviando] = useState<"RASCUNHO" | "PUBLICAR" | null>(null);
   const [estado, setEstado] = useState<EstadoDoEnvio>(null);
+  const [estadoCep, setEstadoCep] = useState<EstadoDoCep>(null);
   const [alterado, setAlterado] = useState(false);
   const [dados, setDados] = useState(estadoInicial);
   const [midias, setMidias] = useState<MidiaSelecionada[]>(() =>
@@ -256,6 +259,68 @@ export function FormularioImovel({
 
   function impedirEnvioPadrao(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
+  }
+
+  async function consultarCep(valor: string) {
+    const cep = valor.replace(/\D/g, "");
+    if (!cep) {
+      setEstadoCep(null);
+      return;
+    }
+    if (cep.length !== 8) {
+      setEstadoCep({ tipo: "erro", mensagem: "Informe os 8 números do CEP." });
+      return;
+    }
+    if (cepEmConsulta.current === cep) return;
+
+    cepEmConsulta.current = cep;
+    setEstadoCep({ tipo: "consultando", mensagem: "Consultando CEP…" });
+    try {
+      const resposta = await fetch(`/painel/api/cep/${cep}`, {
+        credentials: "same-origin",
+      });
+      const resultado = (await resposta.json().catch(() => null)) as {
+        mensagem?: string;
+        cep?: string;
+        estado?: string;
+        cidade?: string;
+        bairro?: string;
+        logradouro?: string;
+      } | null;
+
+      if (resposta.status === 401) {
+        router.push("/login");
+        return;
+      }
+      if (!resposta.ok || !resultado) {
+        throw new Error(resultado?.mensagem ?? "Não foi possível consultar o CEP.");
+      }
+
+      const elemento = formulario.current;
+      if (!elemento) return;
+      const valores = {
+        cep: resultado.cep,
+        estado: resultado.estado,
+        cidade: resultado.cidade,
+        bairro: resultado.bairro,
+        logradouro: resultado.logradouro,
+      };
+      for (const [nome, conteudo] of Object.entries(valores)) {
+        if (!conteudo) continue;
+        const campo = elemento.elements.namedItem(nome);
+        if (campo instanceof HTMLInputElement) campo.value = conteudo;
+      }
+      setDados(valorDoFormulario(elemento));
+      setAlterado(true);
+      setEstadoCep({ tipo: "sucesso", mensagem: "Endereço preenchido pelo CEP." });
+    } catch (erro) {
+      setEstadoCep({
+        tipo: "erro",
+        mensagem: erro instanceof Error ? erro.message : "Não foi possível consultar o CEP.",
+      });
+    } finally {
+      cepEmConsulta.current = null;
+    }
   }
 
   async function executarEnvio(acaoEnviada: "RASCUNHO" | "PUBLICAR") {
@@ -548,7 +613,25 @@ export function FormularioImovel({
               autoComplete="postal-code"
               placeholder="15000-000"
               defaultValue={texto(estadoInicial.cep)}
+              onInput={(evento) => {
+                setEstadoCep(null);
+                if (evento.currentTarget.value.replace(/\D/g, "").length === 8) {
+                  void consultarCep(evento.currentTarget.value);
+                }
+              }}
+              onBlur={(evento) => void consultarCep(evento.currentTarget.value)}
             />
+            {estadoCep ? (
+              <small
+                className={`${estilos.estadoCep} ${estilos[estadoCep.tipo]}`}
+                role={estadoCep.tipo === "erro" ? "alert" : "status"}
+                aria-live="polite"
+              >
+                {estadoCep.mensagem}
+              </small>
+            ) : (
+              <small>Preenche estado, cidade, bairro e logradouro.</small>
+            )}
           </label>
           <label className={estilos.campo}>
             <span>Estado</span>
