@@ -368,14 +368,14 @@ export function FormularioImovel({
         <span>Campos essenciais para publicação são verificados ao final.</span>
       </div>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>01</span>
           <span>
-            <strong>Apresentação</strong>
+            <h2>Apresentação</h2>
             <small>Identificação, tipo e descrição do imóvel.</small>
           </span>
-        </legend>
+        </header>
         <div className={`${estilos.grade} ${estilos.duasColunas}`}>
           <label className={`${estilos.campo} ${estilos.campoLargo}`}>
             <span>
@@ -453,16 +453,16 @@ export function FormularioImovel({
             </small>
           </label>
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>02</span>
           <span>
-            <strong>Valores e condições</strong>
+            <h2>Valores e condições</h2>
             <small>Preço de venda, despesas e condições comerciais.</small>
           </span>
-        </legend>
+        </header>
         <div className={`${estilos.grade} ${estilos.quatroColunas}`}>
           <CampoMonetario
             nome="valorVenda"
@@ -526,16 +526,16 @@ export function FormularioImovel({
             valorInicial={texto(estadoInicial.aceitaPermuta)}
           />
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>03</span>
           <span>
-            <strong>Localização</strong>
+            <h2>Localização</h2>
             <small>Informe somente o nível de detalhe adequado ao anúncio.</small>
           </span>
-        </legend>
+        </header>
         <div className={`${estilos.grade} ${estilos.quatroColunas}`}>
           <label className={estilos.campo}>
             <span>CEP</span>
@@ -651,18 +651,18 @@ export function FormularioImovel({
             </span>
           </label>
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>04</span>
           <span>
-            <strong>Detalhes do imóvel</strong>
+            <h2>Detalhes do imóvel</h2>
             <small>
               Os campos se adaptam ao tipo escolhido e todos são opcionais.
             </small>
           </span>
-        </legend>
+        </header>
         <div className={`${estilos.grade} ${estilos.quatroColunas}`}>
           {tipo !== "TERRENO" ? (
             <CampoNumero
@@ -796,16 +796,16 @@ export function FormularioImovel({
             />
           ) : null}
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>05</span>
           <span>
-            <strong>Características</strong>
+            <h2>Características</h2>
             <small>Destaques que ajudam o cliente a entender o imóvel.</small>
           </span>
-        </legend>
+        </header>
         <div className={estilos.grade}>
           <fieldset className={estilos.subgrupo}>
             <legend>
@@ -838,18 +838,18 @@ export function FormularioImovel({
             <small>Separe cada característica por vírgula.</small>
           </label>
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={estilos.secao}>
-        <legend>
+      <section className={estilos.secao}>
+        <header>
           <span>06</span>
           <span>
-            <strong>Galeria do imóvel</strong>
+            <h2>Galeria do imóvel</h2>
             <small>
               Organize fotos, vídeos, plantas e escolha a capa do anúncio.
             </small>
           </span>
-        </legend>
+        </header>
         <div className={estilos.grade}>
           <GaleriaMidias
             midias={midias}
@@ -862,19 +862,19 @@ export function FormularioImovel({
             }
           />
         </div>
-      </fieldset>
+      </section>
 
-      <fieldset className={`${estilos.secao} ${estilos.publicacao}`}>
-        <legend>
+      <section className={`${estilos.secao} ${estilos.publicacao}`}>
+        <header>
           <span>07</span>
           <span>
-            <strong>Revisão e publicação</strong>
+            <h2>Revisão e publicação</h2>
             <small>
               Confira o nível de preenchimento antes de disponibilizar o
               anúncio.
             </small>
           </span>
-        </legend>
+        </header>
         <div className={`${estilos.grade} ${estilos.revisao}`}>
           <div className={estilos.completude}>
             <div>
@@ -916,7 +916,7 @@ export function FormularioImovel({
             </span>
           </label>
         </div>
-      </fieldset>
+      </section>
 
       <footer className={estilos.acoes}>
         <Link

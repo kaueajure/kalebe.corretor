@@ -40,15 +40,15 @@
   box-shadow: 0 8px 22px rgb(17 17 17 / 3%);
 }
 
-.secao > legend {
+.secao > header {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  padding: 0 0.35rem;
+  width: 100%;
   margin-bottom: 1rem;
 }
 
-.secao > legend > span:first-child {
+.secao > header > span:first-child {
   display: inline-grid;
   place-items: center;
   min-width: 2rem;
@@ -60,12 +60,15 @@
   font-weight: 700;
 }
 
-.secao > legend strong {
+.secao > header h2 {
   display: block;
   color: var(--texto);
+  font-family: var(--fonte-display);
+  font-size: 1.08rem;
+  line-height: 1.25;
 }
 
-.secao > legend small {
+.secao > header small {
   display: block;
   color: var(--texto-suave);
   font-size: 0.85rem;
