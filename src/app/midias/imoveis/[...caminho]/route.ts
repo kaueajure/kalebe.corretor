@@ -36,16 +36,26 @@ function cabecalhos(caminho: string, tamanho: number) {
 
 async function localizar(contexto: ContextoDaRota) {
   const { caminho } = await contexto.params;
-  const caminhoAbsoluto = obterCaminhoAbsolutoDaMidia(caminho);
-  if (!caminhoAbsoluto) return null;
-  try {
-    const informacoes = await stat(caminhoAbsoluto);
-    return informacoes.isFile()
-      ? { caminhoAbsoluto, tamanho: informacoes.size }
-      : null;
-  } catch {
-    return null;
+  const origens = [
+    obterCaminhoAbsolutoDaMidia(caminho),
+    obterCaminhoAbsolutoDaMidia(
+      caminho,
+      path.join(process.cwd(), "public", "midias", "imoveis"),
+    ),
+  ];
+
+  for (const caminhoAbsoluto of origens) {
+    if (!caminhoAbsoluto) continue;
+    try {
+      const informacoes = await stat(caminhoAbsoluto);
+      if (informacoes.isFile()) {
+        return { caminhoAbsoluto, tamanho: informacoes.size };
+      }
+    } catch {
+      // Tenta a cópia versionada quando o volume externo não possui o arquivo.
+    }
   }
+  return null;
 }
 
 export async function GET(requisicao: Request, contexto: ContextoDaRota) {
