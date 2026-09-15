@@ -4,11 +4,18 @@ import { lerSessao, type SessaoPainel } from "@/lib/sessao";
 export function sessaoPainelAutorizada(
   sessao: SessaoPainel | null,
 ): sessao is SessaoPainel {
-  return Boolean(sessao && (sessao.administrador || sessao.desenvolvedor));
+  return Boolean(
+    sessao &&
+      !sessao.alterarSenha &&
+      (sessao.administrador || sessao.desenvolvedor),
+  );
 }
 
 export async function exigirSessaoPainel(): Promise<SessaoPainel> {
   const sessao = await lerSessao();
+  if (sessao?.alterarSenha && (sessao.administrador || sessao.desenvolvedor)) {
+    redirect("/primeiro-acesso");
+  }
   if (!sessaoPainelAutorizada(sessao)) {
     redirect("/login");
   }

@@ -4,7 +4,7 @@ import { obterResumoDoPainel } from "@/lib/imoveis/repositorio";
 import estilos from "./painel.module.css";
 
 export default async function PaginaPainel() {
-  await exigirSessaoPainel();
+  const sessao = await exigirSessaoPainel();
   const { total, publicados, rascunhos } = await obterResumoDoPainel();
 
   return (
@@ -41,6 +41,12 @@ export default async function PaginaPainel() {
           <strong>Novo imóvel</strong>
           <span>Cadastre um imóvel novo como rascunho ou publicado.</span>
         </Link>
+        {sessao.desenvolvedor ? (
+          <Link href="/painel/usuarios" className={estilos.atalho}>
+            <strong>Usuários</strong>
+            <span>Crie acessos e acompanhe o primeiro login.</span>
+          </Link>
+        ) : null}
         <Link href="/" className={estilos.atalho}>
           <strong>Abrir o site</strong>
           <span>Veja como o catálogo aparece para os visitantes.</span>

@@ -7,7 +7,9 @@ import { Rodape } from "@/componentes/rodape/Rodape";
 export function ShellSite({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const areaRestrita =
-    pathname.startsWith("/painel") || pathname.startsWith("/login");
+    pathname.startsWith("/painel") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/primeiro-acesso");
 
   if (areaRestrita) {
     return <>{children}</>;

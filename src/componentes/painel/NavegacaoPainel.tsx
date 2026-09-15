@@ -9,13 +9,16 @@ const itens = [
   { href: "/painel/imoveis", rotulo: "Imóveis", exato: false },
 ];
 
-export function NavegacaoPainel() {
+export function NavegacaoPainel({ desenvolvedor }: { desenvolvedor: boolean }) {
   const caminho = usePathname();
+  const itensVisiveis = desenvolvedor
+    ? [...itens, { href: "/painel/usuarios", rotulo: "Usuários", exato: false }]
+    : itens;
 
   return (
     <nav className={estilos.nav} aria-label="Painel">
       <ul className={estilos.lista}>
-        {itens.map((item) => {
+        {itensVisiveis.map((item) => {
           const ativo = item.exato
             ? caminho === item.href
             : caminho.startsWith(item.href);

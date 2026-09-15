@@ -78,9 +78,10 @@ export async function entrarPainel(
     email: usuario.email,
     administrador: usuario.administrador,
     desenvolvedor: usuario.desenvolvedor,
+    alterarSenha: usuario.alterarSenha,
   });
 
-  redirect("/painel");
+  redirect(usuario.alterarSenha ? "/primeiro-acesso" : "/painel");
 }
 
 export async function sairPainel() {

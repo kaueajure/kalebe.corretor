@@ -1,0 +1,25 @@
+.principal { width: min(100%, 1050px); margin: 0 auto; display: grid; gap: 1.25rem; }
+.cabecalho h1 { font-family: var(--fonte-display); font-size: clamp(1.6rem, 2.5vw, 2.1rem); color: var(--primaria); letter-spacing: -0.03em; }
+.cabecalho p, .tituloBloco p { color: var(--texto-suave); margin-top: 0.35rem; line-height: 1.55; }
+.bloco { padding: 1.25rem; border: 1px solid rgb(17 17 17 / 8%); border-radius: var(--raio-suave); background: #faf9f7; box-shadow: 0 8px 22px rgb(17 17 17 / 3%); }
+.tituloBloco { margin-bottom: 1rem; }
+.tituloBloco h2 { font-family: var(--fonte-display); color: var(--primaria); font-size: 1.25rem; }
+.formulario { display: grid; gap: 1rem; justify-items: start; }
+.gradeFormulario { width: 100%; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.gradeFormulario label { display: grid; align-content: start; gap: 0.4rem; min-width: 0; }
+.gradeFormulario label > span { color: var(--texto-suave); font-size: 0.78rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.04em; }
+.gradeFormulario small { color: var(--texto-fraco); font-size: 0.78rem; }
+.sucesso, .erro { width: 100%; padding: 0.75rem 0.85rem; border-radius: var(--raio); font-weight: 600; font-size: 0.9rem; }
+.sucesso { color: var(--sucesso); background: color-mix(in srgb, var(--sucesso) 10%, #fff); }
+.erro { color: var(--erro); background: color-mix(in srgb, var(--erro) 8%, #fff); }
+.tabelaWrap { overflow-x: auto; }
+.tabela { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.tabela th { padding: 0.7rem; border-bottom: 1px solid var(--borda); color: var(--texto-fraco); font-size: 0.73rem; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; }
+.tabela td { padding: 0.9rem 0.7rem; border-bottom: 1px solid rgb(17 17 17 / 7%); color: var(--texto-suave); }
+.tabela td:first-child { display: grid; gap: 0.2rem; }
+.tabela td strong { color: var(--texto); }
+.tabela td span:not(.ativo, .pendente) { font-size: 0.82rem; }
+.ativo, .pendente { display: inline-flex; padding: 0.3rem 0.55rem; border-radius: 999px; font-size: 0.76rem; font-weight: 650; white-space: nowrap; }
+.ativo { color: var(--sucesso); background: color-mix(in srgb, var(--sucesso) 12%, #fff); }
+.pendente { color: #785900; background: #fff3c4; }
+@media (max-width: 800px) { .gradeFormulario { grid-template-columns: 1fr; } }

@@ -8,7 +8,7 @@ import estilos from "./login.module.css";
 export default async function PaginaLogin() {
   const sessao = await lerSessao();
   if (sessao) {
-    redirect("/painel");
+    redirect(sessao.alterarSenha ? "/primeiro-acesso" : "/painel");
   }
 
   return (

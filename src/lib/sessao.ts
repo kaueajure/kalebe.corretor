@@ -12,6 +12,7 @@ export type SessaoPainel = {
   email: string;
   administrador: boolean;
   desenvolvedor: boolean;
+  alterarSenha: boolean;
 };
 
 function chaveSecreta() {
@@ -33,6 +34,7 @@ export async function criarSessao(dados: SessaoPainel) {
     email: dados.email,
     administrador: dados.administrador,
     desenvolvedor: dados.desenvolvedor,
+    alterarSenha: dados.alterarSenha,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -70,6 +72,7 @@ export async function lerSessao(): Promise<SessaoPainel | null> {
       email: payload.email,
       administrador: Boolean(payload.administrador),
       desenvolvedor: Boolean(payload.desenvolvedor),
+      alterarSenha: Boolean(payload.alterarSenha),
     };
   } catch {
     return null;

@@ -1,0 +1,12 @@
+.pagina { min-height: 100vh; display: grid; place-items: center; padding: 2rem 1.25rem; background: radial-gradient(ellipse 80% 60% at 10% 0%, rgb(40 40 40 / 35%), transparent), #121212; }
+.caixa { width: min(100%, 480px); padding: 2rem; border-radius: var(--raio-suave); background: #f7f6f4; box-shadow: 0 24px 60px rgb(0 0 0 / 45%); }
+.selo { margin-bottom: 0.7rem; color: var(--primaria-clara); font-size: 0.76rem; font-weight: 750; text-transform: uppercase; letter-spacing: 0.08em; }
+.caixa h1 { color: var(--primaria); font-family: var(--fonte-display); font-size: clamp(1.55rem, 4vw, 2rem); letter-spacing: -0.03em; }
+.descricao { margin: 0.6rem 0 1.4rem; color: var(--texto-suave); line-height: 1.6; }
+.formulario { display: grid; gap: 1rem; }
+.formulario label { display: grid; gap: 0.4rem; }
+.formulario label > span { color: var(--texto-suave); font-size: 0.78rem; font-weight: 650; text-transform: uppercase; letter-spacing: 0.04em; }
+.formulario small { color: var(--texto-fraco); font-size: 0.78rem; }
+.erro { padding: 0.75rem 0.85rem; border-radius: var(--raio); color: var(--erro); background: color-mix(in srgb, var(--erro) 8%, #fff); font-weight: 600; font-size: 0.9rem; }
+.sair { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--borda); text-align: center; }
+.sair button { border: 0; background: transparent; color: var(--texto-suave); font: inherit; font-size: 0.85rem; text-decoration: underline; cursor: pointer; }

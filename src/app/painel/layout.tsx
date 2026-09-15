@@ -40,7 +40,7 @@ export default async function LayoutPainel({
           </Link>
         </div>
 
-        <NavegacaoPainel />
+        <NavegacaoPainel desenvolvedor={sessao.desenvolvedor} />
 
         <div className={estilos.conta}>
           <div className={estilos.usuario}>
