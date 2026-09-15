@@ -3,7 +3,6 @@
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import { criarSessao, lerSessao } from "@/lib/sessao";
-import { validarSenhaNova } from "@/lib/seguranca/senha";
 import { buscarUsuarioPorId, concluirPrimeiroAcesso } from "@/lib/usuarios";
 
 export type EstadoDaTrocaDeSenha = { erro?: string };
@@ -23,8 +22,6 @@ export async function trocarSenhaInicial(
     return { erro: "Preencha as três senhas." };
   }
 
-  const erroDaSenha = validarSenhaNova(senhaNova);
-  if (erroDaSenha) return { erro: erroDaSenha };
   if (senhaNova !== confirmarSenhaNova) {
     return { erro: "A confirmação da nova senha não confere." };
   }

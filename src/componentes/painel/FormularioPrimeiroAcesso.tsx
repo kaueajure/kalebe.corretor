@@ -16,12 +16,11 @@ export function FormularioPrimeiroAcesso() {
       </label>
       <label>
         <span>Nova senha</span>
-        <input className="campo" name="senhaNova" type="password" minLength={10} maxLength={72} autoComplete="new-password" required />
-        <small>Mínimo de 10 caracteres, com pelo menos uma letra e um número.</small>
+        <input className="campo" name="senhaNova" type="password" maxLength={72} autoComplete="new-password" required />
       </label>
       <label>
         <span>Confirmar nova senha</span>
-        <input className="campo" name="confirmarSenhaNova" type="password" minLength={10} maxLength={72} autoComplete="new-password" required />
+        <input className="campo" name="confirmarSenhaNova" type="password" maxLength={72} autoComplete="new-password" required />
       </label>
       {estado.erro ? <p className={estilos.erro} role="alert">{estado.erro}</p> : null}
       <button className="botao botao-primario" type="submit" disabled={pendente}>

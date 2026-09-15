@@ -34,8 +34,7 @@ export function FormularioNovoUsuario() {
         </label>
         <label>
           <span>Senha inicial</span>
-          <input className="campo" name="senhaInicial" type="password" minLength={10} maxLength={72} autoComplete="new-password" required />
-          <small>Mínimo de 10 caracteres, com letra e número.</small>
+          <input className="campo" name="senhaInicial" type="password" maxLength={72} autoComplete="new-password" required />
         </label>
       </div>
       {estado.mensagem ? (

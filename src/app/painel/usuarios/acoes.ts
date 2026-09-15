@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { exigirSessaoPainel } from "@/lib/imoveis/auth-painel";
-import { validarSenhaNova } from "@/lib/seguranca/senha";
 import { criarUsuarioAdministrador } from "@/lib/usuarios";
 
 export type EstadoDaCriacaoDeUsuario = {
@@ -40,11 +39,6 @@ export async function criarUsuario(
       mensagem: problema?.message ?? "Revise os dados informados.",
       campo: problema?.path[0] as EstadoDaCriacaoDeUsuario["campo"],
     };
-  }
-
-  const erroDaSenha = validarSenhaNova(validacao.data.senhaInicial);
-  if (erroDaSenha) {
-    return { sucesso: false, mensagem: erroDaSenha, campo: "senhaInicial" };
   }
 
   try {
