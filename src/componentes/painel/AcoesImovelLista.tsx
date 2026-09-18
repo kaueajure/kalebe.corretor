@@ -34,7 +34,7 @@ export function AcoesImovelLista({ id, titulo, identificador, publicado }: Propr
   }
 
   return (
-    <div className={estilos.acoes}>
+    <div className={`${estilos.acoes} acoesImovel`}>
       {publicado ? (
         <Link
           className="botao botao-secundario"

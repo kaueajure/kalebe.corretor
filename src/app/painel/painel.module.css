@@ -16,6 +16,10 @@
   color: var(--texto);
 }
 
+.cabecalhoMobile {
+  display: none;
+}
+
 .lateral {
   display: flex;
   flex-direction: column;
@@ -28,6 +32,7 @@
   position: sticky;
   top: 0;
   height: 100vh;
+  z-index: 20;
 }
 
 .topoLateral {
@@ -36,7 +41,8 @@
   padding: 0 0.35rem;
 }
 
-.marca {
+.marca,
+.marcaMobile {
   font-family: var(--fonte-display);
   font-size: 1.4rem;
   color: #fff;
@@ -44,7 +50,8 @@
   line-height: 1.15;
 }
 
-.marca span {
+.marca span,
+.marcaMobile span {
   display: block;
   font-family: var(--fonte-corpo);
   font-size: 0.72rem;
@@ -55,11 +62,14 @@
   margin-top: 0.25rem;
 }
 
-.verSite {
+.verSite,
+.verSiteCompacto,
+.verSiteMenu,
+.sair {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 44px;
   padding: 0.45rem 0.85rem;
   border: 1px solid var(--painel-lateral-borda);
   border-radius: var(--raio);
@@ -71,7 +81,10 @@
     border-color var(--transicao);
 }
 
-.verSite:hover {
+.verSite:hover,
+.verSiteCompacto:hover,
+.verSiteMenu:hover,
+.sair:hover {
   background: var(--painel-lateral-hover);
   border-color: rgb(255 255 255 / 22%);
 }
@@ -125,22 +138,8 @@
 
 .sair {
   width: 100%;
-  min-height: 40px;
-  border: 1px solid var(--painel-lateral-borda);
-  border-radius: var(--raio);
   background: transparent;
-  color: var(--painel-lateral-texto);
-  font-size: 0.85rem;
-  font-weight: 600;
   cursor: pointer;
-  transition:
-    background var(--transicao),
-    border-color var(--transicao);
-}
-
-.sair:hover {
-  background: var(--painel-lateral-hover);
-  border-color: rgb(255 255 255 / 22%);
 }
 
 .conteudo {
@@ -159,7 +158,7 @@
 
 .inicioCabecalho h1 {
   font-family: var(--fonte-display);
-  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-size: clamp(1.55rem, 4vw, 2.15rem);
   color: var(--primaria);
   letter-spacing: -0.03em;
   margin-bottom: 0.4rem;
@@ -173,14 +172,14 @@
 
 .atalhos {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.9rem;
 }
 
 .atalho {
   display: grid;
   gap: 0.45rem;
-  padding: 1.25rem 1.2rem;
+  padding: 1.15rem 1.1rem;
   border-radius: var(--raio-suave);
   background: var(--painel-superficie);
   border: 1px solid rgb(17 17 17 / 8%);
@@ -189,6 +188,7 @@
     border-color var(--transicao),
     transform var(--transicao),
     box-shadow var(--transicao);
+  min-height: 6.5rem;
 }
 
 .atalho:hover {
@@ -199,7 +199,7 @@
 
 .atalho strong {
   font-family: var(--fonte-display);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--primaria);
   letter-spacing: -0.02em;
 }
@@ -226,7 +226,7 @@
 .metrica strong {
   display: block;
   font-family: var(--fonte-display);
-  font-size: 1.65rem;
+  font-size: clamp(1.35rem, 4vw, 1.65rem);
   letter-spacing: -0.03em;
   color: var(--primaria);
   line-height: 1;
@@ -239,46 +239,166 @@
   font-weight: 600;
 }
 
-@media (max-width: 860px) {
-  .estrutura {
-    grid-template-columns: 1fr;
-  }
+.menuMobile {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(92vw, 22rem);
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--painel-lateral);
+  color: var(--painel-lateral-texto);
+  padding: 0;
+  box-shadow: -18px 0 48px rgb(0 0 0 / 35%);
+}
 
-  .lateral {
-    position: static;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #000;
-    gap: 1rem;
-  }
+.menuMobile::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
 
-  .topoLateral {
-    grid-template-columns: 1fr auto;
-    align-items: start;
-  }
+.menuConteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  height: 100%;
+  padding: 1.15rem 1rem 1.35rem;
+  overflow-y: auto;
+}
 
-  .conta {
-    margin-top: 0;
-  }
+.menuTopo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--painel-lateral-borda);
+}
 
-  .atalhos,
-  .metricas {
-    grid-template-columns: 1fr;
+.menuTopo strong {
+  font-family: var(--fonte-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.menuTopo button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--painel-lateral-borda);
+  border-radius: var(--raio);
+  background: transparent;
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menuConteudo .conta {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.verSiteMenu {
+  width: 100%;
+}
+
+.acoesMobile {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.menuBotao {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--painel-lateral-borda);
+  border-radius: var(--raio);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (min-width: 901px) {
+  .atalhos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 980px) and (min-width: 861px) {
+@media (max-width: 900px) {
+  .estrutura {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .cabecalhoMobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    padding: 0.75rem 1rem;
+    background:
+      linear-gradient(165deg, #1c1c1c 0%, var(--painel-lateral) 55%, #101010 100%);
+    border-bottom: 1px solid #000;
+  }
+
+  .marcaMobile {
+    font-size: 1.2rem;
+  }
+
+  .marcaMobile span {
+    margin-top: 0.1rem;
+  }
+
+  .verSiteCompacto {
+    min-height: 40px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
+  .lateral {
+    display: none;
+  }
+
+  .conteudo {
+    padding: 1.15rem 1rem 5.5rem;
+  }
+
+  .metricas {
+    grid-template-columns: 1fr;
+  }
+
   .atalhos {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 520px) {
-  .conteudo {
-    padding: 1.25rem 1rem 2rem;
+  .cabecalhoMobile {
+    padding: 0.65rem 0.85rem;
   }
 
-  .topoLateral {
-    grid-template-columns: 1fr;
+  .conteudo {
+    padding: 1rem 0.85rem 5.5rem;
+  }
+
+  .metrica {
+    padding: 0.95rem 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atalho {
+    transition: none;
+  }
+
+  .atalho:hover {
+    transform: none;
   }
 }

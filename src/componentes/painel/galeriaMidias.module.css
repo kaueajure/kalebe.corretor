@@ -82,16 +82,18 @@
 
 .miniatura {
   position: relative;
-  width: 96px;
-  height: 72px;
+  width: 112px;
+  height: 84px;
   overflow: hidden;
   border-radius: var(--raio);
   background: var(--fundo-3);
+  flex-shrink: 0;
 }
 
 .miniatura img,
 .miniatura video {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   width: 100%;
   height: 100%;
 }
@@ -100,12 +102,16 @@
   position: absolute;
   left: 0.35rem;
   bottom: 0.35rem;
+  z-index: 1;
+  max-width: calc(100% - 0.7rem);
   padding: 0.15rem 0.4rem;
   border-radius: var(--raio);
   background: var(--primaria);
   color: #fff;
   font-size: 0.68rem;
   font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .edicao {
@@ -115,10 +121,10 @@
 }
 
 .edicao > strong {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   font-size: 0.9rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .campos {
@@ -151,10 +157,17 @@
 
 .capa {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.45rem;
   font-size: 0.88rem;
+  line-height: 1.35;
   color: var(--texto);
+  overflow-wrap: anywhere;
+}
+
+.capa input {
+  margin-top: 0.15rem;
+  flex-shrink: 0;
 }
 
 .acoes {
@@ -183,16 +196,51 @@
 }
 
 @media (max-width: 760px) {
+  .entrada {
+    padding: 1rem;
+  }
+
+  .resumo {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
   .item {
-    grid-template-columns: auto 72px 1fr;
+    grid-template-columns: auto 96px minmax(0, 1fr);
+    gap: 0.7rem;
+    padding: 0.75rem;
+  }
+
+  .miniatura {
+    width: 96px;
+    height: 72px;
   }
 
   .acoes {
     grid-column: 1 / -1;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .acoes button {
+    min-height: 44px;
+    width: 100%;
   }
 
   .campos {
     grid-template-columns: 1fr;
+  }
+
+  .capa {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .item {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .ordem {
+    display: none;
   }
 }

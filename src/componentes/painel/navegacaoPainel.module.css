@@ -10,7 +10,9 @@
 }
 
 .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0.72rem 0.9rem;
   border-radius: var(--raio);
   color: var(--painel-lateral-suave, #a8a8a8);
@@ -37,15 +39,18 @@
   color: #111;
 }
 
-@media (max-width: 860px) {
-  .lista {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-  }
+.navGaveta .lista {
+  gap: 0.4rem;
+}
 
+.navGaveta .link {
+  min-height: 48px;
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
   .link {
-    padding: 0.55rem 0.85rem;
-    font-size: 0.82rem;
+    transition: none;
   }
 }

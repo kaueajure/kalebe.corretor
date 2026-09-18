@@ -43,13 +43,15 @@
 }
 
 .fechar {
-  width: 2rem;
-  height: 2rem;
+  width: 44px;
+  height: 44px;
   border-radius: var(--raio);
   border: 1px solid var(--borda);
   color: var(--texto-suave);
   font-size: 1.25rem;
   line-height: 1;
+  background: transparent;
+  cursor: pointer;
 }
 
 .corpo {
@@ -90,4 +92,30 @@
 
 .botaoConfirmar:hover {
   background: color-mix(in srgb, var(--erro) 85%, #000);
+}
+
+@media (max-width: 640px) {
+  .dialogo {
+    width: min(100% - 1rem, 28rem);
+  }
+
+  .cabecalho,
+  .acoes {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .corpo {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .acoes {
+    flex-direction: column-reverse;
+  }
+
+  .acoes :global(.botao) {
+    width: 100%;
+    min-height: 48px;
+  }
 }

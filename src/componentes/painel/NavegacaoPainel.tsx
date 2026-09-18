@@ -9,14 +9,27 @@ const itens = [
   { href: "/painel/imoveis", rotulo: "Imóveis", exato: false },
 ];
 
-export function NavegacaoPainel({ desenvolvedor }: { desenvolvedor: boolean }) {
+type Propriedades = {
+  desenvolvedor: boolean;
+  aoNavegar?: () => void;
+  variante?: "lateral" | "gaveta";
+};
+
+export function NavegacaoPainel({
+  desenvolvedor,
+  aoNavegar,
+  variante = "lateral",
+}: Propriedades) {
   const caminho = usePathname();
   const itensVisiveis = desenvolvedor
     ? [...itens, { href: "/painel/usuarios", rotulo: "Usuários", exato: false }]
     : itens;
 
   return (
-    <nav className={estilos.nav} aria-label="Painel">
+    <nav
+      className={`${estilos.nav} ${variante === "gaveta" ? estilos.navGaveta : ""}`}
+      aria-label="Painel"
+    >
       <ul className={estilos.lista}>
         {itensVisiveis.map((item) => {
           const ativo = item.exato
@@ -28,6 +41,7 @@ export function NavegacaoPainel({ desenvolvedor }: { desenvolvedor: boolean }) {
                 href={item.href}
                 className={`${estilos.link} ${ativo ? estilos.ativo : ""}`}
                 aria-current={ativo ? "page" : undefined}
+                onClick={aoNavegar}
               >
                 {item.rotulo}
               </Link>
