@@ -190,16 +190,16 @@ export function GaleriaMidias({ midias, aoAlterar, aoErro }: Propriedades) {
         }}
       >
         <div>
-          <strong>Adicione fotos, vídeos ou plantas</strong>
-          <p>Arraste os arquivos para cá ou escolha no computador.</p>
-          <small>Fotos até 15 MB, vídeos até 150 MB; máximo total de 300 MB.</small>
+          <strong>Fotos, vídeos ou plantas</strong>
+          <p>Arraste aqui ou escolha no aparelho.</p>
+          <small>Fotos até 15 MB · vídeos até 150 MB · total 300 MB</small>
         </div>
         <button
           className="botao botao-secundario"
           type="button"
           onClick={() => entrada.current?.click()}
         >
-          Escolher arquivos
+          Adicionar
         </button>
         <input
           ref={entrada}
@@ -246,7 +246,7 @@ export function GaleriaMidias({ midias, aoAlterar, aoErro }: Propriedades) {
                       src={midia.url}
                       alt=""
                       fill
-                      sizes="128px"
+                      sizes="(max-width: 760px) 64px, 88px"
                       unoptimized
                     />
                   ) : (
@@ -286,13 +286,13 @@ export function GaleriaMidias({ midias, aoAlterar, aoErro }: Propriedades) {
                       <span className={estilos.tipoVideo}>Vídeo</span>
                     )}
                     <label className={estilos.legenda}>
-                      <span>Legenda opcional</span>
+                      <span>Legenda</span>
                       <input
                         className="campo"
                         type="text"
                         maxLength={300}
                         value={midia.descricao}
-                        placeholder="Ex.: Sala integrada à varanda"
+                        placeholder="Opcional"
                         onChange={(evento) =>
                           atualizar(midia.id, { descricao: evento.target.value })
                         }
@@ -307,7 +307,10 @@ export function GaleriaMidias({ midias, aoAlterar, aoErro }: Propriedades) {
                         checked={midia.principal}
                         onChange={() => atualizar(midia.id, { principal: true })}
                       />
-                      Usar como capa do anúncio
+                      <span className={estilos.rotuloCapaLongo}>
+                        Usar como capa do anúncio
+                      </span>
+                      <span className={estilos.rotuloCapaCurto}>Capa</span>
                     </label>
                   ) : null}
                 </div>

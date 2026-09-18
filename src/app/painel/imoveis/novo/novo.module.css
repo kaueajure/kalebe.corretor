@@ -1,32 +1,48 @@
 .cabecalho {
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.85rem;
 }
 
 .cabecalho h1 {
   font-family: var(--fonte-display);
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-size: clamp(1.35rem, 4vw, 2.1rem);
   color: var(--primaria);
-  margin-top: 0.65rem;
+  margin-top: 0.35rem;
   letter-spacing: -0.03em;
 }
 
 .cabecalho p {
   color: var(--texto-suave);
-  margin-top: 0.35rem;
-  line-height: 1.5;
+  margin-top: 0.25rem;
+  line-height: 1.45;
   max-width: 40rem;
+  font-size: 0.92rem;
 }
 
 .voltar {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  min-height: 44px;
+  min-height: 36px;
   color: var(--primaria-clara);
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   font-weight: 600;
 }
 
 .voltar:hover {
   color: var(--primaria);
+}
+
+@media (max-width: 900px) {
+  .cabecalho {
+    margin-bottom: 0.65rem;
+  }
+
+  .cabecalho p {
+    font-size: 0.84rem;
+  }
+
+  .voltar {
+    min-height: 32px;
+    font-size: 0.82rem;
+  }
 }

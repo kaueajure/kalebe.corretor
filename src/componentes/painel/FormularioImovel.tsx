@@ -1019,13 +1019,28 @@ export function FormularioImovel({
           disabled={Boolean(enviando)}
           onClick={() => void executarEnvio("RASCUNHO")}
         >
-          {enviando === "RASCUNHO"
-            ? "Salvando…"
-            : modo === "editar"
-              ? situacaoAtual === "PUBLICADO"
-                ? "Despublicar e salvar rascunho"
-                : "Salvar alterações"
-              : "Salvar rascunho"}
+          {enviando === "RASCUNHO" ? (
+            "Salvando…"
+          ) : modo === "editar" ? (
+            situacaoAtual === "PUBLICADO" ? (
+              <>
+                <span className={estilos.rotuloLongo}>
+                  Despublicar e salvar rascunho
+                </span>
+                <span className={estilos.rotuloCurto}>Rascunho</span>
+              </>
+            ) : (
+              <>
+                <span className={estilos.rotuloLongo}>Salvar alterações</span>
+                <span className={estilos.rotuloCurto}>Salvar</span>
+              </>
+            )
+          ) : (
+            <>
+              <span className={estilos.rotuloLongo}>Salvar rascunho</span>
+              <span className={estilos.rotuloCurto}>Rascunho</span>
+            </>
+          )}
         </button>
         <button
           className="botao botao-primario"
@@ -1033,11 +1048,19 @@ export function FormularioImovel({
           disabled={Boolean(enviando)}
           onClick={() => void executarEnvio("PUBLICAR")}
         >
-          {enviando === "PUBLICAR"
-            ? "Publicando…"
-            : modo === "editar"
-              ? "Atualizar e publicar"
-              : "Publicar imóvel"}
+          {enviando === "PUBLICAR" ? (
+            "Publicando…"
+          ) : modo === "editar" ? (
+            <>
+              <span className={estilos.rotuloLongo}>Atualizar e publicar</span>
+              <span className={estilos.rotuloCurto}>Publicar</span>
+            </>
+          ) : (
+            <>
+              <span className={estilos.rotuloLongo}>Publicar imóvel</span>
+              <span className={estilos.rotuloCurto}>Publicar</span>
+            </>
+          )}
         </button>
       </footer>
     </form>

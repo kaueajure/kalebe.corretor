@@ -300,6 +300,10 @@
   transform: none;
 }
 
+.rotuloCurto {
+  display: none;
+}
+
 @media (max-width: 980px) {
   .quatroColunas {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -311,32 +315,170 @@
 
   .orientacao {
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.5rem;
   }
 }
 
 @media (max-width: 900px) {
   .formulario {
-    padding-bottom: 5.5rem;
+    gap: 0.7rem;
+    padding-bottom: 4.75rem;
+  }
+
+  .orientacao {
+    padding: 0.7rem 0.8rem;
+    gap: 0.35rem;
+  }
+
+  .orientacao > span:last-child {
+    display: none;
+  }
+
+  .orientacao p,
+  .orientacao > span {
+    font-size: 0.82rem;
+    margin-top: 0.1rem;
+    line-height: 1.4;
+  }
+
+  .secao {
+    padding: 0.7rem 0.75rem 0.8rem;
+    border-radius: var(--raio);
+    box-shadow: none;
+  }
+
+  .secao > header {
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+    align-items: center;
+  }
+
+  .secao > header > span:first-child {
+    min-width: 1.55rem;
+    height: 1.55rem;
+    font-size: 0.68rem;
+  }
+
+  .secao > header h2 {
+    font-size: 0.98rem;
+  }
+
+  .secao > header small {
+    display: none;
+  }
+
+  .grade {
+    gap: 0.55rem 0.65rem;
+  }
+
+  .campo {
+    gap: 0.22rem;
+  }
+
+  .campo > span {
+    min-height: 0;
+    font-size: 0.7rem;
+  }
+
+  .campo small {
+    font-size: 0.72rem;
+  }
+
+  .secao :global(.campo),
+  .secao :global(.selecao) {
+    height: 40px;
+    min-height: 40px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.92rem;
+  }
+
+  .secao :global(.area-texto) {
+    min-height: 96px;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .preco,
+  .unidade {
+    min-height: 40px;
+    gap: 0.35rem;
+  }
+
+  .checks {
+    gap: 0.45rem 0.85rem;
+    min-height: 0;
+  }
+
+  .checks label {
+    font-size: 0.86rem;
+  }
+
+  .checksRecursos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem 0.55rem;
+  }
+
+  .subgrupo {
+    padding: 0.55rem 0.65rem;
+  }
+
+  .subgrupo > legend {
+    font-size: 0.75rem;
+  }
+
+  .alternador {
+    min-height: 0;
+    padding: 0.55rem 0.65rem;
+    gap: 0.5rem;
+  }
+
+  .alternador strong {
+    font-size: 0.9rem;
+  }
+
+  .alternador small {
+    font-size: 0.78rem;
+  }
+
+  .completude,
+  .pendencias {
+    padding: 0.65rem 0.7rem;
+    gap: 0.4rem;
   }
 
   .acoes {
     position: sticky;
     bottom: 0;
     z-index: 15;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
     margin: 0 -0.15rem;
-    padding: 0.75rem 0.65rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
-    background:
-      linear-gradient(180deg, transparent, var(--painel-fundo, #eceae7) 18%),
-      var(--painel-fundo, #eceae7);
-    border-top: 1px solid rgb(17 17 17 / 8%);
-    flex-direction: column-reverse;
+    padding: 0.55rem 0.5rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
+    background: var(--painel-fundo, #eceae7);
+    border-top: 1px solid rgb(17 17 17 / 10%);
+  }
+
+  .acoes > :first-child {
+    grid-column: 1 / -1;
+    min-height: 36px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.82rem;
   }
 
   .acoes .botao,
   .acoes a {
     width: 100%;
-    min-height: 48px;
+    min-height: 42px;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.86rem;
+  }
+
+  .rotuloLongo {
+    display: none;
+  }
+
+  .rotuloCurto {
+    display: inline;
   }
 }
 
@@ -350,19 +492,14 @@
     grid-column: auto;
   }
 
-  .secao {
-    padding: 0.85rem;
+  .mensagemErro {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
   }
+}
 
-  .secao > header {
-    gap: 0.65rem;
-  }
-
+@media (max-width: 380px) {
   .checksRecursos {
     grid-template-columns: 1fr;
-  }
-
-  .alternador {
-    min-height: 0;
   }
 }
