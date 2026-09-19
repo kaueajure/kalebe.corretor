@@ -146,6 +146,15 @@
   color: var(--texto-suave);
 }
 
+.editorial {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 42rem;
+  color: var(--texto-suave);
+  line-height: 1.7;
+  font-size: 1.02rem;
+}
+
 .sobreSecao {
   padding: 4.5rem 0 5rem;
 }

@@ -7,15 +7,7 @@ export function ListaRegioes() {
     <ul className={estilos.lista}>
       {regioes.map((regiao) => (
         <li key={regiao.slug}>
-          <Link
-            href={
-              "bairro" in regiao && regiao.bairro
-                ? `/imoveis?bairro=${encodeURIComponent(regiao.nome)}`
-                : `/imoveis?cidade=${encodeURIComponent(regiao.nome)}`
-            }
-          >
-            {regiao.nome}
-          </Link>
+          <Link href={regiao.href}>{regiao.nome}</Link>
         </li>
       ))}
     </ul>

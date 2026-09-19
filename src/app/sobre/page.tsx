@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { DadosEstruturados } from "@/componentes/seo/DadosEstruturados";
 import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
+import { schemaPerson } from "@/lib/seo/dados-estruturados";
+import { criarMetadataPagina, IMAGEM_OG_PADRAO } from "@/lib/seo/metadata";
 import { linkWhatsApp } from "@/lib/formatadores";
 import estilos from "./sobre.module.css";
 
-export const metadata: Metadata = {
-  title: "O corretor",
-  description: `Conheça ${empresa.nome}, ${empresa.creci}, corretor em ${empresa.regiao}.`,
-  alternates: { canonical: "/sobre" },
-};
+export const metadata: Metadata = criarMetadataPagina({
+  title: `Kalebe | Corretor de Imóveis em ${empresa.cidade}`,
+  description: `Conheça o Kalebe, corretor ${empresa.creci}, em São José do Rio Preto, Mirassol e Bady Bassitt. Atendimento direto na compra e venda de imóveis.`,
+  canonical: "/sobre",
+  image: IMAGEM_OG_PADRAO,
+  titleAbsoluto: true,
+});
 
 const etapas = [
   {
@@ -33,16 +39,19 @@ const etapas = [
   },
 ];
 
-export default function PaginaSobre() {
+export default async function PaginaSobre() {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <>
+      <DadosEstruturados nonce={nonce} dados={schemaPerson()} />
       <div className="pagina-interna">
         <div className="conteudo">
           <div className={estilos.grade}>
             <div className={estilos.fotoWrap}>
               <Image
                 src="/imagens/sobre/kalebe.webp"
-                alt="Kalebe, corretor de imóveis"
+                alt="Kalebe, corretor de imóveis em São José do Rio Preto"
                 fill
                 sizes="(max-width: 760px) 100vw, 480px"
                 className={estilos.foto}

@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Ordenacao } from "@/componentes/filtroImoveis/Ordenacao";
@@ -5,21 +6,21 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CardImovel } from "@/componentes/cardImovel/CardImovel";
 import { FiltroImoveis } from "@/componentes/filtroImoveis/FiltroImoveis";
+import { DadosEstruturados } from "@/componentes/seo/DadosEstruturados";
 import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import { listarImoveisPublicados } from "@/dados/imoveis";
 import { filtrarImoveis, filtroInicial, linkWhatsApp } from "@/lib/formatadores";
+import { schemaItemList } from "@/lib/seo/dados-estruturados";
+import {
+  caminhoCidade,
+  caminhoCidadeTipo,
+  criarMetadataPagina,
+} from "@/lib/seo/metadata";
 import type { FiltroImoveisEstado } from "@/tipos/imovel";
 import estilos from "./imoveis.module.css";
 
 export const dynamic = "force-dynamic";
-
-export const metadata: Metadata = {
-  title: "Imóveis à venda",
-  description:
-    "Lista de imóveis em São José do Rio Preto, Mirassol e Bady Bassitt. Filtre por tipo, preço, quartos e bairro.",
-  alternates: { canonical: "/imoveis" },
-};
 
 interface Props {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -30,13 +31,66 @@ function valorParam(valor: string | string[] | undefined): string {
   return valor || "";
 }
 
+const CHAVES_FILTRO = [
+  "tipo",
+  "cidade",
+  "bairro",
+  "quartos",
+  "banheiros",
+  "vagas",
+  "precoMin",
+  "precoMax",
+  "areaMin",
+  "busca",
+  "ordem",
+] as const;
+
+function temFiltroOuOrdenacao(
+  params: Record<string, string | string[] | undefined>,
+) {
+  return CHAVES_FILTRO.some((chave) => {
+    const valor = valorParam(params[chave]);
+    return Boolean(valor);
+  });
+}
+
+export async function generateMetadata({
+  searchParams,
+}: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const filtrado = temFiltroOuOrdenacao(params);
+
+  if (filtrado) {
+    return criarMetadataPagina({
+      title: "Imóveis à Venda em São José do Rio Preto e Região",
+      description:
+        "Lista de imóveis em São José do Rio Preto, Mirassol e Bady Bassitt. Filtre por tipo, preço, quartos e bairro.",
+      canonical: "/imoveis",
+      index: false,
+      follow: true,
+    });
+  }
+
+  return criarMetadataPagina({
+    title: "Imóveis à Venda em São José do Rio Preto e Região",
+    description:
+      "Casas, apartamentos, sobrados e terrenos à venda em São José do Rio Preto, Mirassol e Bady Bassitt. Filtre por tipo, preço, quartos e bairro.",
+    canonical: "/imoveis",
+    index: true,
+    follow: true,
+  });
+}
+
 export default async function PaginaImoveis({ searchParams }: Props) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   const params = await searchParams;
   if (Object.hasOwn(params, "finalidade")) {
     const limpos = new URLSearchParams();
     for (const [chave, valor] of Object.entries(params)) {
       if (chave === "finalidade" || valor === undefined) continue;
-      for (const item of Array.isArray(valor) ? valor : [valor]) limpos.append(chave, item);
+      for (const item of Array.isArray(valor) ? valor : [valor]) {
+        limpos.append(chave, item);
+      }
     }
     redirect(`/imoveis${limpos.size ? `?${limpos}` : ""}`);
   }
@@ -56,8 +110,20 @@ export default async function PaginaImoveis({ searchParams }: Props) {
   };
 
   const resultados = filtrarImoveis(imoveis, filtro);
-  const cidades = [...new Set(imoveis.map((i) => i.cidade).filter((item): item is string => Boolean(item)))].sort();
-  const bairros = [...new Set(imoveis.map((i) => i.bairro).filter((item): item is string => Boolean(item)))].sort();
+  const cidades = [
+    ...new Set(
+      imoveis
+        .map((i) => i.cidade)
+        .filter((item): item is string => Boolean(item)),
+    ),
+  ].sort();
+  const bairros = [
+    ...new Set(
+      imoveis
+        .map((i) => i.bairro)
+        .filter((item): item is string => Boolean(item)),
+    ),
+  ].sort();
   const ordem = valorParam(params.ordem);
   resultados.sort((a, b) => {
     if (ordem === "menor-preco") return (a.preco ?? Infinity) - (b.preco ?? Infinity);
@@ -69,11 +135,18 @@ export default async function PaginaImoveis({ searchParams }: Props) {
     );
   });
 
+  const filtrado = temFiltroOuOrdenacao(params);
   const titulo = "Imóveis à venda";
   const local = filtro.cidade ? ` em ${filtro.cidade}` : " na região";
 
   return (
     <>
+      {!filtrado ? (
+        <DadosEstruturados
+          nonce={nonce}
+          dados={schemaItemList("Imóveis à venda", "/imoveis", resultados)}
+        />
+      ) : null}
       <div className="pagina-interna">
         <div className={`conteudo corpo-pagina ${estilos.corpo}`}>
           <header className="intro-pagina">
@@ -89,15 +162,17 @@ export default async function PaginaImoveis({ searchParams }: Props) {
           </header>
 
           <div className={estilos.atalhos} aria-label="Buscas rápidas">
-            <Link href="/imoveis?tipo=casa">
+            <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "casas")}>
               <Icone nome="casa" size={18} />
               Casas
             </Link>
-            <Link href="/imoveis?tipo=apartamento">
+            <Link
+              href={caminhoCidadeTipo("sao-jose-do-rio-preto", "apartamentos")}
+            >
               <Icone nome="predio" size={18} />
               Apartamentos
             </Link>
-            <Link href="/imoveis?cidade=S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Preto">
+            <Link href={caminhoCidade("sao-jose-do-rio-preto")}>
               <Icone nome="local" size={18} />
               Rio Preto
             </Link>
@@ -158,14 +233,14 @@ export default async function PaginaImoveis({ searchParams }: Props) {
           <div>
             <h2>Não achou o que procura?</h2>
             <p>
-              Me diga a cidade, o tipo e a faixa de valor. Eu busco opções
-              com você.
+              Me diga a cidade, o tipo e a faixa de valor. Eu busco opções com
+              você.
             </p>
           </div>
           <a
             href={linkWhatsApp(
               empresa.whatsapp,
-              "Olá, Kalebe! Não encontrei o que procuro na lista e gostaria de ajuda."
+              "Olá, Kalebe! Não encontrei o que procuro na lista e gostaria de ajuda.",
             )}
             className="botao botao-secundario"
             target="_blank"

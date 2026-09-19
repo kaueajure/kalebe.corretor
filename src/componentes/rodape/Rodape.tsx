@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { empresa } from "@/dados/empresa";
 import { linkWhatsApp } from "@/lib/formatadores";
+import {
+  caminhoCidade,
+  caminhoCidadeTipo,
+} from "@/lib/seo/metadata";
 import estilos from "./rodape.module.css";
 
 export function Rodape() {
@@ -25,15 +29,38 @@ export function Rodape() {
               <Link href="/imoveis">Imóveis à venda</Link>
             </li>
             <li>
-              <Link href="/imoveis?tipo=casa">Casas</Link>
+              <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "casas")}>
+                Casas
+              </Link>
             </li>
             <li>
-              <Link href="/imoveis?tipo=apartamento">
+              <Link
+                href={caminhoCidadeTipo("sao-jose-do-rio-preto", "apartamentos")}
+              >
                 Apartamentos
               </Link>
             </li>
             <li>
               <Link href="/favoritos">Favoritos</Link>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className={estilos.titulo}>Localidades</h2>
+          <ul className={estilos.lista}>
+            <li>
+              <Link href={caminhoCidade("sao-jose-do-rio-preto")}>
+                Imóveis em Rio Preto
+              </Link>
+            </li>
+            <li>
+              <Link href={caminhoCidade("mirassol")}>Imóveis em Mirassol</Link>
+            </li>
+            <li>
+              <Link href={caminhoCidade("bady-bassitt")}>
+                Imóveis em Bady Bassitt
+              </Link>
             </li>
           </ul>
         </div>

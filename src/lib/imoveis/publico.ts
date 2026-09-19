@@ -1,8 +1,10 @@
 import "server-only";
 
 import type { RowDataPacket } from "mysql2/promise";
+import { empresa } from "@/dados/empresa";
 import { banco } from "@/lib/banco";
 import { criarEnderecoDaMidia } from "@/lib/imoveis/midias";
+import { criarSlug } from "@/lib/seo/slug";
 import type { Imovel, MidiaPublica, StatusImovel, TipoImovel } from "@/tipos/imovel";
 
 type LinhaPublica = RowDataPacket & {
@@ -162,9 +164,159 @@ export async function obterImovelPorSlug(slug: string): Promise<Imovel | undefin
 
 export async function obterImoveisSimilares(imovel: Imovel, limite = 3) {
   const todos = await listarImoveisPublicados();
-  return todos.filter((item) => item.id !== imovel.id && item.status === "disponivel" &&
-    (item.tipo === imovel.tipo || Boolean(item.cidade && item.cidade === imovel.cidade)))
-    .slice(0, limite);
+  const candidatos = todos.filter(
+    (item) => item.id !== imovel.id && item.status === "disponivel",
+  );
+
+  const pontuar = (item: Imovel) => {
+    if (imovel.bairro && item.bairro === imovel.bairro) return 4;
+    if (
+      imovel.cidade &&
+      item.cidade === imovel.cidade &&
+      item.tipo === imovel.tipo
+    ) {
+      return 3;
+    }
+    if (imovel.cidade && item.cidade === imovel.cidade) return 2;
+    if (item.tipo === imovel.tipo) return 1;
+    return 0;
+  };
+
+  return candidatos
+    .map((item) => ({ item, pontos: pontuar(item) }))
+    .filter((entrada) => entrada.pontos > 0)
+    .sort((a, b) => b.pontos - a.pontos)
+    .slice(0, limite)
+    .map((entrada) => entrada.item);
+}
+
+function compararSlug(valor: string | null | undefined, slug: string) {
+  if (!valor) return false;
+  return criarSlug(valor) === slug;
+}
+
+export async function listarImoveisPorCidade(slugCidade: string): Promise<Imovel[]> {
+  const todos = await listarImoveisPublicados();
+  return todos.filter((item) => compararSlug(item.cidade, slugCidade));
+}
+
+export async function listarImoveisPorCidadeETipo(
+  slugCidade: string,
+  tipo: TipoImovel,
+): Promise<Imovel[]> {
+  const daCidade = await listarImoveisPorCidade(slugCidade);
+  return daCidade.filter((item) => item.tipo === tipo);
+}
+
+export async function listarImoveisPorBairro(slugBairro: string): Promise<Imovel[]> {
+  const todos = await listarImoveisPublicados();
+  return todos.filter((item) => compararSlug(item.bairro, slugBairro));
+}
+
+export async function listarImoveisPorCondominio(
+  slugCondominio: string,
+): Promise<Imovel[]> {
+  const todos = await listarImoveisPublicados();
+  return todos.filter((item) => compararSlug(item.nomeCondominio, slugCondominio));
+}
+
+export interface EntidadeSeo {
+  nome: string;
+  slug: string;
+  total: number;
+  atualizadoEm: string;
+  cidade?: string | null;
+}
+
+function agregarPorCampo(
+  imoveis: Imovel[],
+  campo: "cidade" | "bairro" | "nomeCondominio",
+): EntidadeSeo[] {
+  const mapa = new Map<string, EntidadeSeo>();
+  for (const imovel of imoveis) {
+    const nome = imovel[campo];
+    if (!nome?.trim()) continue;
+    const slug = criarSlug(nome);
+    if (!slug) continue;
+    const atual = mapa.get(slug);
+    if (!atual) {
+      mapa.set(slug, {
+        nome,
+        slug,
+        total: 1,
+        atualizadoEm: imovel.atualizadoEm,
+        cidade: imovel.cidade,
+      });
+    } else {
+      atual.total += 1;
+      if (imovel.atualizadoEm > atual.atualizadoEm) {
+        atual.atualizadoEm = imovel.atualizadoEm;
+      }
+    }
+  }
+  return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+}
+
+export async function listarCidadesComImoveis(): Promise<EntidadeSeo[]> {
+  return agregarPorCampo(await listarImoveisPublicados(), "cidade");
+}
+
+export async function listarBairrosComImoveis(): Promise<EntidadeSeo[]> {
+  return agregarPorCampo(await listarImoveisPublicados(), "bairro");
+}
+
+export async function listarCondominiosComImoveis(): Promise<EntidadeSeo[]> {
+  return agregarPorCampo(await listarImoveisPublicados(), "nomeCondominio");
+}
+
+export async function resolverCidadePorSlug(slug: string): Promise<string | null> {
+  const doCatalogo = (await listarCidadesComImoveis()).find(
+    (item) => item.slug === slug,
+  );
+  if (doCatalogo) return doCatalogo.nome;
+
+  const atendimento = empresa.cidadesAtendimento.find(
+    (cidade) => criarSlug(cidade) === slug,
+  );
+  return atendimento ?? null;
+}
+
+export async function resolverBairroPorSlug(slug: string): Promise<{
+  nome: string;
+  cidade: string | null;
+} | null> {
+  const encontrado = (await listarBairrosComImoveis()).find(
+    (item) => item.slug === slug,
+  );
+  if (!encontrado) return null;
+  return { nome: encontrado.nome, cidade: encontrado.cidade ?? null };
+}
+
+export async function resolverCondominioPorSlug(slug: string): Promise<{
+  nome: string;
+  cidade: string | null;
+} | null> {
+  const encontrado = (await listarCondominiosComImoveis()).find(
+    (item) => item.slug === slug,
+  );
+  if (!encontrado) return null;
+  return { nome: encontrado.nome, cidade: encontrado.cidade ?? null };
+}
+
+export function calcularEstatisticasListagem(imoveis: Imovel[]) {
+  const disponiveis = imoveis.filter((item) => item.status === "disponivel");
+  const precos = disponiveis
+    .map((item) => item.preco)
+    .filter((valor): valor is number => valor != null && valor > 0);
+  const bairros = new Set(
+    disponiveis.map((item) => item.bairro).filter((item): item is string => Boolean(item)),
+  );
+  return {
+    total: disponiveis.length,
+    bairros: bairros.size,
+    precoMin: precos.length ? Math.min(...precos) : null,
+    precoMax: precos.length ? Math.max(...precos) : null,
+  };
 }
 
 export async function listarCidades(): Promise<string[]> {

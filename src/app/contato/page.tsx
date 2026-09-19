@@ -4,13 +4,16 @@ import { FormularioContato } from "@/componentes/formularioContato/FormularioCon
 import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import { linkWhatsApp } from "@/lib/formatadores";
+import { criarMetadataPagina, IMAGEM_OG_PADRAO } from "@/lib/seo/metadata";
 import estilos from "./contato.module.css";
 
-export const metadata: Metadata = {
-  title: "Contato",
-  description: `Fale com ${empresa.nome} pelo WhatsApp ou telefone. Atendimento em ${empresa.regiao}.`,
-  alternates: { canonical: "/contato" },
-};
+export const metadata: Metadata = criarMetadataPagina({
+  title: "Contato | Kalebe Corretor de Imóveis em Rio Preto",
+  description: `Fale com Kalebe Corretor pelo WhatsApp ou telefone. Atendimento em São José do Rio Preto, Mirassol e Bady Bassitt. ${empresa.creci}.`,
+  canonical: "/contato",
+  image: IMAGEM_OG_PADRAO,
+  titleAbsoluto: true,
+});
 
 export default function PaginaContato() {
   return (
@@ -32,7 +35,7 @@ export default function PaginaContato() {
             <div className={estilos.corretor}>
               <Image
                 src="/imagens/sobre/kalebe.webp"
-                alt="Kalebe"
+                alt="Kalebe, corretor de imóveis"
                 width={64}
                 height={64}
               />
@@ -100,7 +103,7 @@ export default function PaginaContato() {
           <a
             href={linkWhatsApp(
               empresa.whatsapp,
-              "Olá, Kalebe! Tenho um imóvel para vender e gostaria de saber como anunciar."
+              "Olá, Kalebe! Tenho um imóvel para vender e gostaria de saber como anunciar.",
             )}
             className="botao botao-secundario"
             target="_blank"

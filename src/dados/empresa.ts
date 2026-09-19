@@ -23,10 +23,37 @@ export const empresa = {
 } as const;
 
 export const regioes = [
-  { nome: "São José do Rio Preto", slug: "sao-jose-do-rio-preto" },
-  { nome: "Mirassol", slug: "mirassol" },
-  { nome: "Bady Bassitt", slug: "bady-bassitt" },
-  { nome: "Jardim Arroio", slug: "jardim-arroio", bairro: true },
-  { nome: "São Thomas", slug: "sao-thomas", bairro: true },
-  { nome: "Região Norte", slug: "regiao-norte", bairro: true },
+  {
+    nome: "São José do Rio Preto",
+    slug: "sao-jose-do-rio-preto",
+    href: "/imoveis/cidade/sao-jose-do-rio-preto",
+  },
+  {
+    nome: "Mirassol",
+    slug: "mirassol",
+    href: "/imoveis/cidade/mirassol",
+  },
+  {
+    nome: "Bady Bassitt",
+    slug: "bady-bassitt",
+    href: "/imoveis/cidade/bady-bassitt",
+  },
+  {
+    nome: "Jardim Arroio",
+    slug: "jardim-arroio",
+    bairro: true,
+    href: "/imoveis/bairro/jardim-arroio",
+  },
+  {
+    nome: "São Thomas",
+    slug: "sao-thomas",
+    bairro: true,
+    href: "/imoveis/bairro/sao-thomas",
+  },
+  {
+    nome: "Região Norte",
+    slug: "regiao-norte",
+    bairro: true,
+    href: "/imoveis/bairro/regiao-norte",
+  },
 ] as const;

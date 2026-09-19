@@ -12,6 +12,7 @@ import {
 } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
+import { criarSlug, evitarIdentificadorReservado } from "@/lib/seo/slug";
 
 const LIMITE_DE_IMAGEM = 15 * 1024 * 1024;
 const LIMITE_DE_VIDEO = 150 * 1024 * 1024;
@@ -198,15 +199,7 @@ async function existe(caminho: string) {
 }
 
 export function criarIdentificadorBase(titulo: string) {
-  return (
-    titulo
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 180) || "imovel"
-  );
+  return evitarIdentificadorReservado(criarSlug(titulo).slice(0, 180) || "imovel");
 }
 
 export async function encontrarPastaDisponivel(

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { BuscaPrincipal } from "@/componentes/buscaPrincipal/BuscaPrincipal";
@@ -6,9 +7,25 @@ import { Icone } from "@/componentes/ui/Icone";
 import { empresa } from "@/dados/empresa";
 import { listarImoveisPublicados } from "@/dados/imoveis";
 import { linkWhatsApp } from "@/lib/formatadores";
+import {
+  caminhoCidade,
+  caminhoCidadeTipo,
+  criarMetadataPagina,
+  IMAGEM_OG_PADRAO,
+} from "@/lib/seo/metadata";
+import { criarSlug } from "@/lib/seo/slug";
 import estilos from "./inicio.module.css";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = criarMetadataPagina({
+  title: `Corretor de Imóveis em São José do Rio Preto | ${empresa.nomeCurto}`,
+  description:
+    "Encontre casas, apartamentos, sobrados e terrenos à venda em São José do Rio Preto, Mirassol e Bady Bassitt. Atendimento direto com Kalebe, corretor CRECI-SP 322829 F.",
+  canonical: "/",
+  image: IMAGEM_OG_PADRAO,
+  titleAbsoluto: true,
+});
 
 export default async function PaginaInicial() {
   const imoveis = await listarImoveisPublicados();
@@ -17,7 +34,9 @@ export default async function PaginaInicial() {
     .sort((a, b) => Number(Boolean(b.destaque)) - Number(Boolean(a.destaque)))
     .slice(0, 6);
   const fotoDaCapa = selecao
-    .flatMap((imovel) => imovel.midias.map((midia) => ({ ...midia, titulo: imovel.titulo })))
+    .flatMap((imovel) =>
+      imovel.midias.map((midia) => ({ ...midia, titulo: imovel.titulo })),
+    )
     .find((midia) => midia.tipo === "imagem");
   const cidades = empresa.cidadesAtendimento;
 
@@ -31,7 +50,6 @@ export default async function PaginaInicial() {
               alt={fotoDaCapa.descricao || fotoDaCapa.titulo}
               fill
               priority
-              unoptimized
               sizes="100vw"
               className={estilos.heroFoto}
             />
@@ -44,26 +62,26 @@ export default async function PaginaInicial() {
             São José do Rio Preto · Mirassol · Bady Bassitt
           </p>
           <h1 className={estilos.titulo}>
-            Encontre um imóvel em Rio Preto e região.
+            Imóveis à venda em São José do Rio Preto e região
           </h1>
           <p className={estilos.subtitulo}>
-            Casas, apartamentos, sobrados e terrenos à venda. Você busca aqui
-            e conversa direto comigo.
+            Casas, apartamentos, sobrados e terrenos à venda. Você busca aqui e
+            conversa direto comigo.
           </p>
           <BuscaPrincipal />
         </div>
       </section>
 
       <div className={`conteudo ${estilos.atalhos}`} aria-label="Buscas rápidas">
-        <Link href="/imoveis?tipo=casa">
+        <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "casas")}>
           <Icone nome="casa" size={18} />
           Casas à venda
         </Link>
-        <Link href="/imoveis?tipo=apartamento">
+        <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "apartamentos")}>
           <Icone nome="predio" size={18} />
           Apartamentos
         </Link>
-        <Link href="/imoveis?cidade=S%C3%A3o%20Jos%C3%A9%20do%20Rio%20Preto">
+        <Link href={caminhoCidade("sao-jose-do-rio-preto")}>
           <Icone nome="local" size={18} />
           Rio Preto
         </Link>
@@ -116,10 +134,7 @@ export default async function PaginaInicial() {
             {cidades.map((cidade) => {
               const total = disponiveis.filter((i) => i.cidade === cidade).length;
               return (
-                <Link
-                  key={cidade}
-                  href={`/imoveis?cidade=${encodeURIComponent(cidade)}`}
-                >
+                <Link key={cidade} href={caminhoCidade(criarSlug(cidade))}>
                   <Icone nome="local" size={22} />
                   <div>
                     <h3>{cidade}</h3>
@@ -133,6 +148,30 @@ export default async function PaginaInicial() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className="secao">
+        <div className="conteudo">
+          <h2 className="titulo-secao">
+            Imóveis em São José do Rio Preto e região
+          </h2>
+          <div className={estilos.editorial}>
+            <p>
+              Atendo quem busca imóvel à venda em São José do Rio Preto,
+              Mirassol e Bady Bassitt — com casas, apartamentos, sobrados e
+              terrenos em bairros e condomínios diferentes.
+            </p>
+            <p>
+              No site você compara fotos, valores e detalhes. Quando quiser
+              visitar ou tirar dúvidas sobre financiamento, falamos direto pelo
+              WhatsApp.
+            </p>
+            <p>
+              O atendimento é pessoal: eu filtro o que faz sentido para a sua
+              busca e acompanho a visita e a negociação.
+            </p>
           </div>
         </div>
       </section>
@@ -187,7 +226,7 @@ export default async function PaginaInicial() {
           <a
             href={linkWhatsApp(
               empresa.whatsapp,
-              "Olá, Kalebe! Tenho um imóvel para vender e gostaria de saber como anunciar."
+              "Olá, Kalebe! Tenho um imóvel para vender e gostaria de saber como anunciar.",
             )}
             className="botao botao-secundario"
             target="_blank"

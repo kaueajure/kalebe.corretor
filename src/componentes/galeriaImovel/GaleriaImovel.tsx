@@ -38,7 +38,6 @@ function ImagemDaMidia({ midia, titulo, indice, total, miniatura = false }: {
       sizes={miniatura ? "120px" : "(max-width: 900px) 100vw, 70vw"}
       className={estilos.foto}
       priority={indice === 0 && !miniatura}
-      unoptimized
     />
   );
 }
@@ -143,7 +142,7 @@ export function GaleriaImovel({ midias, titulo }: Props) {
           {atual.tipo === "video" ? (
             <ImagemDaMidia midia={atual} titulo={titulo} indice={indice} total={total} />
           ) : (
-            <Image src={atual.url} alt={descricaoDaMidia(atual, titulo, indice)} fill sizes="100vw" className={estilos.fotoAmpliada} unoptimized />
+            <Image src={atual.url} alt={descricaoDaMidia(atual, titulo, indice)} fill sizes="100vw" className={estilos.fotoAmpliada} />
           )}
         </div>
         {total > 1 ? (
