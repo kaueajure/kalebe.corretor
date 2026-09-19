@@ -89,7 +89,7 @@ export function schemaItemList(
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name,
+    name: nome,
     url: `${SITE_URL}${caminho}`,
     numberOfItems: imoveis.length,
     itemListElement: imoveis.slice(0, 30).map((imovel, indice) => ({
