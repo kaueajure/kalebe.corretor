@@ -6,6 +6,7 @@ import {
   calcularEstatisticasListagem,
   listarImoveisPorCidadeETipo,
   resolverCidadePorSlug,
+  totalDisponiveis,
 } from "@/dados/imoveis";
 import {
   schemaBreadcrumbList,
@@ -32,13 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const imoveis = await listarImoveisPorCidadeETipo(slugCidade, tipoSeo.tipo);
-  const disponiveis = imoveis.filter((item) => item.status === "disponivel");
+  const disponiveisCount = totalDisponiveis(imoveis);
 
   return criarMetadataPagina({
     title: `${tipoSeo.tituloLista} em ${nome}`,
     description: tipoSeo.descricaoLista(nome),
     canonical: caminhoCidadeTipo(slugCidade, slugTipo),
-    index: disponiveis.length > 0,
+    index: disponiveisCount > 0,
     follow: true,
   });
 }

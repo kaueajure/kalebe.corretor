@@ -6,6 +6,7 @@ import {
   calcularEstatisticasListagem,
   listarImoveisPorCidade,
   resolverCidadePorSlug,
+  totalDisponiveis,
 } from "@/dados/imoveis";
 import {
   schemaBreadcrumbList,
@@ -29,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!nome) return { title: "Cidade não encontrada", robots: { index: false, follow: false } };
 
   const imoveis = await listarImoveisPorCidade(slug);
-  const disponiveis = imoveis.filter((item) => item.status === "disponivel");
-  const indexavel = disponiveis.length > 0;
+  const disponiveisCount = totalDisponiveis(imoveis);
+  const indexavel = disponiveisCount > 0;
 
   return criarMetadataPagina({
     title: `Imóveis à Venda em ${nome}`,

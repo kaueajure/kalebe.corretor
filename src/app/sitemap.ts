@@ -1,14 +1,12 @@
 import type { MetadataRoute } from "next";
-import { TIPOS_SEO, MINIMO_INDEXAVEL_LOCAL } from "@/dados/seo";
+import { MINIMO_INDEXAVEL_LOCAL } from "@/dados/seo";
 import {
   listarBairrosComImoveis,
   listarCidadesComImoveis,
+  listarCidadesTiposComImoveis,
   listarCondominiosComImoveis,
   listarEntradasDoSitemap,
-  listarImoveisPublicados,
 } from "@/dados/imoveis";
-import { criarSlug } from "@/lib/seo/slug";
-import { empresa } from "@/dados/empresa";
 
 export const revalidate = 3600;
 
@@ -23,73 +21,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    const [entradasImoveis, cidades, bairros, condominios, publicados] =
+    const [entradasImoveis, cidades, cidadesTipos, bairros, condominios] =
       await Promise.all([
         listarEntradasDoSitemap(),
         listarCidadesComImoveis(),
+        listarCidadesTiposComImoveis(),
         listarBairrosComImoveis(),
         listarCondominiosComImoveis(),
-        listarImoveisPublicados(),
       ]);
 
-    const disponiveis = publicados.filter((item) => item.status === "disponivel");
+    const entradasCidade = cidades
+      .filter((item) => item.total > 0)
+      .map((item) => ({
+        url: `${BASE}/imoveis/cidade/${item.slug}`,
+        lastModified: item.atualizadoEm,
+      }));
 
-    const mapaCidades = new Map(cidades.map((item) => [item.slug, item]));
-    for (const nome of empresa.cidadesAtendimento) {
-      const slug = criarSlug(nome);
-      if (!mapaCidades.has(slug)) {
-        mapaCidades.set(slug, {
-          nome,
-          slug,
-          total: 0,
-          atualizadoEm: new Date(0).toISOString(),
-        });
-      }
-    }
-
-    const entradasCidade: MetadataRoute.Sitemap = [];
-    const entradasTipo: MetadataRoute.Sitemap = [];
-
-    for (const cidade of mapaCidades.values()) {
-      const daCidade = disponiveis.filter(
-        (item) => item.cidade && criarSlug(item.cidade) === cidade.slug,
-      );
-      if (daCidade.length === 0) continue;
-
-      const atualizadoCidade = daCidade.reduce(
-        (acc, item) => (item.atualizadoEm > acc ? item.atualizadoEm : acc),
-        daCidade[0].atualizadoEm,
-      );
-      entradasCidade.push({
-        url: `${BASE}/imoveis/cidade/${cidade.slug}`,
-        lastModified: atualizadoCidade,
-      });
-
-      for (const tipo of TIPOS_SEO) {
-        const doTipo = daCidade.filter((item) => item.tipo === tipo.tipo);
-        if (doTipo.length === 0) continue;
-        const atualizadoTipo = doTipo.reduce(
-          (acc, item) => (item.atualizadoEm > acc ? item.atualizadoEm : acc),
-          doTipo[0].atualizadoEm,
-        );
-        entradasTipo.push({
-          url: `${BASE}/imoveis/cidade/${cidade.slug}/${tipo.slug}`,
-          lastModified: atualizadoTipo,
-        });
-      }
-    }
+    const entradasTipo = cidadesTipos
+      .filter((item) => item.total > 0)
+      .map((item) => ({
+        url: `${BASE}/imoveis/cidade/${item.slugCidade}/${item.slugTipo}`,
+        lastModified: item.atualizadoEm,
+      }));
 
     const entradasBairro = bairros
       .filter((item) => item.total >= MINIMO_INDEXAVEL_LOCAL)
       .map((item) => ({
-        url: `${BASE}/imoveis/bairro/${item.slug}`,
+        url: `${BASE}/imoveis/bairro/${item.slugCidade}/${item.slug}`,
         lastModified: item.atualizadoEm,
       }));
 
     const entradasCondominio = condominios
       .filter((item) => item.total >= MINIMO_INDEXAVEL_LOCAL)
       .map((item) => ({
-        url: `${BASE}/imoveis/condominio/${item.slug}`,
+        url: `${BASE}/imoveis/condominio/${item.slugCidade}/${item.slug}`,
         lastModified: item.atualizadoEm,
       }));
 

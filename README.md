@@ -9,8 +9,8 @@ Site e painel administrativo em Next.js para publicar imóveis à venda. O catá
 - `/imoveis/[slug]` — anúncio com fotos, vídeos e plantas
 - `/imoveis/cidade/[cidade]` — landing SEO por cidade
 - `/imoveis/cidade/[cidade]/[tipo]` — landing SEO por cidade e tipo
-- `/imoveis/bairro/[bairro]` — landing SEO por bairro
-- `/imoveis/condominio/[condominio]` — landing SEO por condomínio
+- `/imoveis/bairro/[cidade]/[bairro]` — landing SEO por bairro
+- `/imoveis/condominio/[cidade]/[condominio]` — landing SEO por condomínio
 - `/sobre` e `/contato` — apresentação e atendimento
 - `/favoritos` — imóveis salvos no navegador
 - `/painel` — administração protegida
@@ -46,12 +46,12 @@ O site gera `sitemap.xml` e `robots.txt` dinamicamente.
 - `/`, `/imoveis`, `/sobre`, `/contato`
 - `/imoveis/[slug]` (imóveis publicados)
 - `/imoveis/cidade/...` e `/imoveis/cidade/.../[tipo]` com imóveis disponíveis
-- `/imoveis/bairro/...` e `/imoveis/condominio/...` com pelo menos 2 imóveis publicados
+- `/imoveis/bairro/...` e `/imoveis/condominio/...` com pelo menos 2 imóveis **disponíveis**
 
 ### URLs com `noindex`
 
 - `/imoveis?...` (qualquer filtro ou ordenação) — `noindex, follow`, canonical em `/imoveis`
-- bairros/condomínios com apenas 1 imóvel — página útil, mas `noindex`
+- bairros/condomínios com exatamente 1 imóvel disponível — página útil, mas `noindex`
 - `/login`, `/primeiro-acesso`, `/painel`, `/favoritos` — `noindex, nofollow`
 
 Os filtros do catálogo **não** são bloqueados no `robots.txt`, para o Google conseguir ler o `noindex`.
@@ -61,8 +61,8 @@ Os filtros do catálogo **não** são bloqueados no `robots.txt`, para o Google 
 ```text
 /imoveis/cidade/sao-jose-do-rio-preto
 /imoveis/cidade/sao-jose-do-rio-preto/casas
-/imoveis/bairro/jardim-arroio
-/imoveis/condominio/nome-do-condominio
+/imoveis/bairro/sao-jose-do-rio-preto/jardim-arroio
+/imoveis/condominio/sao-jose-do-rio-preto/nome-do-condominio
 ```
 
 ### Google Search Console

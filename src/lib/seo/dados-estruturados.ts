@@ -133,9 +133,6 @@ export function schemaRealEstateListing(imovel: Imovel) {
     endereco.streetAddress = [imovel.logradouro, imovel.numero]
       .filter(Boolean)
       .join(", ");
-  } else if (imovel.bairro) {
-    // Bairro público sem inventar rua exata.
-    endereco.streetAddress = imovel.bairro;
   }
 
   return {
@@ -158,9 +155,7 @@ export function schemaRealEstateListing(imovel: Imovel) {
           },
         }
       : {}),
-    ...((imovel.cidade || imovel.estado || imovel.bairro)
-      ? { address: endereco }
-      : {}),
+    ...((imovel.cidade || imovel.estado) ? { address: endereco } : {}),
   };
 }
 

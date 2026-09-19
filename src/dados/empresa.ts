@@ -40,20 +40,23 @@ export const regioes = [
   },
   {
     nome: "Jardim Arroio",
+    cidade: "São José do Rio Preto",
     slug: "jardim-arroio",
     bairro: true,
-    href: "/imoveis/bairro/jardim-arroio",
+    href: "/imoveis/bairro/sao-jose-do-rio-preto/jardim-arroio",
   },
   {
     nome: "São Thomas",
+    cidade: "São José do Rio Preto",
     slug: "sao-thomas",
     bairro: true,
-    href: "/imoveis/bairro/sao-thomas",
+    href: "/imoveis/bairro/sao-jose-do-rio-preto/sao-thomas",
   },
   {
     nome: "Região Norte",
+    cidade: "São José do Rio Preto",
     slug: "regiao-norte",
     bairro: true,
-    href: "/imoveis/bairro/regiao-norte",
+    href: "/imoveis/bairro/sao-jose-do-rio-preto/regiao-norte",
   },
 ] as const;

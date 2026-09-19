@@ -169,7 +169,14 @@ export async function obterImoveisSimilares(imovel: Imovel, limite = 3) {
   );
 
   const pontuar = (item: Imovel) => {
-    if (imovel.bairro && item.bairro === imovel.bairro) return 4;
+    if (
+      imovel.bairro &&
+      item.bairro === imovel.bairro &&
+      imovel.cidade &&
+      item.cidade === imovel.cidade
+    ) {
+      return 4;
+    }
     if (
       imovel.cidade &&
       item.cidade === imovel.cidade &&
@@ -190,117 +197,323 @@ export async function obterImoveisSimilares(imovel: Imovel, limite = 3) {
     .map((entrada) => entrada.item);
 }
 
-function compararSlug(valor: string | null | undefined, slug: string) {
-  if (!valor) return false;
-  return criarSlug(valor) === slug;
+function tipoParaBanco(tipo: TipoImovel): string {
+  const mapa: Record<TipoImovel, string> = {
+    casa: "CASA",
+    apartamento: "APARTAMENTO",
+    terreno: "TERRENO",
+    comercial: "COMERCIAL",
+    sobrado: "SOBRADO",
+  };
+  return mapa[tipo];
+}
+
+function tipoDoBanco(tipo: string): TipoImovel {
+  return mapearTipo(tipo);
+}
+
+function encontrarPorSlug(nomes: string[], slug: string): string | null {
+  return nomes.find((nome) => criarSlug(nome) === slug) ?? null;
+}
+
+export interface EntidadeSeoCidade {
+  nome: string;
+  slug: string;
+  total: number;
+  atualizadoEm: string;
+}
+
+export interface EntidadeSeoLocal {
+  nome: string;
+  slug: string;
+  cidade: string;
+  slugCidade: string;
+  total: number;
+  atualizadoEm: string;
+}
+
+export interface EntidadeSeoCidadeTipo {
+  cidade: string;
+  slugCidade: string;
+  tipo: TipoImovel;
+  slugTipo: string;
+  total: number;
+  atualizadoEm: string;
+}
+
+type LinhaAgregadaCidade = RowDataPacket & {
+  cidade: string;
+  total: number | string;
+  atualizado_em: Date | string;
+};
+
+type LinhaAgregadaLocal = RowDataPacket & {
+  cidade: string;
+  nome: string;
+  total: number | string;
+  atualizado_em: Date | string;
+};
+
+type LinhaAgregadaTipo = RowDataPacket & {
+  cidade: string;
+  tipo: string;
+  total: number | string;
+  atualizado_em: Date | string;
+};
+
+const FILTRO_DISPONIVEL = `
+  situacao = 'PUBLICADO'
+  AND disponibilidade = 'DISPONIVEL'
+`;
+
+export async function listarCidadesComImoveis(): Promise<EntidadeSeoCidade[]> {
+  const [linhas] = await banco.query<LinhaAgregadaCidade[]>(
+    `SELECT cidade, COUNT(*) AS total, MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade IS NOT NULL AND cidade <> ''
+      GROUP BY cidade
+      ORDER BY cidade`,
+  );
+  return linhas.map((linha) => ({
+    nome: linha.cidade,
+    slug: criarSlug(linha.cidade),
+    total: Number(linha.total),
+    atualizadoEm: dataIso(linha.atualizado_em),
+  }));
+}
+
+export async function listarBairrosComImoveis(): Promise<EntidadeSeoLocal[]> {
+  const [linhas] = await banco.query<LinhaAgregadaLocal[]>(
+    `SELECT cidade, bairro AS nome, COUNT(*) AS total, MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade IS NOT NULL AND cidade <> ''
+        AND bairro IS NOT NULL AND bairro <> ''
+      GROUP BY cidade, bairro
+      ORDER BY cidade, bairro`,
+  );
+  return linhas.map((linha) => ({
+    nome: linha.nome,
+    slug: criarSlug(linha.nome),
+    cidade: linha.cidade,
+    slugCidade: criarSlug(linha.cidade),
+    total: Number(linha.total),
+    atualizadoEm: dataIso(linha.atualizado_em),
+  }));
+}
+
+export async function listarCondominiosComImoveis(): Promise<EntidadeSeoLocal[]> {
+  const [linhas] = await banco.query<LinhaAgregadaLocal[]>(
+    `SELECT cidade, nome_condominio AS nome, COUNT(*) AS total,
+            MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade IS NOT NULL AND cidade <> ''
+        AND nome_condominio IS NOT NULL AND nome_condominio <> ''
+      GROUP BY cidade, nome_condominio
+      ORDER BY cidade, nome_condominio`,
+  );
+  return linhas.map((linha) => ({
+    nome: linha.nome,
+    slug: criarSlug(linha.nome),
+    cidade: linha.cidade,
+    slugCidade: criarSlug(linha.cidade),
+    total: Number(linha.total),
+    atualizadoEm: dataIso(linha.atualizado_em),
+  }));
+}
+
+export async function listarCidadesTiposComImoveis(): Promise<EntidadeSeoCidadeTipo[]> {
+  const [linhas] = await banco.query<LinhaAgregadaTipo[]>(
+    `SELECT cidade, tipo, COUNT(*) AS total, MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade IS NOT NULL AND cidade <> ''
+      GROUP BY cidade, tipo
+      ORDER BY cidade, tipo`,
+  );
+  return linhas.map((linha) => {
+    const tipo = tipoDoBanco(linha.tipo);
+    return {
+      cidade: linha.cidade,
+      slugCidade: criarSlug(linha.cidade),
+      tipo,
+      slugTipo: obterSlugTipo(tipo),
+      total: Number(linha.total),
+      atualizadoEm: dataIso(linha.atualizado_em),
+    };
+  });
+}
+
+function obterSlugTipo(tipo: TipoImovel): string {
+  const mapa: Record<TipoImovel, string> = {
+    casa: "casas",
+    apartamento: "apartamentos",
+    terreno: "terrenos",
+    sobrado: "sobrados",
+    comercial: "imoveis-comerciais",
+  };
+  return mapa[tipo];
+}
+
+export async function resolverCidadePorSlug(slug: string): Promise<string | null> {
+  const [linhas] = await banco.query<(RowDataPacket & { cidade: string })[]>(
+    `SELECT DISTINCT cidade FROM imoveis
+      WHERE situacao = 'PUBLICADO'
+        AND cidade IS NOT NULL AND cidade <> ''`,
+  );
+  const doCatalogo = encontrarPorSlug(
+    linhas.map((linha) => linha.cidade),
+    slug,
+  );
+  if (doCatalogo) return doCatalogo;
+
+  return (
+    empresa.cidadesAtendimento.find((cidade) => criarSlug(cidade) === slug) ??
+    null
+  );
+}
+
+export async function resolverBairroPorSlug(
+  slugCidade: string,
+  slugBairro: string,
+): Promise<EntidadeSeoLocal | null> {
+  const cidade = await resolverCidadePorSlug(slugCidade);
+  if (!cidade) return null;
+
+  const [linhas] = await banco.query<(RowDataPacket & { bairro: string })[]>(
+    `SELECT DISTINCT bairro FROM imoveis
+      WHERE situacao = 'PUBLICADO'
+        AND cidade = ?
+        AND bairro IS NOT NULL AND bairro <> ''`,
+    [cidade],
+  );
+  const nome = encontrarPorSlug(
+    linhas.map((linha) => linha.bairro),
+    slugBairro,
+  );
+  if (!nome) return null;
+
+  const [agregados] = await banco.query<
+    (RowDataPacket & { total: number | string; atualizado_em: Date | string | null })[]
+  >(
+    `SELECT COUNT(*) AS total, MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade = ?
+        AND bairro = ?`,
+    [cidade, nome],
+  );
+  const agregado = agregados[0];
+
+  return {
+    nome,
+    slug: slugBairro,
+    cidade,
+    slugCidade,
+    total: Number(agregado?.total ?? 0),
+    atualizadoEm: agregado?.atualizado_em
+      ? dataIso(agregado.atualizado_em)
+      : new Date(0).toISOString(),
+  };
+}
+
+export async function resolverCondominioPorSlug(
+  slugCidade: string,
+  slugCondominio: string,
+): Promise<EntidadeSeoLocal | null> {
+  const cidade = await resolverCidadePorSlug(slugCidade);
+  if (!cidade) return null;
+
+  const [linhas] = await banco.query<(RowDataPacket & { nome: string })[]>(
+    `SELECT DISTINCT nome_condominio AS nome FROM imoveis
+      WHERE situacao = 'PUBLICADO'
+        AND cidade = ?
+        AND nome_condominio IS NOT NULL AND nome_condominio <> ''`,
+    [cidade],
+  );
+  const nome = encontrarPorSlug(
+    linhas.map((linha) => linha.nome),
+    slugCondominio,
+  );
+  if (!nome) return null;
+
+  const [agregados] = await banco.query<
+    (RowDataPacket & { total: number | string; atualizado_em: Date | string | null })[]
+  >(
+    `SELECT COUNT(*) AS total, MAX(atualizado_em) AS atualizado_em
+       FROM imoveis
+      WHERE ${FILTRO_DISPONIVEL}
+        AND cidade = ?
+        AND nome_condominio = ?`,
+    [cidade, nome],
+  );
+  const agregado = agregados[0];
+
+  return {
+    nome,
+    slug: slugCondominio,
+    cidade,
+    slugCidade,
+    total: Number(agregado?.total ?? 0),
+    atualizadoEm: agregado?.atualizado_em
+      ? dataIso(agregado.atualizado_em)
+      : new Date(0).toISOString(),
+  };
 }
 
 export async function listarImoveisPorCidade(slugCidade: string): Promise<Imovel[]> {
-  const todos = await listarImoveisPublicados();
-  return todos.filter((item) => compararSlug(item.cidade, slugCidade));
+  const cidade = await resolverCidadePorSlug(slugCidade);
+  if (!cidade) return [];
+  const [linhas] = await banco.query<LinhaPublica[]>(
+    `${SELECT_PUBLICO} AND cidade = ?
+      ORDER BY destaque DESC, publicado_em DESC, id DESC`,
+    [cidade],
+  );
+  return completarImoveis(linhas);
 }
 
 export async function listarImoveisPorCidadeETipo(
   slugCidade: string,
   tipo: TipoImovel,
 ): Promise<Imovel[]> {
-  const daCidade = await listarImoveisPorCidade(slugCidade);
-  return daCidade.filter((item) => item.tipo === tipo);
+  const cidade = await resolverCidadePorSlug(slugCidade);
+  if (!cidade) return [];
+  const [linhas] = await banco.query<LinhaPublica[]>(
+    `${SELECT_PUBLICO} AND cidade = ? AND tipo = ?
+      ORDER BY destaque DESC, publicado_em DESC, id DESC`,
+    [cidade, tipoParaBanco(tipo)],
+  );
+  return completarImoveis(linhas);
 }
 
-export async function listarImoveisPorBairro(slugBairro: string): Promise<Imovel[]> {
-  const todos = await listarImoveisPublicados();
-  return todos.filter((item) => compararSlug(item.bairro, slugBairro));
+export async function listarImoveisPorBairro(
+  slugCidade: string,
+  slugBairro: string,
+): Promise<Imovel[]> {
+  const resolvido = await resolverBairroPorSlug(slugCidade, slugBairro);
+  if (!resolvido) return [];
+  const [linhas] = await banco.query<LinhaPublica[]>(
+    `${SELECT_PUBLICO} AND cidade = ? AND bairro = ?
+      ORDER BY destaque DESC, publicado_em DESC, id DESC`,
+    [resolvido.cidade, resolvido.nome],
+  );
+  return completarImoveis(linhas);
 }
 
 export async function listarImoveisPorCondominio(
+  slugCidade: string,
   slugCondominio: string,
 ): Promise<Imovel[]> {
-  const todos = await listarImoveisPublicados();
-  return todos.filter((item) => compararSlug(item.nomeCondominio, slugCondominio));
-}
-
-export interface EntidadeSeo {
-  nome: string;
-  slug: string;
-  total: number;
-  atualizadoEm: string;
-  cidade?: string | null;
-}
-
-function agregarPorCampo(
-  imoveis: Imovel[],
-  campo: "cidade" | "bairro" | "nomeCondominio",
-): EntidadeSeo[] {
-  const mapa = new Map<string, EntidadeSeo>();
-  for (const imovel of imoveis) {
-    const nome = imovel[campo];
-    if (!nome?.trim()) continue;
-    const slug = criarSlug(nome);
-    if (!slug) continue;
-    const atual = mapa.get(slug);
-    if (!atual) {
-      mapa.set(slug, {
-        nome,
-        slug,
-        total: 1,
-        atualizadoEm: imovel.atualizadoEm,
-        cidade: imovel.cidade,
-      });
-    } else {
-      atual.total += 1;
-      if (imovel.atualizadoEm > atual.atualizadoEm) {
-        atual.atualizadoEm = imovel.atualizadoEm;
-      }
-    }
-  }
-  return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
-}
-
-export async function listarCidadesComImoveis(): Promise<EntidadeSeo[]> {
-  return agregarPorCampo(await listarImoveisPublicados(), "cidade");
-}
-
-export async function listarBairrosComImoveis(): Promise<EntidadeSeo[]> {
-  return agregarPorCampo(await listarImoveisPublicados(), "bairro");
-}
-
-export async function listarCondominiosComImoveis(): Promise<EntidadeSeo[]> {
-  return agregarPorCampo(await listarImoveisPublicados(), "nomeCondominio");
-}
-
-export async function resolverCidadePorSlug(slug: string): Promise<string | null> {
-  const doCatalogo = (await listarCidadesComImoveis()).find(
-    (item) => item.slug === slug,
+  const resolvido = await resolverCondominioPorSlug(slugCidade, slugCondominio);
+  if (!resolvido) return [];
+  const [linhas] = await banco.query<LinhaPublica[]>(
+    `${SELECT_PUBLICO} AND cidade = ? AND nome_condominio = ?
+      ORDER BY destaque DESC, publicado_em DESC, id DESC`,
+    [resolvido.cidade, resolvido.nome],
   );
-  if (doCatalogo) return doCatalogo.nome;
-
-  const atendimento = empresa.cidadesAtendimento.find(
-    (cidade) => criarSlug(cidade) === slug,
-  );
-  return atendimento ?? null;
-}
-
-export async function resolverBairroPorSlug(slug: string): Promise<{
-  nome: string;
-  cidade: string | null;
-} | null> {
-  const encontrado = (await listarBairrosComImoveis()).find(
-    (item) => item.slug === slug,
-  );
-  if (!encontrado) return null;
-  return { nome: encontrado.nome, cidade: encontrado.cidade ?? null };
-}
-
-export async function resolverCondominioPorSlug(slug: string): Promise<{
-  nome: string;
-  cidade: string | null;
-} | null> {
-  const encontrado = (await listarCondominiosComImoveis()).find(
-    (item) => item.slug === slug,
-  );
-  if (!encontrado) return null;
-  return { nome: encontrado.nome, cidade: encontrado.cidade ?? null };
+  return completarImoveis(linhas);
 }
 
 export function calcularEstatisticasListagem(imoveis: Imovel[]) {
@@ -309,7 +522,9 @@ export function calcularEstatisticasListagem(imoveis: Imovel[]) {
     .map((item) => item.preco)
     .filter((valor): valor is number => valor != null && valor > 0);
   const bairros = new Set(
-    disponiveis.map((item) => item.bairro).filter((item): item is string => Boolean(item)),
+    disponiveis
+      .map((item) => item.bairro)
+      .filter((item): item is string => Boolean(item)),
   );
   return {
     total: disponiveis.length,
@@ -317,6 +532,11 @@ export function calcularEstatisticasListagem(imoveis: Imovel[]) {
     precoMin: precos.length ? Math.min(...precos) : null,
     precoMax: precos.length ? Math.max(...precos) : null,
   };
+}
+
+/** Fonte única: indexação de bairro/condomínio usa só disponíveis. */
+export function totalDisponiveis(imoveis: Imovel[]) {
+  return imoveis.filter((item) => item.status === "disponivel").length;
 }
 
 export async function listarCidades(): Promise<string[]> {

@@ -172,12 +172,12 @@ export function caminhoCidadeTipo(slugCidade: string, slugTipo: string) {
   return `/imoveis/cidade/${slugCidade}/${slugTipo}`;
 }
 
-export function caminhoBairro(slugBairro: string) {
-  return `/imoveis/bairro/${slugBairro}`;
+export function caminhoBairro(slugCidade: string, slugBairro: string) {
+  return `/imoveis/bairro/${slugCidade}/${slugBairro}`;
 }
 
-export function caminhoCondominio(slugCondominio: string) {
-  return `/imoveis/condominio/${slugCondominio}`;
+export function caminhoCondominio(slugCidade: string, slugCondominio: string) {
+  return `/imoveis/condominio/${slugCidade}/${slugCondominio}`;
 }
 
 export function altImovel(imovel: Pick<Imovel, "tipo" | "bairro" | "cidade" | "titulo">, descricao?: string | null) {

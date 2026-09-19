@@ -138,16 +138,28 @@ export default async function PaginaDetalheImovel({ params }: Props) {
               <h1 className={estilos.titulo}>{imovel.titulo}</h1>
               {localizacao || imovel.nomeCondominio ? (
                 <p className={estilos.local}>
-                  {imovel.nomeCondominio && slugCondominio ? (
+                  {imovel.nomeCondominio ? (
                     <>
-                      <Link href={caminhoCondominio(slugCondominio)}>
-                        {imovel.nomeCondominio}
-                      </Link>
+                      {slugCidade && slugCondominio ? (
+                        <Link
+                          href={caminhoCondominio(slugCidade, slugCondominio)}
+                        >
+                          {imovel.nomeCondominio}
+                        </Link>
+                      ) : (
+                        imovel.nomeCondominio
+                      )}
                       {localizacao ? " · " : null}
                     </>
                   ) : null}
-                  {imovel.bairro && slugBairro ? (
-                    <Link href={caminhoBairro(slugBairro)}>{imovel.bairro}</Link>
+                  {imovel.bairro ? (
+                    slugCidade && slugBairro ? (
+                      <Link href={caminhoBairro(slugCidade, slugBairro)}>
+                        {imovel.bairro}
+                      </Link>
+                    ) : (
+                      imovel.bairro
+                    )
                   ) : null}
                   {imovel.bairro && imovel.cidade ? ", " : null}
                   {imovel.cidade && slugCidade ? (
@@ -251,23 +263,29 @@ export default async function PaginaDetalheImovel({ params }: Props) {
                     <p>{enderecoExato}</p>
                   ) : (
                     <p>
-                      {imovel.nomeCondominio && slugCondominio ? (
-                        <Link href={caminhoCondominio(slugCondominio)}>
-                          {imovel.nomeCondominio}
-                        </Link>
-                      ) : (
-                        imovel.nomeCondominio
-                      )}
+                      {imovel.nomeCondominio ? (
+                        slugCidade && slugCondominio ? (
+                          <Link
+                            href={caminhoCondominio(slugCidade, slugCondominio)}
+                          >
+                            {imovel.nomeCondominio}
+                          </Link>
+                        ) : (
+                          imovel.nomeCondominio
+                        )
+                      ) : null}
                       {imovel.nomeCondominio && (imovel.bairro || imovel.cidade)
                         ? " · "
                         : null}
-                      {imovel.bairro && slugBairro ? (
-                        <Link href={caminhoBairro(slugBairro)}>
-                          {imovel.bairro}
-                        </Link>
-                      ) : (
-                        imovel.bairro
-                      )}
+                      {imovel.bairro ? (
+                        slugCidade && slugBairro ? (
+                          <Link href={caminhoBairro(slugCidade, slugBairro)}>
+                            {imovel.bairro}
+                          </Link>
+                        ) : (
+                          imovel.bairro
+                        )
+                      ) : null}
                       {imovel.bairro && imovel.cidade ? ", " : null}
                       {imovel.cidade && slugCidade ? (
                         <Link href={caminhoCidade(slugCidade)}>

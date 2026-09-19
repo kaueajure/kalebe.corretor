@@ -14,8 +14,10 @@ export {
   listarCidadesComImoveis,
   listarBairrosComImoveis,
   listarCondominiosComImoveis,
+  listarCidadesTiposComImoveis,
   resolverCidadePorSlug,
   resolverBairroPorSlug,
   resolverCondominioPorSlug,
   calcularEstatisticasListagem,
+  totalDisponiveis,
 } from "@/lib/imoveis/publico";
