@@ -1,6 +1,6 @@
 .formulario {
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .mensagemErro {
@@ -18,12 +18,35 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.15rem;
-  border: 1px solid rgb(17 17 17 / 8%);
-  border-radius: var(--raio-suave);
-  background: #faf9f7;
-  box-shadow: 0 8px 22px rgb(17 17 17 / 3%);
+  padding: 1.1rem 1.3rem;
+  border-top: 2px solid #111;
+  background: #fff;
 }
+
+.sumario {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.35rem;
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  overflow-x: auto;
+  padding: 0.2rem 0;
+  border-bottom: 1px solid #bdbdbd;
+  background: var(--painel-fundo, #f7f7f7);
+  scrollbar-width: thin;
+}
+
+.sumario a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--texto-suave);
+  font-size: 0.86rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.sumario a:hover { color: #111; text-decoration: underline; text-underline-offset: 4px; }
 
 .orientacao p,
 .orientacao > span {
@@ -33,11 +56,12 @@
 }
 
 .secao {
-  border: 1px solid rgb(17 17 17 / 8%);
-  border-radius: var(--raio-suave);
-  background: #faf9f7;
-  padding: 1rem 1.1rem 1.15rem;
-  box-shadow: 0 8px 22px rgb(17 17 17 / 3%);
+  display: grid;
+  grid-template-columns: minmax(150px, 210px) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  border-top: 1px solid #bdbdbd;
+  padding: 2rem 0 2.5rem;
+  scroll-margin-top: 4.5rem;
 }
 
 .secao > header {
@@ -45,26 +69,22 @@
   align-items: flex-start;
   gap: 0.75rem;
   width: 100%;
-  margin-bottom: 0.85rem;
+  margin-bottom: 1.25rem;
 }
 
 .secao > header > span:first-child {
-  display: inline-grid;
-  place-items: center;
   min-width: 2rem;
-  height: 2rem;
-  border-radius: var(--raio);
-  background: #ebe9e5;
-  color: var(--primaria);
-  font-size: 0.78rem;
-  font-weight: 700;
+  color: #777;
+  font-size: 0.9rem;
+  font-weight: 650;
 }
 
 .secao > header h2 {
   display: block;
   color: var(--texto);
-  font-family: var(--fonte-display);
-  font-size: 1.08rem;
+  font-family: var(--fonte-corpo);
+  font-size: 1.1rem;
+  font-weight: 700;
   line-height: 1.25;
 }
 
@@ -77,7 +97,7 @@
 
 .grade {
   display: grid;
-  gap: 0.85rem 1rem;
+  gap: 1rem 1.25rem;
   align-items: start;
 }
 
@@ -86,7 +106,7 @@
 }
 
 .quatroColunas {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .campo {
@@ -103,12 +123,11 @@
   display: flex;
   align-items: flex-end;
   min-height: 1rem;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   line-height: 1rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--texto-suave);
-  font-weight: 600;
+  letter-spacing: 0;
+  color: #3b3b3b;
+  font-weight: 650;
 }
 
 .campo > span em {
@@ -125,8 +144,8 @@
 
 .secao :global(.campo),
 .secao :global(.selecao) {
-  height: 44px;
-  min-height: 44px;
+  height: 48px;
+  min-height: 48px;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
 }
@@ -219,7 +238,7 @@
   padding: 0.7rem 0.85rem;
   border: 1px solid var(--borda);
   border-radius: var(--raio);
-  background: var(--fundo);
+  background: #fff;
 }
 
 .alternador strong {
@@ -244,7 +263,7 @@
   padding: 0.9rem 1rem;
   border: 1px solid var(--borda);
   border-radius: var(--raio);
-  background: var(--fundo);
+  background: #fff;
 }
 
 .completude > div {
@@ -291,7 +310,8 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 0.75rem;
-  padding-top: 0.25rem;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid #bdbdbd;
 }
 
 .acoes .botao:disabled {
@@ -319,10 +339,13 @@
   }
 }
 
+@media (max-width: 1120px) {
+  .secao { grid-template-columns: 1fr; gap: 0.4rem; }
+}
+
 @media (max-width: 900px) {
   .formulario {
-    gap: 0.7rem;
-    padding-bottom: 4.75rem;
+    gap: 0.8rem;
   }
 
   .orientacao {
@@ -342,29 +365,29 @@
   }
 
   .secao {
-    padding: 0.7rem 0.75rem 0.8rem;
-    border-radius: var(--raio);
-    box-shadow: none;
+    padding: 1.5rem 0 2rem;
+    scroll-margin-top: 7rem;
   }
+
+  .sumario { top: 64px; }
 
   .secao > header {
     gap: 0.5rem;
-    margin-bottom: 0.55rem;
+    margin-bottom: 1rem;
     align-items: center;
   }
 
   .secao > header > span:first-child {
-    min-width: 1.55rem;
-    height: 1.55rem;
-    font-size: 0.68rem;
+    min-width: 1.75rem;
+    font-size: 0.85rem;
   }
 
   .secao > header h2 {
-    font-size: 0.98rem;
+    font-size: 1.12rem;
   }
 
   .secao > header small {
-    display: none;
+    display: block;
   }
 
   .grade {
@@ -377,7 +400,7 @@
 
   .campo > span {
     min-height: 0;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 
   .campo small {
@@ -386,10 +409,10 @@
 
   .secao :global(.campo),
   .secao :global(.selecao) {
-    height: 40px;
-    min-height: 40px;
-    padding: 0.45rem 0.7rem;
-    font-size: 0.92rem;
+    height: 48px;
+    min-height: 48px;
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
   }
 
   .secao :global(.area-texto) {
@@ -399,7 +422,7 @@
 
   .preco,
   .unidade {
-    min-height: 40px;
+    min-height: 48px;
     gap: 0.35rem;
   }
 
@@ -446,21 +469,15 @@
   }
 
   .acoes {
-    position: sticky;
-    bottom: 0;
-    z-index: 15;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.45rem;
-    margin: 0 -0.15rem;
-    padding: 0.55rem 0.5rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
-    background: var(--painel-fundo, #eceae7);
-    border-top: 1px solid rgb(17 17 17 / 10%);
+    padding: 1rem 0 calc(1rem + env(safe-area-inset-bottom, 0px));
   }
 
   .acoes > :first-child {
     grid-column: 1 / -1;
-    min-height: 36px;
+    min-height: 44px;
     padding: 0.35rem 0.75rem;
     font-size: 0.82rem;
   }
@@ -468,7 +485,7 @@
   .acoes .botao,
   .acoes a {
     width: 100%;
-    min-height: 42px;
+    min-height: 48px;
     padding: 0.45rem 0.65rem;
     font-size: 0.86rem;
   }

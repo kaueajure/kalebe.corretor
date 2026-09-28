@@ -4,11 +4,15 @@
 
 .grade {
   display: grid;
-  grid-template-columns: minmax(0, 1.45fr) 340px;
-  gap: 2rem;
-  margin-top: 1.75rem;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  grid-template-areas: "intro lateral" "corpo lateral";
+  gap: 0 4rem;
+  margin-top: 2.5rem;
   align-items: start;
 }
+
+.intro { grid-area: intro; }
+.corpo { grid-area: corpo; min-width: 0; }
 
 .metaTopo {
   display: flex;
@@ -26,11 +30,11 @@
 
 .titulo {
   font-family: var(--fonte-display);
-  font-size: clamp(1.85rem, 3.2vw, 2.55rem);
+  font-size: clamp(2rem, 3.4vw, 3rem);
   line-height: 1.12;
   margin-bottom: 0.4rem;
   letter-spacing: -0.04em;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--primaria);
 }
 
@@ -50,17 +54,17 @@
 }
 
 .resumo {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 0.7rem;
-  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid var(--borda);
+  border-bottom: 1px solid var(--borda);
 }
 
 .resumo li {
-  background: var(--fundo-3);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio);
-  padding: 0.95rem 0.85rem;
+  min-width: 5rem;
 }
 
 .resumo strong {
@@ -74,12 +78,11 @@
 .resumo span {
   font-size: 0.75rem;
   color: var(--texto-fraco);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 .bloco {
-  margin-bottom: 1.85rem;
+  margin-bottom: 2.5rem;
+  max-width: 70ch;
 }
 
 .bloco h2 {
@@ -147,16 +150,15 @@
 }
 
 .lateral {
+  grid-area: lateral;
   position: sticky;
   top: calc(var(--cabecalho-altura) + 1rem);
 }
 
 .caixa {
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-suave);
-  padding: 1.45rem;
-  box-shadow: var(--sombra);
+  background: var(--fundo-3);
+  border-top: 3px solid var(--primaria-clara);
+  padding: 1.5rem;
 }
 
 .precoAntigo {
@@ -167,7 +169,7 @@
 
 .preco {
   font-family: var(--fonte-display);
-  font-size: 2rem;
+  font-size: clamp(1.8rem, 3vw, 2.15rem);
   margin-bottom: 0.75rem;
   letter-spacing: -0.04em;
   color: var(--primaria);
@@ -242,10 +244,29 @@
 @media (max-width: 900px) {
   .grade {
     grid-template-columns: 1fr;
+    grid-template-areas: "intro" "lateral" "corpo";
+    gap: 0;
   }
 
   .lateral {
     position: static;
+    margin-bottom: 2rem;
+  }
+
+  .caixa {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 1fr);
+    column-gap: 1.5rem;
+  }
+
+  .caixa .acoes {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+
+  .caixa .corretor,
+  .caixa .creci {
+    grid-column: 1 / -1;
   }
 
   .codigo {
@@ -254,6 +275,10 @@
 }
 
 @media (max-width: 700px) {
+  .grade { margin-top: 1.75rem; }
+  .caixa { display: block; }
+  .resumo { gap: 0.8rem 1.25rem; margin-bottom: 1.75rem; }
+  .resumo li { min-width: 4.5rem; }
   .similaresCabecalho {
     flex-direction: column;
     align-items: start;

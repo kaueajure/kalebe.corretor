@@ -23,14 +23,25 @@ export default async function PaginaLogin() {
         </Link>
       ) : null}
 
-      <div className={estilos.caixa}>
-        <p className={estilos.selo}>{empresa.nomeCurto}</p>
-        <h1 className={estilos.marca}>Painel administrativo</h1>
-        <p className={estilos.subtitulo}>
-          Entre com sua conta para gerenciar o catálogo de imóveis.
-        </p>
-        <FormularioLogin />
-      </div>
+      <main className={estilos.quadro}>
+        <div className={estilos.apresentacao}>
+          <p className={estilos.selo}>{empresa.nomeCurto}</p>
+          <div>
+            <p className={estilos.rotulo}>Área de trabalho</p>
+            <h2 className={estilos.marca}>Seu catálogo, em ordem.</h2>
+            <p>Cadastre imóveis, organize as fotos e acompanhe o que está publicado.</p>
+          </div>
+          <span>Corretor de imóveis · {empresa.creci}</span>
+        </div>
+        <div className={estilos.caixa}>
+          <div>
+            <p className={estilos.rotulo}>Acesso administrativo</p>
+            <h1>Entrar no painel</h1>
+            <p className={estilos.subtitulo}>Use seu e-mail e sua senha para continuar.</p>
+          </div>
+          <FormularioLogin />
+        </div>
+      </main>
     </div>
   );
 }

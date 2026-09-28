@@ -422,18 +422,28 @@ export function FormularioImovel({
           <strong>
             {modo === "editar"
               ? `Editando ${codigo ?? "imóvel"}`
-              : "Cadastro flexível"}
+              : "Rascunho e publicação"}
           </strong>
           <p>
             {modo === "editar"
-              ? "Atualize as informações e a galeria do imóvel."
-              : "Somente o título é necessário para salvar um rascunho. Campos não preenchidos ficam ocultos no site."}
+              ? "Altere os dados do anúncio e revise antes de salvar."
+              : "Comece pelo título. Você pode salvar um rascunho e completar o anúncio depois."}
           </p>
         </div>
         <span>Campos essenciais para publicação são verificados ao final.</span>
       </div>
 
-      <section className={estilos.secao}>
+      <nav className={estilos.sumario} aria-label="Seções do cadastro">
+        <a href="#apresentacao">Apresentação</a>
+        <a href="#valores">Valores</a>
+        <a href="#localizacao">Localização</a>
+        <a href="#detalhes">Detalhes</a>
+        <a href="#caracteristicas">Características</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#publicacao">Publicação</a>
+      </nav>
+
+      <section id="apresentacao" className={estilos.secao}>
         <header>
           <span>01</span>
           <span>
@@ -520,7 +530,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={estilos.secao}>
+      <section id="valores" className={estilos.secao}>
         <header>
           <span>02</span>
           <span>
@@ -593,7 +603,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={estilos.secao}>
+      <section id="localizacao" className={estilos.secao}>
         <header>
           <span>03</span>
           <span>
@@ -736,7 +746,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={estilos.secao}>
+      <section id="detalhes" className={estilos.secao}>
         <header>
           <span>04</span>
           <span>
@@ -881,7 +891,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={estilos.secao}>
+      <section id="caracteristicas" className={estilos.secao}>
         <header>
           <span>05</span>
           <span>
@@ -923,7 +933,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={estilos.secao}>
+      <section id="galeria" className={estilos.secao}>
         <header>
           <span>06</span>
           <span>
@@ -947,7 +957,7 @@ export function FormularioImovel({
         </div>
       </section>
 
-      <section className={`${estilos.secao} ${estilos.publicacao}`}>
+      <section id="publicacao" className={`${estilos.secao} ${estilos.publicacao}`}>
         <header>
           <span>07</span>
           <span>

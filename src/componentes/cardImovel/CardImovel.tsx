@@ -9,7 +9,6 @@ import {
 } from "@/lib/formatadores";
 import { altImovel } from "@/lib/seo/metadata";
 import { FavoritoBotao } from "@/componentes/favoritoBotao/FavoritoBotao";
-import { Icone } from "@/componentes/ui/Icone";
 import estilos from "./cardImovel.module.css";
 
 interface Props {
@@ -41,7 +40,6 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
           ) : (
             <div className={estilos.semFoto}>Foto indisponível</div>
           )}
-          <span className={estilos.negocio}>Venda</span>
           {imovel.status !== "disponivel" ? (
             <span className={estilos.status}>
               {formatarStatus(imovel.status)}
@@ -50,9 +48,9 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
         </div>
 
         <div className={estilos.corpo}>
-          {imovel.preco != null ? (
-            <p className={estilos.preco}>{formatarPreco(imovel.preco)}</p>
-          ) : null}
+          <p className={estilos.preco}>
+            {imovel.preco != null ? formatarPreco(imovel.preco) : "Valor sob consulta"}
+          </p>
           {imovel.precoAnterior ? (
             <p className={estilos.precoAnterior}>
               {formatarPreco(imovel.precoAnterior)}
@@ -67,7 +65,6 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
             <ul className={estilos.specs} aria-label="Características">
               {imovel.quartos != null ? (
                 <li>
-                  <Icone nome="quartos" size={16} />
                   <strong>{imovel.quartos}</strong> quartos
                 </li>
               ) : null}
@@ -78,13 +75,11 @@ export function CardImovel({ imovel, prioridade = false }: Props) {
               ) : null}
               {imovel.vagas != null ? (
                 <li>
-                  <Icone nome="carro" size={16} />
                   <strong>{imovel.vagas}</strong> vagas
                 </li>
               ) : null}
               {imovel.area != null ? (
                 <li>
-                  <Icone nome="area" size={15} />
                   <strong>{formatarArea(imovel.area)}</strong>
                 </li>
               ) : null}

@@ -33,6 +33,14 @@ function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props
         .map((local) => local.bairro as string))].sort()
     : bairros;
   const chavesAvancadas = ["bairro", "precoMin", "quartos", "banheiros", "vagas", "areaMin"];
+  const rotulosAtivos: Record<string, string> = {
+    cidade: "Cidade", tipo: "Tipo", bairro: "Bairro", precoMin: "A partir de",
+    precoMax: "Até", quartos: "Quartos", banheiros: "Banheiros", vagas: "Vagas",
+    areaMin: "Área mínima", busca: "Busca",
+  };
+  const filtrosAtivos = Object.entries(rotulosAtivos)
+    .filter(([chave]) => Boolean(params.get(chave)))
+    .map(([chave, rotulo]) => ({ chave, rotulo, valor: params.get(chave) || "" }));
 
   function aplicar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -109,6 +117,24 @@ function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props
           <button type="submit" className="botao botao-primario" disabled={pendente}>{pendente ? "Buscando…" : "Buscar imóveis"}</button>
         </div>
       </div>
+      {filtrosAtivos.length > 0 ? (
+        <div className={estilos.ativos} aria-label="Filtros aplicados">
+          {filtrosAtivos.map(({ chave, rotulo, valor }) => (
+            <button
+              key={chave}
+              type="button"
+              onClick={() => {
+                const proxima = new URLSearchParams(params);
+                proxima.delete(chave);
+                iniciar(() => router.push(`/imoveis?${proxima.toString()}`, { scroll: false }));
+              }}
+              aria-label={`Remover filtro ${rotulo}: ${valor}`}
+            >
+              {rotulo}: {valor} <span aria-hidden="true">×</span>
+            </button>
+          ))}
+        </div>
+      ) : null}
       <input type="hidden" name="ordem" value={params.get("ordem") || ""} />
       <span className="sr-only" role="status">{pendente ? "Atualizando resultados" : `${total} imóveis encontrados`}</span>
     </form>

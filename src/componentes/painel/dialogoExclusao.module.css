@@ -1,26 +1,26 @@
 .botaoPerigo {
-  color: var(--erro);
-  border-color: color-mix(in srgb, var(--erro) 40%, var(--borda));
+  color: #111;
+  border-color: #777;
 }
 
 .botaoPerigo:hover {
-  background: color-mix(in srgb, var(--erro) 8%, var(--fundo-2));
-  border-color: var(--erro);
+  background: #eee;
+  border-color: #111;
 }
 
 .dialogo {
   width: min(100% - 2rem, 28rem);
   margin: auto;
   border: 1px solid var(--borda);
-  border-radius: var(--raio-suave);
+  border-radius: 3px;
   background: var(--fundo-2);
   color: var(--texto);
   padding: 0;
-  box-shadow: 0 18px 48px color-mix(in srgb, var(--primaria) 18%, transparent);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 20%);
 }
 
 .dialogo::backdrop {
-  background: color-mix(in srgb, var(--primaria) 45%, transparent);
+  background: rgb(0 0 0 / 55%);
 }
 
 .cabecalho {
@@ -31,8 +31,9 @@
 }
 
 .cabecalho h2 {
-  font-family: var(--fonte-display);
+  font-family: var(--fonte-corpo);
   font-size: 1.25rem;
+  font-weight: 700;
   color: var(--primaria);
 }
 
@@ -59,9 +60,9 @@
   gap: 0.25rem;
   margin: 0 1.25rem;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio);
-  background: var(--fundo);
+  border-top: 1px solid #bdbdbd;
+  border-bottom: 1px solid #bdbdbd;
+  background: #f7f7f7;
 }
 
 .corpo span {
@@ -87,11 +88,11 @@
 }
 
 .botaoConfirmar {
-  background: var(--erro);
+  background: #111;
 }
 
 .botaoConfirmar:hover {
-  background: color-mix(in srgb, var(--erro) 85%, #000);
+  background: #333;
 }
 
 @media (max-width: 640px) {

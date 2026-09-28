@@ -2,14 +2,16 @@
   width: min(100%, 1050px);
   margin: 0 auto;
   display: grid;
-  gap: 1.25rem;
+  gap: 2rem;
 }
 
+.cabecalho { padding-bottom: 1.4rem; border-bottom: 1px solid #bdbdbd; }
 .cabecalho h1 {
-  font-family: var(--fonte-display);
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-family: var(--fonte-corpo);
+  font-size: clamp(1.85rem, 3vw, 2.5rem);
+  font-weight: 700;
   color: var(--primaria);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.045em;
 }
 
 .cabecalho p,
@@ -20,11 +22,11 @@
 }
 
 .bloco {
-  padding: 1.25rem;
-  border: 1px solid rgb(17 17 17 / 8%);
-  border-radius: var(--raio-suave);
-  background: #faf9f7;
-  box-shadow: 0 8px 22px rgb(17 17 17 / 3%);
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
+  padding: 1.75rem 0 2rem;
+  border-top: 1px solid #bdbdbd;
 }
 
 .tituloBloco {
@@ -32,9 +34,10 @@
 }
 
 .tituloBloco h2 {
-  font-family: var(--fonte-display);
+  font-family: var(--fonte-corpo);
   color: var(--primaria);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .formulario {
@@ -59,10 +62,8 @@
 
 .gradeFormulario label > span {
   color: var(--texto-suave);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 650;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 }
 
 .gradeFormulario small {
@@ -74,33 +75,31 @@
 .erro {
   width: 100%;
   padding: 0.75rem 0.85rem;
-  border-radius: var(--raio);
+  border-left: 3px solid #111;
+  background: #fff;
   font-weight: 600;
   font-size: 0.9rem;
 }
 
 .sucesso {
-  color: var(--sucesso);
-  background: color-mix(in srgb, var(--sucesso) 10%, #fff);
+  color: #111;
 }
 
 .erro {
-  color: var(--erro);
-  background: color-mix(in srgb, var(--erro) 8%, #fff);
+  color: #111;
 }
 
 .listaUsuarios {
   display: grid;
-  gap: 0.75rem;
+  border-top: 1px solid #bdbdbd;
+  background: #fff;
 }
 
 .cartaoUsuario {
   display: grid;
   gap: 0.75rem;
-  padding: 1rem;
-  border: 1px solid rgb(17 17 17 / 8%);
-  border-radius: var(--raio);
-  background: #fff;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--borda);
 }
 
 .cartaoUsuario strong {
@@ -146,19 +145,23 @@
   display: inline-flex;
   width: fit-content;
   padding: 0.3rem 0.55rem;
-  border-radius: var(--raio);
+  border-radius: 3px;
   font-size: 0.76rem;
   font-weight: 650;
 }
 
 .ativo {
-  color: var(--sucesso);
-  background: color-mix(in srgb, var(--sucesso) 12%, #fff);
+  color: #fff;
+  background: #111;
 }
 
 .pendente {
-  color: #785900;
-  background: #fff3c4;
+  color: #333;
+  background: #ededed;
+}
+
+@media (max-width: 1100px) {
+  .bloco { grid-template-columns: 1fr; gap: 0.5rem; }
 }
 
 @media (max-width: 900px) {
@@ -173,7 +176,7 @@
 
 @media (max-width: 640px) {
   .bloco {
-    padding: 1rem;
+    padding: 1rem 0;
   }
 
   .gradeFormulario {

@@ -1,13 +1,14 @@
 .pagina {
-  width: min(100%, 760px);
+  width: min(100%, 1120px);
   display: grid;
   gap: 1.5rem;
 }
 
 .cabecalho h1 {
-  font-family: var(--fonte-display);
-  font-size: clamp(1.6rem, 4vw, 2.15rem);
-  letter-spacing: -0.03em;
+  font-family: var(--fonte-corpo);
+  font-size: clamp(1.85rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
   line-height: 1.2;
 }
 
@@ -18,15 +19,15 @@
   line-height: 1.6;
 }
 
+.cabecalho { padding-bottom: 1.4rem; border-bottom: 1px solid #bdbdbd; }
 .cabecalho p { margin-top: 0.4rem; }
 
 .cartao {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.75rem;
   padding: clamp(1.25rem, 4vw, 2rem);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-suave);
-  background: #fff;
+  border-top: 2px solid #111;
+  background: var(--painel-superficie, #fff);
 }
 
 .linhaEstado {
@@ -37,22 +38,88 @@
 }
 
 .linhaEstado h2 {
-  font-family: var(--fonte-display);
+  font-family: var(--fonte-corpo);
   font-size: 1.2rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .descricao { margin-top: 0.4rem; max-width: 35rem; }
 
+.formulario {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.85fr);
+  gap: 1.5rem 2rem;
+  align-items: start;
+}
+
+.campos { display: grid; gap: 1.1rem; }
+.campos label { display: grid; gap: 0.4rem; min-width: 0; }
+.campos label > span {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.2rem 0.75rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+.campos label small { color: var(--texto-suave); font-size: 0.76rem; font-weight: 500; }
+.campos :global(.area-texto) { min-height: 105px; resize: vertical; }
+
+.previaBloco { display: grid; gap: 0.7rem; }
+.previaBloco h3 { font-size: 0.88rem; font-weight: 700; }
+.previaBloco > small { color: var(--texto-suave); font-size: 0.78rem; line-height: 1.4; }
+.previa {
+  display: grid;
+  place-items: center;
+  min-height: 350px;
+  padding: 2rem 1.25rem;
+  background: #111;
+  color: #fff;
+  text-align: center;
+}
+.previaConteudo { width: min(100%, 360px); overflow-wrap: anywhere; }
+.previaMarca { font-family: var(--fonte-display); font-size: 0.94rem; font-weight: 700; }
+.previaLinha { display: block; width: 2.4rem; height: 2px; margin: 1.2rem auto; background: #fff; }
+.previaRotulo { margin-bottom: 0.5rem; color: #d4d4d4; font-size: 0.76rem; font-weight: 650; }
+.previaConteudo strong {
+  display: block;
+  font-family: var(--fonte-display);
+  font-size: clamp(1.55rem, 2.5vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  white-space: pre-wrap;
+}
+.previaConteudo > p:not(.previaMarca, .previaRotulo) {
+  margin: 0.9rem auto 0;
+  color: #d4d4d4;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.previaConteudo .previaComplementar { padding-top: 0.9rem; border-top: 1px solid #777; }
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--borda);
+}
+.formulario > .sucesso,
+.formulario > .erro { grid-column: 1 / -1; }
+
 .estado {
   flex: none;
   padding: 0.3rem 0.7rem;
-  border-radius: 999px;
+  border-radius: 3px;
   font-size: 0.82rem;
 }
 
-.ativo { background: #fff1ed; color: #9a3412; }
-.inativo { background: #e9f5ed; color: #25603a; }
+.ativo { background: #111; color: #fff; }
+.inativo { background: #ededed; color: #333; }
 
 .explicacao {
   padding-top: 1.25rem;
@@ -66,22 +133,16 @@
   color: var(--texto);
 }
 
-.botao {
-  min-height: 44px;
-  padding: 0.65rem 1.1rem;
-  border-radius: var(--raio);
-  background: var(--primaria);
-  color: #fff;
-  font-weight: 650;
-}
-
-.botao:hover { background: var(--primaria-clara); }
-.botao:disabled { opacity: 0.6; }
-.botao:focus-visible { outline: 3px solid #737373; outline-offset: 3px; }
 .sucesso { color: var(--sucesso); }
 .erro { color: var(--erro); }
 
+@media (max-width: 800px) {
+  .formulario { grid-template-columns: 1fr; }
+  .previa { min-height: 300px; }
+}
+
 @media (max-width: 560px) {
   .linhaEstado { flex-direction: column-reverse; gap: 0.75rem; }
-  .botao { width: 100%; }
+  .acoes { display: grid; }
+  .acoes :global(.botao) { width: 100%; }
 }

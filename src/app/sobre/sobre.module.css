@@ -9,7 +9,7 @@
 .fotoWrap {
   position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: var(--raio-suave);
+  border-radius: 3px;
   overflow: hidden;
   background: var(--fundo-3);
 }
@@ -41,21 +41,19 @@
 .etapas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.15rem;
+  gap: 1.5rem;
   margin-top: 1.75rem;
 }
 
 .etapas > div {
-  padding: 1.4rem 1.25rem 1.5rem;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-suave);
-  background: #fff;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid var(--borda-forte);
 }
 
 .etapas span {
   display: block;
   font-family: var(--fonte-display);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 800;
   color: var(--primaria);
   margin-bottom: 0.85rem;

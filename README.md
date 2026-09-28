@@ -26,7 +26,7 @@ npm run banco:migrar
 npm run dev
 ```
 
-O modo de manutenção requer a migração `008_manutencao.sql`. Quando ativado, visitantes e administradores são redirecionados para `/manutencao`. O desenvolvedor acessa `/login` digitando o endereço manualmente e mantém acesso ao site e ao painel após entrar.
+O modo de manutenção requer as migrações `008_manutencao.sql` e `009_textos_manutencao.sql`. Em `/painel/manutencao`, o desenvolvedor edita o texto superior, o título, a mensagem principal e uma mensagem complementar opcional. Os textos podem ser salvos sem ativar a manutenção. Quando ativado, visitantes e administradores são redirecionados para `/manutencao`. O desenvolvedor acessa `/login` digitando o endereço manualmente e mantém acesso ao site e ao painel após entrar.
 
 ### Armazenamento de fotos na Hostinger
 

@@ -15,9 +15,6 @@ export function BuscaPrincipal() {
 
   return (
     <div className={estilos.busca}>
-      <div className={estilos.intencoes}>
-        <strong>Imóveis à venda</strong>
-      </div>
       <form action="/imoveis" className={estilos.form} aria-label="Buscar imóveis">
         <div className={estilos.campo}>
           <label htmlFor="busca-cidade">Onde você quer morar?</label>
@@ -52,6 +49,15 @@ export function BuscaPrincipal() {
               <option key={preco} value={preco}>
                 {rotuloPreco(preco)}
               </option>
+            ))}
+          </select>
+        </div>
+        <div className={estilos.campo}>
+          <label htmlFor="busca-quartos">Quantos quartos?</label>
+          <select id="busca-quartos" name="quartos" className="selecao" defaultValue="">
+            <option value="">Qualquer quantidade</option>
+            {[1, 2, 3, 4].map((quantidade) => (
+              <option key={quantidade} value={quantidade}>{quantidade} ou mais</option>
             ))}
           </select>
         </div>

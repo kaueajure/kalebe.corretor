@@ -47,7 +47,7 @@ export function AcoesImovelLista({ id, titulo, identificador, publicado }: Propr
         </Link>
       ) : null}
       <Link
-        className="botao botao-secundario"
+        className={`botao botao-primario ${estilos.editar}`}
         href={`/painel/imoveis/${id}/editar`}
         aria-label={`Editar ${titulo}`}
       >

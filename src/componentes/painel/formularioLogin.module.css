@@ -5,7 +5,7 @@
 
 .form :global(.campo) {
   background: #fff;
-  border-color: #d8d6d2;
+  border-color: var(--borda);
 }
 
 .form :global(.botao-primario) {

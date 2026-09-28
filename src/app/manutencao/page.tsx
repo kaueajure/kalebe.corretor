@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { empresa } from "@/dados/empresa";
-import { manutencaoAtiva } from "@/lib/manutencao";
+import { obterConfiguracaoManutencao } from "@/lib/manutencao";
 import { lerSessao } from "@/lib/sessao";
 import { sairDaManutencao } from "./acoes";
 import estilos from "./manutencao.module.css";
 
-export const metadata: Metadata = {
-  title: "Site em manutenção",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const configuracao = await obterConfiguracaoManutencao();
+  return {
+    title: { absolute: configuracao.titulo },
+    robots: { index: false, follow: false },
+  };
+}
 
 export default async function AvisoManutencao() {
-  if (!(await manutencaoAtiva())) redirect("/");
+  const configuracao = await obterConfiguracaoManutencao();
+  if (!configuracao.ativa) redirect("/");
   const sessao = await lerSessao();
 
   return (
@@ -20,10 +24,16 @@ export default async function AvisoManutencao() {
       <div className={estilos.conteudo}>
         <p className={estilos.marca}>{empresa.nomeCurto}</p>
         <span className={estilos.linha} aria-hidden="true" />
-        <h1>Site em manutenção</h1>
+        {configuracao.rotulo ? (
+          <p className={estilos.rotulo}>{configuracao.rotulo}</p>
+        ) : null}
+        <h1>{configuracao.titulo}</h1>
         <p className={estilos.descricao}>
-          Estamos fazendo ajustes para melhorar sua experiência. Volte em breve.
+          {configuracao.mensagemPrincipal}
         </p>
+        {configuracao.mensagemComplementar ? (
+          <p className={estilos.complementar}>{configuracao.mensagemComplementar}</p>
+        ) : null}
         {sessao && !sessao.desenvolvedor ? (
           <form action={sairDaManutencao} className={estilos.sair}>
             <button type="submit">Sair da conta</button>

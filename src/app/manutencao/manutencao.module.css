@@ -3,7 +3,7 @@
   display: grid;
   place-items: center;
   padding: 2rem 1.5rem;
-  background: #111;
+  background: var(--primaria);
   color: #fff;
 }
 
@@ -26,19 +26,43 @@
   background: #fff;
 }
 
+.rotulo {
+  margin-bottom: 0.8rem;
+  color: #d4d4d4;
+  font-size: 0.86rem;
+  font-weight: 650;
+  white-space: pre-wrap;
+}
+
 .conteudo h1 {
   font-family: var(--fonte-display);
   font-size: clamp(2.4rem, 8vw, 4rem);
   line-height: 1.1;
   letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .descricao {
   max-width: 31rem;
   margin: 1.2rem auto 0;
-  color: #d1d1d1;
+  color: #d4d4d4;
   font-size: clamp(1rem, 2.5vw, 1.15rem);
   line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.complementar {
+  max-width: 31rem;
+  margin: 1.5rem auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid #777;
+  color: #d4d4d4;
+  font-size: 0.96rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .sair { margin-top: 2rem; }

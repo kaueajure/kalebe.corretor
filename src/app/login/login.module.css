@@ -1,92 +1,111 @@
 .envolve {
   min-height: 100vh;
-  background:
-    radial-gradient(ellipse 80% 60% at 10% 0%, rgb(40 40 40 / 35%), transparent),
-    radial-gradient(ellipse 70% 50% at 100% 100%, rgb(30 30 30 / 40%), transparent),
-    #121212;
-  color: #f5f5f5;
+  background: #f4f4f4;
+  color: #111;
 }
 
 .pagina {
-  min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 2rem 1.25rem 3rem;
+  min-height: 100vh;
+  padding: 4.5rem 1.25rem;
   position: relative;
 }
 
 .voltar {
   position: absolute;
   top: 1.25rem;
-  left: 1.25rem;
+  left: max(1.25rem, calc((100vw - 980px) / 2));
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
   min-height: 44px;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: var(--raio);
-  background: rgb(255 255 255 / 6%);
-  color: #f0f0f0;
+  color: #555;
   font-size: 0.9rem;
-  font-weight: 600;
-  transition:
-    background var(--transicao),
-    border-color var(--transicao),
-    color var(--transicao);
+  font-weight: 650;
+}
+.voltar:hover { color: #111; text-decoration: underline; text-underline-offset: 4px; }
+
+.quadro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
+  width: min(100%, 980px);
+  min-height: 550px;
+  border: 1px solid #d5d5d5;
+  background: #fff;
 }
 
-.voltar:hover {
-  background: rgb(255 255 255 / 12%);
-  border-color: rgb(255 255 255 / 32%);
+.apresentacao {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 3rem;
+  padding: clamp(2rem, 4vw, 3.25rem);
+  background: #111;
   color: #fff;
-}
-
-.caixa {
-  width: min(100%, 420px);
-  background: #f7f6f4;
-  color: var(--texto);
-  border: 1px solid rgb(255 255 255 / 8%);
-  border-radius: calc(var(--raio-suave) + 2px);
-  padding: 2.15rem 1.85rem 2rem;
-  box-shadow:
-    0 24px 60px rgb(0 0 0 / 45%),
-    0 1px 0 rgb(255 255 255 / 6%) inset;
 }
 
 .selo {
   font-family: var(--fonte-display);
-  font-size: 1.05rem;
-  color: var(--primaria);
-  margin-bottom: 0.85rem;
-  letter-spacing: -0.02em;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1;
+}
+
+.rotulo {
+  margin-bottom: 0.9rem;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .marca {
+  max-width: 12ch;
   font-family: var(--fonte-display);
-  font-size: clamp(1.45rem, 3vw, 1.7rem);
-  color: var(--primaria);
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  margin-bottom: 0.45rem;
+  font-size: clamp(2.3rem, 4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.055em;
+}
+
+.apresentacao div > p:last-child {
+  max-width: 26rem;
+  margin-top: 1.25rem;
+  color: #d4d4d4;
+  line-height: 1.55;
+}
+.apresentacao > span { color: #bbb; font-size: 0.8rem; }
+
+.caixa {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  min-width: 0;
+  padding: clamp(2rem, 4vw, 3.25rem);
+}
+
+.caixa h1 {
+  font-family: var(--fonte-corpo);
+  font-size: clamp(1.75rem, 2.5vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.045em;
 }
 
 .subtitulo {
-  color: var(--texto-suave);
-  font-size: 0.95rem;
-  margin-bottom: 1.75rem;
-  line-height: 1.55;
+  margin-top: 0.55rem;
+  color: #555;
+  font-size: 0.94rem;
+  line-height: 1.5;
 }
 
-@media (max-width: 520px) {
-  .voltar {
-    position: static;
-    margin-bottom: 1.25rem;
-    justify-self: start;
-  }
-
-  .pagina {
-    place-items: start center;
-    padding-top: 1.25rem;
-  }
+@media (max-width: 700px) {
+  .pagina { place-items: start center; padding: 5rem 0.75rem 2rem; }
+  .voltar { top: 0.75rem; left: 0.75rem; }
+  .quadro { grid-template-columns: 1fr; min-height: 0; }
+  .apresentacao { gap: 1.5rem; padding: 1.4rem; }
+  .apresentacao div { display: none; }
+  .apresentacao > span { display: none; }
+  .caixa { padding: 2rem 1.4rem 2.25rem; }
 }

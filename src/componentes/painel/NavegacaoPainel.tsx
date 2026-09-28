@@ -34,6 +34,7 @@ export function NavegacaoPainel({
       className={`${estilos.nav} ${variante === "gaveta" ? estilos.navGaveta : ""}`}
       aria-label="Painel"
     >
+      <p className={estilos.rotulo}>Espaço de trabalho</p>
       <ul className={estilos.lista}>
         {itensVisiveis.map((item) => {
           const ativo = item.exato

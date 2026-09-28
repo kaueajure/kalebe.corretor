@@ -14,8 +14,8 @@ function descricaoDaMidia(midia: MidiaPublica, titulo: string, indice: number) {
   return midia.descricao || `${titulo} — ${midia.tipo === "planta" ? "planta" : "foto"} ${indice + 1}`;
 }
 
-function ImagemDaMidia({ midia, titulo, indice, total, miniatura = false }: {
-  midia: MidiaPublica; titulo: string; indice: number; total: number; miniatura?: boolean;
+function ImagemDaMidia({ midia, titulo, indice, total, miniatura = false, lateral = false }: {
+  midia: MidiaPublica; titulo: string; indice: number; total: number; miniatura?: boolean; lateral?: boolean;
 }) {
   if (midia.tipo === "video") {
     return (
@@ -35,7 +35,7 @@ function ImagemDaMidia({ midia, titulo, indice, total, miniatura = false }: {
       src={midia.url}
       alt={descricaoDaMidia(midia, titulo, indice)}
       fill
-      sizes={miniatura ? "120px" : "(max-width: 900px) 100vw, 70vw"}
+      sizes={miniatura ? "108px" : lateral ? "(max-width: 1280px) 30vw, 420px" : "(max-width: 900px) 100vw, 70vw"}
       className={estilos.foto}
       priority={indice === 0 && !miniatura}
     />
@@ -91,43 +91,47 @@ export function GaleriaImovel({ midias, titulo }: Props) {
               <ImagemDaMidia midia={atual} titulo={titulo} indice={indice} total={total} />
             </button>
           )}
-          {total > 1 && !mosaico ? (
+          {total > 1 ? (
             <>
               <button type="button" className={`${estilos.nav} ${estilos.prev}`} onClick={() => irPara(indice - 1)} aria-label="Mídia anterior">‹</button>
               <button type="button" className={`${estilos.nav} ${estilos.next}`} onClick={() => irPara(indice + 1)} aria-label="Próxima mídia">›</button>
             </>
           ) : null}
           <span className={estilos.contador}>{indice + 1} / {total}</span>
-          {mosaico ? <span className={estilos.verFotos}>Ver galeria</span> : null}
+          {mosaico ? (
+            <button type="button" className={estilos.verFotos} onClick={() => abrir(indice)}>
+              Ver galeria
+            </button>
+          ) : null}
         </div>
 
         {mosaico ? midias.slice(1, 3).map((midia, deslocamento) => {
           const posicao = deslocamento + 1;
           return (
             <button type="button" className={estilos.lado} onClick={() => abrir(posicao)} aria-label={`Ver mídia ${posicao + 1}`} key={`${midia.url}-${posicao}`}>
-              <ImagemDaMidia midia={midia} titulo={titulo} indice={posicao} total={total} miniatura />
+              <ImagemDaMidia midia={midia} titulo={titulo} indice={posicao} total={total} lateral />
             </button>
           );
         }) : null}
       </div>
 
       {total > 1 ? (
-        <div className={estilos.miniaturas} role="list">
+        <ul className={estilos.miniaturas} aria-label="Mídias do imóvel">
           {midias.map((midia, posicao) => (
-            <button
-              key={`${midia.url}-${posicao}`}
-              type="button"
-              role="listitem"
-              className={`${estilos.miniatura} ${posicao === indice ? estilos.ativa : ""}`}
-              onClick={() => setIndice(posicao)}
-              aria-label={`Ver ${midia.tipo === "video" ? "vídeo" : midia.tipo} ${posicao + 1}`}
-              aria-current={posicao === indice}
-            >
-              <ImagemDaMidia midia={midia} titulo={titulo} indice={posicao} total={total} miniatura />
-              {midia.tipo !== "imagem" ? <span className={estilos.tipo}>{midia.tipo === "video" ? "Vídeo" : "Planta"}</span> : null}
-            </button>
+            <li key={`${midia.url}-${posicao}`}>
+              <button
+                type="button"
+                className={`${estilos.miniatura} ${posicao === indice ? estilos.ativa : ""}`}
+                onClick={() => setIndice(posicao)}
+                aria-label={`Ver ${midia.tipo === "video" ? "vídeo" : midia.tipo === "planta" ? "planta" : "foto"} ${posicao + 1}`}
+                aria-current={posicao === indice}
+              >
+                <ImagemDaMidia midia={midia} titulo={titulo} indice={posicao} total={total} miniatura />
+                {midia.tipo !== "imagem" ? <span className={estilos.tipo}>{midia.tipo === "video" ? "Vídeo" : "Planta"}</span> : null}
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       ) : null}
 
       <dialog

@@ -8,31 +8,35 @@ export default async function PaginaPainel() {
   const { total, publicados, rascunhos } = await obterResumoDoPainel();
 
   return (
-    <div className={estilos.inicio}>
+    <main className={estilos.inicio}>
       <header className={estilos.inicioCabecalho}>
-        <h1>Bem-vindo ao painel</h1>
-        <p>
-          Gerencie o catálogo de imóveis publicados no site. Escolha um atalho
-          abaixo para começar.
-        </p>
+        <div>
+          <h1>Visão geral</h1>
+          <p>Acompanhe o catálogo e continue de onde parou.</p>
+        </div>
+        <Link href="/painel/imoveis/novo" className="botao botao-primario">
+          Adicionar imóvel
+        </Link>
       </header>
 
       <section className={estilos.metricas} aria-label="Resumo do catálogo">
         <div className={estilos.metrica}>
-          <strong>{total}</strong>
           <span>Total de imóveis</span>
+          <strong>{total}</strong>
         </div>
         <div className={estilos.metrica}>
-          <strong>{publicados}</strong>
           <span>Publicados</span>
+          <strong>{publicados}</strong>
         </div>
         <div className={estilos.metrica}>
-          <strong>{rascunhos}</strong>
           <span>Rascunhos</span>
+          <strong>{rascunhos}</strong>
         </div>
       </section>
 
-      <section className={estilos.atalhos} aria-label="Atalhos">
+      <section className={estilos.atalhosBloco} aria-labelledby="atalhos-painel">
+        <h2 id="atalhos-painel">Acesso rápido</h2>
+        <div className={estilos.atalhos}>
         <Link href="/painel/imoveis" className={estilos.atalho}>
           <strong>Ver imóveis</strong>
           <span>Consulte, edite ou remova imóveis do catálogo.</span>
@@ -51,7 +55,8 @@ export default async function PaginaPainel() {
           <strong>Abrir o site</strong>
           <span>Veja como o catálogo aparece para os visitantes.</span>
         </Link>
+        </div>
       </section>
-    </div>
+    </main>
   );
 }

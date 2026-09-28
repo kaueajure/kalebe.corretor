@@ -2,9 +2,8 @@
   position: fixed;
   inset: 0 0 auto;
   z-index: 100;
-  background: rgb(255 255 255 / 92%);
+  background: var(--fundo);
   border-bottom: 1px solid var(--borda);
-  backdrop-filter: blur(16px);
 }
 
 .interno {
@@ -54,11 +53,13 @@
   align-items: center;
   min-height: 44px;
   padding: 0 0.7rem;
+  border-bottom: 2px solid transparent;
 }
 
 .navDesktop a:hover,
 .navDesktop [aria-current="page"] {
   color: var(--primaria);
+  border-bottom-color: var(--primaria-clara);
 }
 
 .acoes {
@@ -73,9 +74,7 @@
   height: 44px;
   display: grid;
   place-items: center;
-  border: 1px solid var(--borda);
-  border-radius: 999px;
-  background: #fff;
+  border-radius: 50%;
 }
 
 .favoritos:hover {
@@ -106,7 +105,7 @@
   color: #fff;
   font-size: 0.9rem;
   font-weight: 700;
-  border-radius: var(--raio);
+  border-radius: 3px;
 }
 
 .cta:hover {

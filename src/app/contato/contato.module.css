@@ -10,10 +10,8 @@
   gap: 0.9rem;
   align-items: center;
   margin: 0 0 1.75rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-suave);
-  background: var(--fundo-3);
+  padding: 0 0 1rem;
+  border-bottom: 1px solid var(--borda);
   max-width: 22rem;
 }
 
@@ -68,11 +66,8 @@
 }
 
 .formWrap {
-  background: #fff;
-  border: 1px solid var(--borda);
-  padding: 1.85rem 1.75rem;
-  border-radius: var(--raio-suave);
-  box-shadow: var(--sombra);
+  border-top: 2px solid var(--primaria-clara);
+  padding: 1.5rem 0 0;
 }
 
 .formTitulo {

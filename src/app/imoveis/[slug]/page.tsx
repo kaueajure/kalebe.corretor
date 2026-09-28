@@ -129,7 +129,7 @@ export default async function PaginaDetalheImovel({ params }: Props) {
           ) : null}
 
           <div className={estilos.grade}>
-            <div>
+            <div className={estilos.intro}>
               <div className={estilos.metaTopo}>
                 <span className="pill">Venda</span>
                 <span className="pill">{formatarTipo(imovel.tipo)}</span>
@@ -222,7 +222,9 @@ export default async function PaginaDetalheImovel({ params }: Props) {
                   ) : null}
                 </ul>
               ) : null}
+            </div>
 
+            <div className={estilos.corpo}>
               {imovel.descricao ? (
                 <section className={estilos.bloco}>
                   <h2>Descrição</h2>
