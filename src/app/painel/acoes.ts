@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import bcrypt from "bcryptjs";
 import { criarSessao, limparSessao } from "@/lib/sessao";
 import { buscarUsuarioPorEmail } from "@/lib/usuarios";
+import { manutencaoAtiva } from "@/lib/manutencao";
 
 export type ResultadoLogin = {
   ok: boolean;
@@ -65,7 +66,9 @@ export async function entrarPainel(
 
   const usuario = await buscarUsuarioPorEmail(email);
   const senhaOk = await bcrypt.compare(senha, usuario?.senha ?? HASH_INERTE);
-  if (!usuario || !senhaOk || (!usuario.administrador && !usuario.desenvolvedor)) {
+  const ativa = await manutencaoAtiva();
+  if (!usuario || !senhaOk || (!usuario.administrador && !usuario.desenvolvedor) ||
+      (ativa && !usuario.desenvolvedor)) {
     registrarFalha(chaves);
     return { ok: false, erro: "E-mail ou senha inválidos." };
   }

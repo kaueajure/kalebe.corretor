@@ -22,7 +22,11 @@ export function NavegacaoPainel({
 }: Propriedades) {
   const caminho = usePathname();
   const itensVisiveis = desenvolvedor
-    ? [...itens, { href: "/painel/usuarios", rotulo: "Usuários", exato: false }]
+    ? [
+        ...itens,
+        { href: "/painel/usuarios", rotulo: "Usuários", exato: false },
+        { href: "/painel/manutencao", rotulo: "Manutenção", exato: false },
+      ]
     : itens;
 
   return (

@@ -1,0 +1,54 @@
+.pagina {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.5rem;
+  background: #111;
+  color: #fff;
+}
+
+.conteudo {
+  width: min(100%, 560px);
+  text-align: center;
+}
+
+.marca {
+  font-family: var(--fonte-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.linha {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  margin: 2rem auto;
+  background: #fff;
+}
+
+.conteudo h1 {
+  font-family: var(--fonte-display);
+  font-size: clamp(2.4rem, 8vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+}
+
+.descricao {
+  max-width: 31rem;
+  margin: 1.2rem auto 0;
+  color: #d1d1d1;
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  line-height: 1.6;
+}
+
+.sair { margin-top: 2rem; }
+.sair button {
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  border: 1px solid #777;
+  border-radius: var(--raio);
+  color: #fff;
+  font-weight: 600;
+}
+.sair button:hover { border-color: #fff; }
+.sair button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }

@@ -1,7 +1,31 @@
 import { randomUUID } from "node:crypto";
+import { jwtVerify } from "jose";
+import type { RowDataPacket } from "mysql2";
 import { NextResponse, type NextRequest } from "next/server";
+import { banco } from "@/lib/banco";
+import { manutencaoAtiva } from "@/lib/manutencao";
 
-export function proxy(requisicao: NextRequest) {
+type LinhaDesenvolvedor = RowDataPacket & { desenvolvedor: number | boolean };
+
+async function acessoDeDesenvolvedor(requisicao: NextRequest): Promise<boolean> {
+  const token = requisicao.cookies.get("sessao_painel")?.value;
+  const segredo = process.env.sessao_secreta?.trim() || process.env.SESSAO_SECRETA?.trim();
+  if (!token || !segredo || segredo.length < 32) return false;
+
+  try {
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(segredo));
+    if (typeof payload.id !== "string" || payload.desenvolvedor !== true) return false;
+    const [linhas] = await banco.execute<LinhaDesenvolvedor[]>(
+      "SELECT desenvolvedor FROM usuarios WHERE id = :id LIMIT 1",
+      { id: payload.id },
+    );
+    return Boolean(linhas[0]?.desenvolvedor);
+  } catch {
+    return false;
+  }
+}
+
+export async function proxy(requisicao: NextRequest) {
   const nonce = Buffer.from(randomUUID()).toString("base64");
   const desenvolvimento = process.env.NODE_ENV !== "production";
   const politica = [
@@ -22,7 +46,22 @@ export function proxy(requisicao: NextRequest) {
   const cabecalhosDaRequisicao = new Headers(requisicao.headers);
   cabecalhosDaRequisicao.set("x-nonce", nonce);
   cabecalhosDaRequisicao.set("Content-Security-Policy", politica);
-  const resposta = NextResponse.next({ request: { headers: cabecalhosDaRequisicao } });
+  const ativa = await manutencaoAtiva();
+  const caminho = requisicao.nextUrl.pathname;
+  let resposta: NextResponse;
+
+  if (ativa && caminho !== "/login" && caminho !== "/manutencao" &&
+      !(await acessoDeDesenvolvedor(requisicao))) {
+    resposta = NextResponse.redirect(new URL("/manutencao", requisicao.url), {
+      status: requisicao.method === "GET" || requisicao.method === "HEAD" ? 307 : 303,
+    });
+  } else if (!ativa && caminho === "/manutencao") {
+    resposta = NextResponse.redirect(new URL("/", requisicao.url));
+  } else {
+    resposta = NextResponse.next({ request: { headers: cabecalhosDaRequisicao } });
+  }
+
+  if (ativa) resposta.headers.set("Cache-Control", "no-store");
   resposta.headers.set("Content-Security-Policy", politica);
   resposta.headers.set("X-Content-Type-Options", "nosniff");
   resposta.headers.set("X-Frame-Options", "DENY");
@@ -33,5 +72,5 @@ export function proxy(requisicao: NextRequest) {
 }
 
 export const config = {
-  matcher: [{ source: "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico)$).*)" }],
+  matcher: [{ source: "/((?!_next/static).*)" }],
 };

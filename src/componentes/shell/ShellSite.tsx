@@ -9,7 +9,8 @@ export function ShellSite({ children }: { children: React.ReactNode }) {
   const areaRestrita =
     pathname.startsWith("/painel") ||
     pathname.startsWith("/login") ||
-    pathname.startsWith("/primeiro-acesso");
+    pathname.startsWith("/primeiro-acesso") ||
+    pathname === "/manutencao";
 
   if (areaRestrita) {
     return <>{children}</>;

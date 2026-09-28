@@ -14,6 +14,7 @@ Site e painel administrativo em Next.js para publicar imóveis à venda. O catá
 - `/sobre` e `/contato` — apresentação e atendimento
 - `/favoritos` — imóveis salvos no navegador
 - `/painel` — administração protegida
+- `/painel/manutencao` — controle de manutenção exclusivo do desenvolvedor
 
 ## Configuração
 
@@ -24,6 +25,8 @@ npm install
 npm run banco:migrar
 npm run dev
 ```
+
+O modo de manutenção requer a migração `008_manutencao.sql`. Quando ativado, visitantes e administradores são redirecionados para `/manutencao`. O desenvolvedor acessa `/login` digitando o endereço manualmente e mantém acesso ao site e ao painel após entrar.
 
 ### Armazenamento de fotos na Hostinger
 
