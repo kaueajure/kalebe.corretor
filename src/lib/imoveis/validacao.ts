@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { limparNomeLocal, nomesLocaisUnicos } from "@/lib/localizacoes";
 
 export const tiposDoImovel = [
   "CASA",
@@ -31,6 +32,13 @@ export const esquemaDosMetadadosDasMidias = z
 function textoOpcional(maximo: number, mensagem: string) {
   return z.preprocess(
     (valor) => (typeof valor === "string" && valor.trim() ? valor.trim() : null),
+    z.string().max(maximo, mensagem).nullable(),
+  );
+}
+
+function localOpcional(maximo: number, mensagem: string) {
+  return z.preprocess(
+    (valor) => typeof valor === "string" ? limparNomeLocal(valor) || null : null,
     z.string().max(maximo, mensagem).nullable(),
   );
 }
@@ -110,12 +118,12 @@ export const esquemaDoCadastroDeImovel = z
 
     cep: textoOpcional(10, "O CEP pode ter no máximo 10 caracteres."),
     estado: textoOpcional(2, "Use a sigla do estado com 2 caracteres."),
-    cidade: textoOpcional(160, "A cidade pode ter no máximo 160 caracteres."),
-    bairro: textoOpcional(160, "O bairro pode ter no máximo 160 caracteres."),
+    cidade: localOpcional(160, "A cidade pode ter no máximo 160 caracteres."),
+    bairro: localOpcional(160, "O bairro pode ter no máximo 160 caracteres."),
     logradouro: textoOpcional(220, "O logradouro pode ter no máximo 220 caracteres."),
     numero: textoOpcional(30, "O número pode ter no máximo 30 caracteres."),
     complemento: textoOpcional(120, "O complemento pode ter no máximo 120 caracteres."),
-    nomeCondominio: textoOpcional(180, "O condomínio pode ter no máximo 180 caracteres."),
+    nomeCondominio: localOpcional(180, "O condomínio pode ter no máximo 180 caracteres."),
     pontoReferencia: textoOpcional(
       180,
       "O ponto de referência pode ter no máximo 180 caracteres.",
@@ -165,14 +173,12 @@ export function separarCaracteristicas(
   const nomes = [...(valor?.split(",") ?? []), ...adicionais]
     .map((item) => item.trim().replace(/\s+/g, " "))
     .filter(Boolean);
-  const unicas = new Map<string, string>();
-
   for (const nome of nomes) {
     if (nome.length > 120) {
       throw new Error("Cada característica pode ter no máximo 120 caracteres.");
     }
-    unicas.set(nome.toLocaleLowerCase("pt-BR"), nome);
   }
-  if (unicas.size > 50) throw new Error("Informe no máximo 50 características.");
-  return [...unicas.values()];
+  const unicas = nomesLocaisUnicos(nomes);
+  if (unicas.length > 50) throw new Error("Informe no máximo 50 características.");
+  return unicas;
 }

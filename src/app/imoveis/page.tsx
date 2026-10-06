@@ -12,11 +12,10 @@ import { empresa } from "@/dados/empresa";
 import { listarImoveisPublicados } from "@/dados/imoveis";
 import { filtrarImoveis, filtroInicial, linkWhatsApp } from "@/lib/formatadores";
 import { schemaItemList } from "@/lib/seo/dados-estruturados";
-import {
-  caminhoCidade,
-  caminhoCidadeTipo,
-  criarMetadataPagina,
-} from "@/lib/seo/metadata";
+import { criarMetadataPagina } from "@/lib/seo/metadata";
+import { obterOpcoesFiltros } from "@/lib/imoveis/opcoes-filtros";
+import { resolverNomeLocal } from "@/lib/localizacoes";
+import { obterTipoSeoPorTipo } from "@/dados/seo";
 import type { FiltroImoveisEstado } from "@/tipos/imovel";
 import estilos from "./imoveis.module.css";
 
@@ -95,11 +94,12 @@ export default async function PaginaImoveis({ searchParams }: Props) {
     redirect(`/imoveis${limpos.size ? `?${limpos}` : ""}`);
   }
   const imoveis = await listarImoveisPublicados();
+  const opcoes = obterOpcoesFiltros(imoveis);
   const filtro: FiltroImoveisEstado = {
     ...filtroInicial,
     tipo: valorParam(params.tipo) as FiltroImoveisEstado["tipo"],
-    cidade: valorParam(params.cidade),
-    bairro: valorParam(params.bairro),
+    cidade: resolverNomeLocal(opcoes.cidades, valorParam(params.cidade)),
+    bairro: resolverNomeLocal(opcoes.bairros, valorParam(params.bairro)),
     precoMin: valorParam(params.precoMin),
     precoMax: valorParam(params.precoMax),
     quartos: valorParam(params.quartos),
@@ -110,20 +110,6 @@ export default async function PaginaImoveis({ searchParams }: Props) {
   };
 
   const resultados = filtrarImoveis(imoveis, filtro);
-  const cidades = [
-    ...new Set(
-      imoveis
-        .map((i) => i.cidade)
-        .filter((item): item is string => Boolean(item)),
-    ),
-  ].sort();
-  const bairros = [
-    ...new Set(
-      imoveis
-        .map((i) => i.bairro)
-        .filter((item): item is string => Boolean(item)),
-    ),
-  ].sort();
   const ordem = valorParam(params.ordem);
   resultados.sort((a, b) => {
     if (ordem === "menor-preco") return (a.preco ?? Infinity) - (b.preco ?? Infinity);
@@ -161,22 +147,16 @@ export default async function PaginaImoveis({ searchParams }: Props) {
             </p>
           </header>
 
-          <div className={estilos.atalhos} aria-label="Buscas rápidas">
-            <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "casas")}>
-              <Icone nome="casa" size={18} />
-              Casas
-            </Link>
-            <Link
-              href={caminhoCidadeTipo("sao-jose-do-rio-preto", "apartamentos")}
-            >
-              <Icone nome="predio" size={18} />
-              Apartamentos
-            </Link>
-            <Link href={caminhoCidade("sao-jose-do-rio-preto")}>
-              <Icone nome="local" size={18} />
-              Rio Preto
-            </Link>
-          </div>
+          {opcoes.tipos.length > 0 ? (
+            <div className={estilos.atalhos} aria-label="Buscas rápidas">
+              {opcoes.tipos.map((tipo) => (
+                <Link key={tipo} href={`/imoveis?tipo=${tipo}`}>
+                  <Icone nome={tipo === "apartamento" || tipo === "comercial" ? "predio" : "casa"} size={18} />
+                  {obterTipoSeoPorTipo(tipo).plural}
+                </Link>
+              ))}
+            </div>
+          ) : null}
 
           <Suspense
             fallback={
@@ -186,8 +166,7 @@ export default async function PaginaImoveis({ searchParams }: Props) {
             }
           >
             <FiltroImoveis
-              cidades={cidades}
-              bairros={bairros}
+              {...opcoes}
               total={resultados.length}
               localizacoes={imoveis.map(({ cidade, bairro }) => ({
                 cidade,

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Source_Sans_3 } from "next/font/google";
 import { headers } from "next/headers";
+import { Rodape } from "@/componentes/rodape/Rodape";
 import { ShellSite } from "@/componentes/shell/ShellSite";
 import { DadosEstruturados } from "@/componentes/seo/DadosEstruturados";
 import { FavoritosProvedor } from "@/hooks/useFavoritos";
@@ -73,7 +74,7 @@ export default async function RootLayout({
           dados={[schemaWebSite(), schemaOrganization()]}
         />
         <FavoritosProvedor>
-          <ShellSite>{children}</ShellSite>
+          <ShellSite rodape={<Rodape />}>{children}</ShellSite>
         </FavoritosProvedor>
       </body>
     </html>

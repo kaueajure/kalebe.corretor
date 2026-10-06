@@ -2,9 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { Cabecalho } from "@/componentes/cabecalho/Cabecalho";
-import { Rodape } from "@/componentes/rodape/Rodape";
 
-export function ShellSite({ children }: { children: React.ReactNode }) {
+export function ShellSite({ children, rodape }: { children: React.ReactNode; rodape: React.ReactNode }) {
   const pathname = usePathname();
   const areaRestrita =
     pathname.startsWith("/painel") ||
@@ -21,7 +20,7 @@ export function ShellSite({ children }: { children: React.ReactNode }) {
       <a className="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
       <Cabecalho />
       <main id="conteudo-principal" className="pagina" tabIndex={-1}>{children}</main>
-      <Rodape />
+      {rodape}
     </>
   );
 }

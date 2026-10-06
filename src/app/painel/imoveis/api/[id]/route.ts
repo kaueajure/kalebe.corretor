@@ -131,7 +131,7 @@ export async function PUT(requisicao: Request, contexto: ContextoDaRota) {
     });
     await conexao.commit();
     alteracaoConfirmada = true;
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/imoveis");
     revalidatePath(`/imoveis/${imovel.identificador}`);
     revalidatePath("/sitemap.xml");
@@ -196,7 +196,7 @@ export async function DELETE(requisicao: Request, contexto: ContextoDaRota) {
       return respostaDeErro("Imóvel não encontrado.", 404);
     }
     await conexao.commit();
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/imoveis");
     revalidatePath(`/imoveis/${resultado.identificador}`);
     revalidatePath("/sitemap.xml");

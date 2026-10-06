@@ -3,34 +3,31 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition, type FormEvent } from "react";
 import { Icone } from "@/componentes/ui/Icone";
+import { formatarTipo } from "@/lib/formatadores";
+import { mesmoLocal, nomesLocaisUnicos, resolverNomeLocal } from "@/lib/localizacoes";
+import type { OpcoesFiltros } from "@/lib/imoveis/opcoes-filtros";
 import estilos from "./filtroImoveis.module.css";
 
-interface Props {
-  cidades: string[];
-  bairros: string[];
+interface Props extends OpcoesFiltros {
   total: number;
   localizacoes?: { cidade: string | null; bairro: string | null }[];
 }
-
-const tipos = [
-  ["casa", "Casa"], ["apartamento", "Apartamento"],
-  ["sobrado", "Sobrado"], ["terreno", "Terreno"], ["comercial", "Comercial"],
-];
 
 export function FiltroImoveis(props: Props) {
   const params = useSearchParams();
   return <FormularioFiltros key={params.toString()} {...props} />;
 }
 
-function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props) {
+function FormularioFiltros({ cidades, bairros, tipos, quartos, banheiros, vagas, total, localizacoes = [] }: Props) {
   const router = useRouter();
   const params = useSearchParams();
-  const [cidade, setCidade] = useState(params.get("cidade") || "");
+  const cidadeInicial = resolverNomeLocal(cidades, params.get("cidade") || "");
+  const [cidade, setCidade] = useState(cidadeInicial);
   const [pendente, iniciar] = useTransition();
   const bairrosDaCidade = cidade
-    ? [...new Set(localizacoes
-        .filter((local) => local.cidade === cidade && local.bairro)
-        .map((local) => local.bairro as string))].sort()
+    ? nomesLocaisUnicos(localizacoes
+        .filter((local) => mesmoLocal(local.cidade, cidade))
+        .map((local) => local.bairro))
     : bairros;
   const chavesAvancadas = ["bairro", "precoMin", "quartos", "banheiros", "vagas", "areaMin"];
   const rotulosAtivos: Record<string, string> = {
@@ -67,7 +64,7 @@ function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props
           <label htmlFor="filtro-tipo" className="rotulo-campo">Tipo de imóvel</label>
           <select id="filtro-tipo" name="tipo" className="selecao" defaultValue={params.get("tipo") || ""}>
             <option value="">Todos os tipos</option>
-            {tipos.map(([valor, texto]) => <option key={valor} value={valor}>{texto}</option>)}
+            {tipos.map((tipo) => <option key={tipo} value={tipo}>{formatarTipo(tipo)}</option>)}
           </select>
         </div>
         <div>
@@ -81,7 +78,7 @@ function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props
           {bairrosDaCidade.length > 0 ? (
             <div>
               <label htmlFor="filtro-bairro" className="rotulo-campo">Bairro</label>
-              <select key={cidade} id="filtro-bairro" name="bairro" className="selecao" defaultValue={cidade === (params.get("cidade") || "") ? params.get("bairro") || "" : ""}>
+              <select key={cidade} id="filtro-bairro" name="bairro" className="selecao" defaultValue={mesmoLocal(cidade, cidadeInicial) ? resolverNomeLocal(bairrosDaCidade, params.get("bairro") || "") : ""}>
                 <option value="">Todos os bairros</option>
                 {bairrosDaCidade.map((bairro) => <option key={bairro}>{bairro}</option>)}
               </select>
@@ -91,12 +88,16 @@ function FormularioFiltros({ cidades, bairros, total, localizacoes = [] }: Props
             <label htmlFor="filtro-preco-min" className="rotulo-campo">Valor mínimo (R$)</label>
             <input id="filtro-preco-min" name="precoMin" className="campo" type="number" min="0" defaultValue={params.get("precoMin") || ""} placeholder="Ex.: 150000" />
           </div>
-          {[["quartos", "Quartos"], ["banheiros", "Banheiros"], ["vagas", "Vagas"]].map(([chave, rotulo]) => (
+          {([
+            { chave: "quartos", rotulo: "Quartos", quantidades: quartos },
+            { chave: "banheiros", rotulo: "Banheiros", quantidades: banheiros },
+            { chave: "vagas", rotulo: "Vagas", quantidades: vagas },
+          ]).map(({ chave, rotulo, quantidades }) => (
             <div key={chave}>
               <label htmlFor={`filtro-${chave}`} className="rotulo-campo">{rotulo}</label>
               <select id={`filtro-${chave}`} name={chave} className="selecao" defaultValue={params.get(chave) || ""}>
                 <option value="">Qualquer quantidade</option>
-                {[1, 2, 3, 4].map((numero) => <option key={numero} value={numero}>{numero} ou mais</option>)}
+                {quantidades.map((numero) => <option key={numero} value={numero}>{numero} ou mais</option>)}
               </select>
             </div>
           ))}

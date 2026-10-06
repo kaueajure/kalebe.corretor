@@ -3,6 +3,7 @@ export {
   obterImovelPorSlug,
   obterImoveisSimilares,
   listarCidades,
+  listarTipos,
   listarBairros,
   listarImoveisPorIds,
   listarSlugsPublicados,

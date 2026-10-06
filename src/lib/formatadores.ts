@@ -1,4 +1,5 @@
 import type { FiltroImoveisEstado, Imovel } from "@/tipos/imovel";
+import { mesmoLocal, normalizarTexto } from "@/lib/localizacoes";
 
 export function formatarPreco(valor: number | null | undefined): string {
   if (valor == null) return "Sob consulta";
@@ -75,8 +76,8 @@ export function filtrarImoveis(
 ): Imovel[] {
   return lista.filter((imovel) => {
     if (filtro.tipo && imovel.tipo !== filtro.tipo) return false;
-    if (filtro.cidade && imovel.cidade !== filtro.cidade) return false;
-    if (filtro.bairro && imovel.bairro !== filtro.bairro) return false;
+    if (filtro.cidade && !mesmoLocal(imovel.cidade, filtro.cidade)) return false;
+    if (filtro.bairro && !mesmoLocal(imovel.bairro, filtro.bairro)) return false;
 
     if (filtro.precoMin) {
       const min = Number(filtro.precoMin);
@@ -103,17 +104,17 @@ export function filtrarImoveis(
       if ((imovel.area ?? 0) < a) return false;
     }
     if (filtro.busca) {
-      const termo = filtro.busca.toLowerCase();
+      const termo = normalizarTexto(filtro.busca);
       const texto = [
         imovel.titulo,
         imovel.bairro ?? "",
         imovel.cidade ?? "",
+        imovel.nomeCondominio ?? "",
         imovel.codigo,
         imovel.descricao,
       ]
-        .join(" ")
-        .toLowerCase();
-      if (!texto.includes(termo)) return false;
+        .join(" ");
+      if (!normalizarTexto(texto).includes(termo)) return false;
     }
     return true;
   });

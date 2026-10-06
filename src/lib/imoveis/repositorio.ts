@@ -4,6 +4,25 @@ import { banco } from "@/lib/banco";
 import type { MidiaPreparada } from "@/lib/imoveis/midias";
 import { criarEnderecoDaMidia } from "@/lib/imoveis/midias";
 import type { DadosValidadosDoImovel } from "@/lib/imoveis/validacao";
+import { escolherNomeLocal, mesmoLocal } from "@/lib/localizacoes";
+
+/** Reaproveita grafias existentes também na criação e edição, sem limitar novas localidades. */
+async function padronizarLocalizacao(conexao: PoolConnection, dados: DadosValidadosDoImovel) {
+  const [locais] = await conexao.query<(RowDataPacket & {
+    cidade: string | null; bairro: string | null; nome_condominio: string | null;
+  })[]>("SELECT cidade, bairro, nome_condominio FROM imoveis");
+  const preferir = (valor: string | null, existentes: (string | null)[]) => valor
+    ? escolherNomeLocal([valor, ...existentes.filter((nome): nome is string => Boolean(nome) && mesmoLocal(nome, valor))])
+    : null;
+  const cidade = preferir(dados.cidade, locais.map((local) => local.cidade));
+  const daCidade = locais.filter((local) => mesmoLocal(local.cidade, cidade));
+  return {
+    ...dados,
+    cidade,
+    bairro: preferir(dados.bairro, daCidade.map((local) => local.bairro)),
+    nomeCondominio: preferir(dados.nomeCondominio, daCidade.map((local) => local.nome_condominio)),
+  };
+}
 
 type LinhaDoImovel = RowDataPacket & {
   id: number;
@@ -137,6 +156,7 @@ export async function cadastrarImovel(
     midias: MidiaPreparada[];
   },
 ) {
+  dados = { ...dados, ...await padronizarLocalizacao(conexao, dados) };
   const valorCondominio = dados.condominioIsento ? 0 : dados.valorCondominio;
   const valorIptu = dados.iptuIsento ? 0 : dados.valorIptu;
   const periodicidadeIptu =
@@ -462,6 +482,7 @@ export async function atualizarImovel(
     }[];
   },
 ) {
+  dados = { ...dados, ...await padronizarLocalizacao(conexao, dados) };
   const campos = montarCamposDoImovel(dados);
 
   await conexao.execute(

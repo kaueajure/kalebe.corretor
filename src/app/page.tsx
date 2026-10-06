@@ -9,10 +9,12 @@ import { listarImoveisPublicados } from "@/dados/imoveis";
 import { linkWhatsApp } from "@/lib/formatadores";
 import {
   caminhoCidade,
-  caminhoCidadeTipo,
   criarMetadataPagina,
   IMAGEM_OG_PADRAO,
 } from "@/lib/seo/metadata";
+import { obterOpcoesFiltros } from "@/lib/imoveis/opcoes-filtros";
+import { mesmoLocal } from "@/lib/localizacoes";
+import { obterTipoSeoPorTipo } from "@/dados/seo";
 import { criarSlug } from "@/lib/seo/slug";
 import estilos from "./inicio.module.css";
 
@@ -38,7 +40,8 @@ export default async function PaginaInicial() {
       imovel.midias.map((midia) => ({ ...midia, titulo: imovel.titulo })),
     )
     .find((midia) => midia.tipo === "imagem");
-  const cidades = empresa.cidadesAtendimento;
+  const opcoes = obterOpcoesFiltros(imoveis);
+  const { cidades } = opcoes;
 
   return (
     <>
@@ -59,7 +62,7 @@ export default async function PaginaInicial() {
         <div className={`conteudo-largo ${estilos.heroConteudo}`}>
           <p className={estilos.local}>
             <Icone nome="local" size={16} />
-            São José do Rio Preto · Mirassol · Bady Bassitt
+            {cidades.length ? cidades.join(" · ") : empresa.regiao}
           </p>
           <h1 className={estilos.titulo}>
             Imóveis à venda em São José do Rio Preto e região
@@ -68,24 +71,20 @@ export default async function PaginaInicial() {
             Casas, apartamentos, sobrados e terrenos à venda. Você busca aqui e
             conversa direto comigo.
           </p>
-          <BuscaPrincipal />
+          <BuscaPrincipal opcoes={opcoes} />
         </div>
       </section>
 
-      <div className={`conteudo ${estilos.atalhos}`} aria-label="Buscas rápidas">
-        <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "casas")}>
-          <Icone nome="casa" size={18} />
-          Casas à venda
-        </Link>
-        <Link href={caminhoCidadeTipo("sao-jose-do-rio-preto", "apartamentos")}>
-          <Icone nome="predio" size={18} />
-          Apartamentos
-        </Link>
-        <Link href={caminhoCidade("sao-jose-do-rio-preto")}>
-          <Icone nome="local" size={18} />
-          Rio Preto
-        </Link>
-      </div>
+      {opcoes.tipos.length > 0 ? (
+        <div className={`conteudo ${estilos.atalhos}`} aria-label="Buscas rápidas">
+          {opcoes.tipos.map((tipo) => (
+            <Link key={tipo} href={`/imoveis?tipo=${tipo}`}>
+              <Icone nome={tipo === "apartamento" || tipo === "comercial" ? "predio" : "casa"} size={18} />
+              {obterTipoSeoPorTipo(tipo).plural}
+            </Link>
+          ))}
+        </div>
+      ) : null}
 
       <section className="secao">
         <div className="conteudo">
@@ -123,34 +122,35 @@ export default async function PaginaInicial() {
         </div>
       </section>
 
-      <section className="secao">
-        <div className="conteudo">
-          <h2 className="titulo-secao">Onde você quer morar?</h2>
-          <p className={`texto-secao ${estilos.cidadeIntro}`}>
-            Atendo estas três cidades. Escolha uma para ver o que está
-            disponível.
-          </p>
-          <div className={estilos.cidades}>
-            {cidades.map((cidade) => {
-              const total = disponiveis.filter((i) => i.cidade === cidade).length;
-              return (
-                <Link key={cidade} href={caminhoCidade(criarSlug(cidade))}>
-                  <Icone nome="local" size={22} />
-                  <div>
-                    <h3>{cidade}</h3>
-                    <p>
-                      {total
-                        ? `${total} ${total === 1 ? "imóvel à venda" : "imóveis à venda"}`
-                        : "Consultar opções"}
-                    </p>
-                  </div>
-                  <Icone nome="seta" size={18} />
-                </Link>
-              );
-            })}
+      {cidades.length > 0 ? (
+        <section className="secao">
+          <div className="conteudo">
+            <h2 className="titulo-secao">Onde você quer morar?</h2>
+            <p className={`texto-secao ${estilos.cidadeIntro}`}>
+              Escolha uma cidade para ver os imóveis publicados.
+            </p>
+            <div className={estilos.cidades}>
+              {cidades.map((cidade) => {
+                const total = disponiveis.filter((i) => mesmoLocal(i.cidade, cidade)).length;
+                return (
+                  <Link key={cidade} href={caminhoCidade(criarSlug(cidade))}>
+                    <Icone nome="local" size={22} />
+                    <div>
+                      <h3>{cidade}</h3>
+                      <p>
+                        {total
+                          ? `${total} ${total === 1 ? "imóvel à venda" : "imóveis à venda"}`
+                          : "Consultar opções"}
+                      </p>
+                    </div>
+                    <Icone nome="seta" size={18} />
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section className="secao">
         <div className="conteudo">

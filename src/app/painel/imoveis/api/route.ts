@@ -109,7 +109,7 @@ export async function POST(requisicao: Request) {
       pastaConfirmada = true;
     }
     await conexao.commit();
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     revalidatePath("/imoveis");
     revalidatePath(`/imoveis/${resultado.identificador}`);
     revalidatePath("/sitemap.xml");

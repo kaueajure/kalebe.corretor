@@ -1,17 +1,9 @@
 import { Icone } from "@/componentes/ui/Icone";
-import { empresa } from "@/dados/empresa";
+import { formatarPreco, formatarTipo } from "@/lib/formatadores";
+import type { OpcoesFiltros } from "@/lib/imoveis/opcoes-filtros";
 import estilos from "./buscaPrincipal.module.css";
 
-function rotuloPreco(valor: number) {
-  if (valor >= 1_000_000) {
-    return "Até R$ 1 milhão";
-  }
-
-  return `Até R$ ${valor / 1000} mil`;
-}
-
-export function BuscaPrincipal() {
-  const precos = [200000, 300000, 400000, 600000, 1000000];
+export function BuscaPrincipal({ opcoes }: { opcoes: OpcoesFiltros }) {
 
   return (
     <div className={estilos.busca}>
@@ -20,7 +12,7 @@ export function BuscaPrincipal() {
           <label htmlFor="busca-cidade">Onde você quer morar?</label>
           <select id="busca-cidade" name="cidade" className="selecao" defaultValue="">
             <option value="">Todas as cidades</option>
-            {empresa.cidadesAtendimento.map((cidade) => (
+            {opcoes.cidades.map((cidade) => (
               <option key={cidade}>{cidade}</option>
             ))}
           </select>
@@ -29,11 +21,7 @@ export function BuscaPrincipal() {
           <label htmlFor="busca-tipo">Tipo de imóvel</label>
           <select id="busca-tipo" name="tipo" className="selecao" defaultValue="">
             <option value="">Todos os tipos</option>
-            <option value="casa">Casa</option>
-            <option value="apartamento">Apartamento</option>
-            <option value="sobrado">Sobrado</option>
-            <option value="terreno">Terreno</option>
-            <option value="comercial">Comercial</option>
+            {opcoes.tipos.map((tipo) => <option key={tipo} value={tipo}>{formatarTipo(tipo)}</option>)}
           </select>
         </div>
         <div className={estilos.campo}>
@@ -45,9 +33,9 @@ export function BuscaPrincipal() {
             defaultValue=""
           >
             <option value="">Qualquer valor</option>
-            {precos.map((preco) => (
+            {opcoes.precos.map((preco) => (
               <option key={preco} value={preco}>
-                {rotuloPreco(preco)}
+                Até {formatarPreco(preco)}
               </option>
             ))}
           </select>
@@ -56,7 +44,7 @@ export function BuscaPrincipal() {
           <label htmlFor="busca-quartos">Quantos quartos?</label>
           <select id="busca-quartos" name="quartos" className="selecao" defaultValue="">
             <option value="">Qualquer quantidade</option>
-            {[1, 2, 3, 4].map((quantidade) => (
+            {opcoes.quartos.map((quantidade) => (
               <option key={quantidade} value={quantidade}>{quantidade} ou mais</option>
             ))}
           </select>
